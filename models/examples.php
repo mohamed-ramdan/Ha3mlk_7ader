@@ -79,7 +79,7 @@ echo "user";
 
 
 $obj->setTable('user');
-echo $obj->insert(array('name' => 'merit', 'email' => 'mero378@yahoo.com', 'password' => md5('123'), 'roomNumber' => 200, 'ext' => 100, 'picture' => 'upload/image/user/default.png', 'isAdmin' => 1));
+echo $obj->insert(array('name' => 'merityttttttr', 'email' => 'rtrttttrtrmyero378@yahoo.com', 'password' => md5('123'), 'roomNumber' => 200, 'ext' => 100, 'picture' => 'upload/image/user/default.png', 'isAdmin' => 1));
 
 echo "</br>";
 
@@ -87,7 +87,7 @@ echo"__________________________1_______________________________";
 echo "</br>";
 
 
-$retarray = $obj->select(array('email' => 'mero3@yahoo.com', 'password' => md5('123')));
+$retarray = $obj->select(array("'email' = 'mero3@yahoo.com' and 'password' = md5('123')"));
 var_dump($retarray);
 
 echo "</br>";
@@ -96,14 +96,14 @@ echo"_____________________________2_____________________________";
 echo "</br>";
 
 $obj->setTable('user');
-$retarray = $obj->select(array());
+$retarray = $obj->select();
 var_dump($retarray);
 echo "</br>";
 
 echo"______________________________3___________________________";
 echo "</br>";
 
-$retarray = $obj->select(array('email' => 'mero3@yahoo.com'));
+$retarray = $obj->select("'email' = 'mero3@yahoo.com'");
 var_dump($retarray);
 echo "</br>";
 
@@ -120,12 +120,24 @@ echo"________________________5_________________________________";
 echo "</br>";
 
 $obj->setTable('category');
-$retarray = $obj->select(array(), "where categoryID>10");
+$retarray = $obj->select("categoryID >10");
 var_dump($retarray);
 echo "</br>";
 
 echo"_________________________6________________________________";
 echo "</br>";
+
+echo"________________________5_________________________________";
+echo "</br>";
+
+$obj->setTable('user');
+$retarray = $obj->select("name ='merityttttt'");
+var_dump($retarray);
+echo "</br>";
+
+echo"_________________________6________________________________";
+echo "</br>";
+
 
 //tables wll be sent
 echo "</br>";
@@ -134,7 +146,7 @@ echo "complex select";
 echo"__________________________7_______________________________";
 echo "</br>";
 
-$retarray = $obj->selectjoin(array("product", "category", "cafeOrder", "user", "orderComponent"), array("product.categoryID" => "category.categoryID", "user.userID" => "cafeOrder.orderUserID", "orderComponent.orderID" => "cafeOrder.orderID", "orderComponent.productID" => "product.productID"));
+$retarray = $obj->selectjoin(array("product", "category", "cafeOrder", "user", "orderComponent"), "product.categoryID = category.categoryID and user.userID = cafeOrder.orderUserID and  orderComponent.orderID = cafeOrder.orderID and orderComponent.productID = product.productID");
 
 var_dump($retarray);
 echo "</br>";
@@ -143,8 +155,8 @@ echo "</br>";
 
 echo"____________________________8_____________________________";
 echo "</br>";
-
-$retarray = $obj->selectjoin(array("product", "category"), array("product.categoryID" => "category.categoryID",));
+// give table name and the phrase after where
+$retarray = $obj->selectjoin(array("product", "category"), "'product.categoryID' = 'category.categoryID'");
 
 var_dump($retarray);
 
@@ -156,9 +168,12 @@ echo"___________________________9______________________________";
 echo "</br>";
 
 $obj->setTable('user');
-echo $obj->update(array('name' => 'mero', 'email' => 'mero3mero@yahoo.com', 'password' => md5(123), 'roomNumber' => '200', 'ext' => 100, 'picture' => 'upload/image/user/default.png', 'isAdmin' => 0), array('userID' => 1));
+echo $obj->update(array('name' => 'mero', 'email' => 'mero3meromero@yahoo.com', 'password' => md5(123), 'roomNumber' => '200', 'ext' => 100, 'picture' => 'upload/image/user/default.png', 'isAdmin' => 0),"name='merityttttttr'");
 
 
-echo"__________________________________________________________";
+echo"_________________________10_________________________________";
 
+$obj->setTable('user');
+$retarray=$obj->select();
+var_dump($retarray);
 

@@ -56,6 +56,7 @@ class ORM {
         foreach ($data as $col => $value) {
             $query .= $col . "= '" . $value . "' , ";
         }
+        echo $query;
         //remove last ','
         $query[strlen($query) - 2] = " ";
         //output of the query
@@ -68,30 +69,22 @@ class ORM {
         return $this->dbconn->affected_rows;
     }
      // select function
-    function select($data, $extra = "") {
+    function select($cond = "") {
         //"select * from table name"
         $query = "select * from $this->table ";
-        //if no cond dont concate with where
-        if (!empty($data)) {
-            $query .= "where ";
-        }
-        // concate cond array
-        foreach ($data as $col => $value) {
-            $query .= $col . "= '" . $value . "'and ";
-        }
-        //remove last and
-        if (!empty($data)) {
-            $query = substr($query, 0, strlen($query) - 4);
-        }
-        //if there is extra cond
-        if (!empty($extra)) {
-            $query .= $extra;
+       
+        
+        //if there is  cond
+        if (!empty($cond)) {
+             $query .= " where ";
+            $query .= $cond;
         }
         
         //execute the query
         $result = $this->dbconn->query($query);
-        
-        if (!$result) {
+        //there is an object or empty object
+        if (!$result){ 
+           
             return $this->dbconn->error;
         } else {
             $tmp = array();
@@ -103,7 +96,7 @@ class ORM {
         }
     }
      //select from more than one table
-    function selectjoin($tables, $data, $extra = "") {
+    function selectjoin($tables,$cond = "") {
         
         $query = "select * from  ";
         //table array concate with the quary
@@ -114,58 +107,49 @@ class ORM {
         $query = substr($query, 0, strlen($query) - 2);
         //if there is conditions
 
-        if (!empty($data)) {
-            $query .= " where  ";
-
-
-            foreach ($data as $col => $value) {
-                $query .= $col . "= " . $value . " and ";
-            }
-
-            $query = substr($query, 0, strlen($query) - 4);
-        }
-        
          // if there is extra cond
-        if (!empty($extra)) {
-            $query .= $extra;
+        if (!empty($cond)) {
+            $query .= " where  ";
+            $query .= $cond;
         }
 
         $result = $this->dbconn->query($query);
-
+        //there is an object or empty object 
         if (!$result) {
+            
             return $this->dbconn->error;
         } else {
-            return $result->fetch_assoc();
+            $tmp = array();
+            while ($row = $result->fetch_assoc()) {
+                //load all returned rows into an array
+                $tmp[] = $row;
+            }
+            return $tmp;
         }
     }
         
-    function update($data, $cond, $extra = "") {
+    function update($data, $cond = "") {
         // "update user set "
         $query = "update  $this->table set  ";
         //"concate with all cond if founded"
         foreach ($data as $col => $value) {
-            $query .= $col . "= '" . $value . "'and ";
+            $query .= $col . "= '" . $value . "' , ";
         }
+        
         //remove last and 
-        $query = substr($query, 0, strlen($query) - 4);
+        
+        $query = substr($query, 0, strlen($query) - 2);
         // if there a cond
+        
+        
         if (!empty($cond)) {
+            
             $query .= " where  ";
 
-
-            foreach ($cond as $col => $value) {
-                $query .= $col . "= " . $value . " and ";
-            }
-
-            $query = substr($query, 0, strlen($query) - 4);
+            $query .= $cond;
+            
         }
-        // if there are extra cond
-        if (!empty($extra)) {
-            $query .= $extra;
-        }
-
-        
-
+        echo $query; 
         $result = $this->dbconn->query($query);
 
         if (!$result) {
@@ -175,20 +159,12 @@ class ORM {
         }
     }
 
-    function delete($data, $extra = "") {
+    function delete($cond = "") {
         $query = "delete from $this->table ";
-        if (!empty($data)) {
+        if (!empty($cond)) {
             $query .= "where ";
-        }
-        foreach ($data as $col => $value) {
-            $query .= $col . "= '" . $value . "'and ";
-        }
-        if (!empty($data)) {
-            $query = substr($query, 0, strlen($query) - 4);
-        }
-
-        if (!empty($extra)) {
-            $query .= $extra;
+        
+            $query .= $cond;
         }
 
         $result = $this->dbconn->query($query);
