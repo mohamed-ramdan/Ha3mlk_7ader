@@ -18,7 +18,8 @@
 
 
 // Include Needed Models 
-include_once '../models/ORM.php'.'../models/Order.php'.'../models/User.php'.'../models/Category.php'.'../models/Product.php';
+include_once '../models/ORM.php';
+//.'../models/Order.php'.'../models/User.php'.'../models/Category.php'.'../models/Product.php';
 
 
 class AdminController
@@ -33,16 +34,25 @@ class AdminController
     function getUnFinishedOrders()
     {
         echo 'hi there, inside my function';
-        $orm = new ORM();
+        $orm = ORM::getInstance();
         $orm->setTable('h3mlk7aderdb.cafeOrder');
+        echo "<br /> table set ";
         $unFinishedOrders=array();
-        $unFinishedOrders = $orm->select($data=array("status"=>"undone"));
-        var_dump($unFinishedOrders);
-        header("Location:unfinishedorders.php?orders=$unFinishedOrders");
+        $unFinishedOrders = $orm->select("where status = 'undone'");
+        if(!empty($unFinishedOrders))
+        {
+            var_dump($unFinishedOrders);
+        }
+        else
+        {
+            
+            echo "<br /> empty ";
+        }
+        header("Location:../views/unfinishedorders.php?orders=$unFinishedOrders");
         
     }
     
-    protected function __construct() {
+    function __construct() {
         
         echo 'inside constructor';
         $this->getUnFinishedOrders();
