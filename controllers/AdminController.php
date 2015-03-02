@@ -1,25 +1,7 @@
 <?php
 
-/*
-      ***---((---((  __PLEASE READ__  ))---))---***
- * ====================================================
- * In views unfinishedorders.php file needs to be start from
- * by this link    http://localhost/Ha3mlk_7ader/views/unfinishedorders.php
- * then submit to redirect to adminController where the constrcutor calls unFinishedOrders function
- * that call ORM select function where order status = undone then var_dumb the result considering creating
- * an object from the class directly under the constructor 
- * 
- * Note: database tables has a valid data inserted for test
- * Note: mysql connection parameters had been set ('localhost','root','admin','ha3mlk7aderdb'); in ORM
- * 
- * The Expected result: on press submit key go to admin controller and see the array printed or even NULL value
- * The Real result: Blank page wit NO error defined
- *  */
-
-
 // Include Needed Models 
 include_once '../models/ORM.php';
-//.'../models/Order.php'.'../models/User.php'.'../models/Category.php'.'../models/Product.php';
 
 
 class AdminController
@@ -33,30 +15,170 @@ class AdminController
      */
     function getUnFinishedOrders()
     {
-        echo 'hi there, inside my function';
+        // Get Intance from ORM model
         $orm = ORM::getInstance();
+        // Set table orders to retrieve
         $orm->setTable('h3mlk7aderdb.cafeOrder');
-        echo "<br /> table set ";
-        $unFinishedOrders=array();
-        $unFinishedOrders = $orm->select("where status = 'undone'");
+        // Call function sekect from ORM instance
+        $unFinishedOrders = $orm->select("status='undone'");
+        // If there are any unfinished orders
         if(!empty($unFinishedOrders))
+            
         {
+            // Show these orders
+            echo "<br />";
+            echo "<br /><p style='color:orange';> Unfinished orders <p> ";
             var_dump($unFinishedOrders);
         }
         else
         {
             
-            echo "<br /> empty ";
+            echo "<br /><p style='color:green';> All orders accomplished <p> ";
         }
-        header("Location:../views/unfinishedorders.php?orders=$unFinishedOrders");
         
     }
     
+    
+    /**
+     * getManualOrderData is a function that get all needed data 
+     * to be user for creating a manual order
+     * @param void 
+     * @return array of users , products, rooms, category
+     */
+    function getManualOrderNeededData()
+    {
+        // Get Intance from ORM model
+        $orm = ORM::getInstance();  
+        
+        // Set table orders to retrieve
+        $orm->setTable('h3mlk7aderdb.user');
+        // Retrieve all users
+        $users = $orm->select();
+
+        // Set table orders to retrieve
+        $orm->setTable('h3mlk7aderdb.category');
+        // Retrieve all categories
+        $categories = $orm->select();
+        
+        // Set table orders to retrieve
+        $orm->setTable('h3mlk7aderdb.product');
+        // Retrieve all products
+        $products = $orm->select("");
+        
+        // Set table orders to retrieve
+        $orm->setTable('h3mlk7aderdb.room');
+        // Retrieve all rooms
+        $rooms = $orm->select();
+        
+        // If there are no problem
+        if(!empty($users)&&!empty($categories)&&!empty($products)&&!empty($rooms))    
+        {
+            // Show users
+            echo "<br /><p style='color:green';> users <p> ";
+            var_dump($users);
+            
+            // Show categories
+            echo "<br /><br /><p style='color:green';> categories <p> ";
+            var_dump($categories);
+            
+            // Show products
+            echo "<br /><br /><p style='color:green';> products <p> ";
+            var_dump($products);
+            
+            // Show rooms
+            echo "<br /><br /><p style='color:green';> rooms <p> ";
+            var_dump($rooms);    
+        }
+        else
+        {  
+            echo "<br /><p style='color:green';> cannot make a manual order <p> ";
+        }
+        
+    }
+    
+    /**
+     * getAllProducts is a function that retrieve all products
+     * @param void 
+     * @return array products 
+     */
+    function getAllProducts()
+    {
+        // Get Intance from ORM model
+        $orm = ORM::getInstance();
+        
+        // Set table retrieve
+        $orm->setTable('h3mlk7aderdb.product');
+        // Retrieve all products
+        $products = $orm->select();
+        
+        // Set table retrieve
+        $orm->setTable('h3mlk7aderdb.user');
+        // Retrieve all users
+        $users = $orm->select("userId=1");
+        
+        if(!empty($products)&&!empty($users))    
+        {
+            // Show products
+            echo "<br /><br /><p style='color:#8a2be2';> All Products <p> ";
+            var_dump($products);
+            
+            // Show users
+            echo "<br /><p style='color:#8a2be2';> users <p> ";
+            var_dump($users);
+            
+        }    
+    }
+    
+    /**
+     * getAddNewProductNeededData is a function that retrieve the requiested data needed for add new product
+     * @param void 
+     * @return array categories
+     */
+    function getAddNewProductNeededData()
+    {
+        // Get Intance from ORM model
+        $orm = ORM::getInstance();
+        
+        // Set table to retrieve
+        $orm->setTable('h3mlk7aderdb.category');
+        // Retrieve all categories
+        $categories = $orm->select();
+        
+        // Set table to retrieve
+        $orm->setTable('h3mlk7aderdb.user');
+        // Retrieve all users
+        $users = $orm->select("userId=1");
+        
+        if(!empty($categories)&&!empty($users))    
+        {
+            // Show categories
+            echo "<br /><br /><p style='color:#ee1289';> Categories <p> ";
+            var_dump($categories);
+            
+            // Show users
+            echo "<br /><p style='color:#ee1289';> users <p> ";
+            var_dump($users);
+            
+        } 
+        
+    }
+            
+    
     function __construct() {
         
-        echo 'inside constructor';
+        echo '<h2>inside constructor</h2>'."<br />";
+        echo "<h2>Function getUnFinishedOrders</h2>";
         $this->getUnFinishedOrders();
-        
+        echo "<hr />";
+        echo "<h2>Function getManualOrderNeededData</h2>";
+        $this->getManualOrderNeededData();
+        echo "<hr />";
+        echo "<h2>Function getAllProducts</h2>";
+        $this->getAllProducts();
+        echo "<hr />";
+        echo "<h2>Function getAddNewProductNeededData</h2>";
+        $this->getAddNewProductNeededData();
+        echo "<hr />";
     }
     
 }
