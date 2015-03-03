@@ -9,8 +9,8 @@
 $GLOBALS['conf'] = array(
     'host'=>'localhost',
     'username'=>'root',
-    'password' =>'01228675292',
-    'database' =>'ha3mlk7aderdb'             //merit import the new database file
+    'password' =>'123',
+    'database' =>'h3mlk7aderdb'             //merit import the new database file
     
 );
 

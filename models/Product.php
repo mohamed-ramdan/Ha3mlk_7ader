@@ -3,7 +3,7 @@
     The model for Product
  */
 
-require 'Category.php';
+require_once 'Category.php';
 
 class Product{
     private $id;

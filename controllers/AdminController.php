@@ -20,22 +20,12 @@ class AdminController
         // Set table orders to retrieve
         $orm->setTable('h3mlk7aderdb.cafeOrder');
         // Call function sekect from ORM instance
-        $unFinishedOrders = $orm->select("status='undone'");
+        //$unFinishedOrders = $orm->select("status!='done' and status!='canceled' ");
+        $unFinishedOrders  = $orm->selectjoin(array('cafeOrder','user','orderComponent','product'),
+                "cafeOrder.orderUserID=user.userID and cafeOrder.orderID = orderComponent.orderID and orderComponent.productID = product.productID");
         // If there are any unfinished orders
-        if(!empty($unFinishedOrders))
-            
-        {
-            // Show these orders
-            echo "<br />";
-            echo "<br /><p style='color:orange';> Unfinished orders <p> ";
-            var_dump($unFinishedOrders);
-        }
-        else
-        {
-            
-            echo "<br /><p style='color:green';> All orders accomplished <p> ";
-        }
         
+        return $unFinishedOrders;
     }
     
     
@@ -71,27 +61,35 @@ class AdminController
         $rooms = $orm->select();
         
         // If there are no problem
+        
         if(!empty($users)&&!empty($categories)&&!empty($products)&&!empty($rooms))    
         {
-            // Show users
-            echo "<br /><p style='color:green';> users <p> ";
-            var_dump($users);
+            //putting users/categories/products/rooms in 1 array to return
+            $data=array('users'=>$users,'categories'=>$categories,'products'=>$products, 'rooms'=>$rooms);
             
-            // Show categories
-            echo "<br /><br /><p style='color:green';> categories <p> ";
-            var_dump($categories);
-            
-            // Show products
-            echo "<br /><br /><p style='color:green';> products <p> ";
-            var_dump($products);
-            
-            // Show rooms
-            echo "<br /><br /><p style='color:green';> rooms <p> ";
-            var_dump($rooms);    
+            return $data;
+//            
+//            // Show users
+//            echo "<br /><p style='color:green';> users <p> ";
+//            var_dump($users);
+//            
+//            // Show categories
+//            echo "<br /><br /><p style='color:green';> categories <p> ";
+//            var_dump($categories);
+//            
+//            // Show products
+//            echo "<br /><br /><p style='color:green';> products <p> ";
+//            var_dump($products);
+//            
+//            // Show rooms
+//            echo "<br /><br /><p style='color:green';> rooms <p> ";
+//            var_dump($rooms);    
         }
         else
         {  
-            echo "<br /><p style='color:green';> cannot make a manual order <p> ";
+            $data=false;
+            return $data;
+//            echo "<br /><p style='color:green';> cannot make a manual order <p> ";
         }
         
     }
@@ -165,7 +163,7 @@ class AdminController
             
     
     function __construct() {
-        
+     /*   
         echo '<h2>inside constructor</h2>'."<br />";
         echo "<h2>Function getUnFinishedOrders</h2>";
         $this->getUnFinishedOrders();
@@ -179,10 +177,16 @@ class AdminController
         echo "<h2>Function getAddNewProductNeededData</h2>";
         $this->getAddNewProductNeededData();
         echo "<hr />";
+      
+      */
     }
     
 }
-$varAdmin = new AdminController();
+    
+    // First must check if the user is authorized and he is an admin
+    
 
+//$varAdmin = new AdminController();
+    
 ?>
 
