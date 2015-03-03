@@ -89,7 +89,7 @@ require_once '../models/Validation.php';
                         //remove from $_post
                         unset($_POST["passwordc"]);
                         unset($_POST["captcha"]);
-                       
+                        $_POST["password"]=  md5($_POST["password"]);
                         $DOCUMENT_ROOT = $_SERVER['DOCUMENT_ROOT'];
                         $upfile="$DOCUMENT_ROOT/Ha3mlk_7ader/Ha3mlk_7ader/static/img/{$_POST['email']}_{$_FILES['picture']['name']}";
 			$imgname = "{$_POST['email']}_{$_FILES['picture']['name']}";
@@ -125,6 +125,7 @@ require_once '../models/Validation.php';
                         $_POST["roomNumber"]=$op[0]['id'];
                         unset($_POST["passwordc"]);
                         unset($_POST["captcha"]);
+                        $_POST["password"]=  md5($_POST["password"]);
                         $_POST["isAdmin"]=0;
                         $obj->setTable('user');
                         $a=$obj->insert($_POST);
