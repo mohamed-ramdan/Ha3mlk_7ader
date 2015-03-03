@@ -89,16 +89,15 @@
                                       <div class="col-sm-5">
                                           <select name="roomNumber">
                                                     <?php  
-                                                        include_once "../controllers/AuthenticationController.php";
-                                                        $authobj=new Authenticate;
+                                                       include_once "../controllers/AuthenticationController.php";
+                                                       $authobj=new Authenticate;
                                                         $rooms=$authobj->getRooms();
-                                                        
+                                                        $getroom=$_GET['roomVal'];
                                                         for ($i = 0; $i < count($rooms); $i++){
                                                             
-                                                       echo "<option value=\"".$rooms[$i]['roomNumber']."\""."<?php if( isset(".$_GET['roomVal'].") "
-                                                        . "&&".$_GET['roomVal']."==".$rooms[$i]['roomNumber']."){echo 'selected';} ?>" 
-                                                                . $rooms[$i]['roomNumber']."</option>";
-                                                        echo "<br/>";
+                                                            echo "<option value=\"".$rooms[$i]['roomNumber']."\""."<?php if(".$getroom."===".$rooms[$i]['roomNumber']."){echo 'selected';} ?>" 
+                                                            . $rooms[$i]['roomNumber']."</option>";
+                                                            echo "<br/>";
 
                                                     }
                                                     ?>
@@ -111,7 +110,7 @@
                                         <div class="col-sm-2"></div>
                                       <label for="pic" class="col-sm-2 control-label">Profile Picture</label>
                                       <div class="col-sm-5">
-                                          <input type="file"  name="picture" class="form-control" value="<?php if( isset($_GET['pictureVal']) ){echo $_GET['pictureVal']; }?>"/>
+                                          <input type="file"  name="picture" class="form-control" />
                                       </div>
                                     </div>
                                     
