@@ -84,7 +84,7 @@ function __autoload($classname) {
                 function unique($value, $fieldname){
 			include_once "../controllers/AuthenticationController.php";
                         $authobj=new Authenticate;
-                        $users=$authobj->getUserWithEmail();
+                        $users=$authobj->getUserWithEmail($value,$fieldname);
                                     
 			if(count($users)>=1){
                             
