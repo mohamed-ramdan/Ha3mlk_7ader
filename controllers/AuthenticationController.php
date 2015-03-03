@@ -20,13 +20,13 @@ require_once '../models/Validation.php';
      
     
         function  login(){
-            var_dump($_POST); var_dump($_GET);
+            
             $obj = ORM::getInstance();
             $email=$_POST['email']; 
             $password=$_POST['password'];
             $obj->setTable('user');
             $opOfQuery=$obj->select(" email = '$email' and password = md5($password) ");
-            echo"o/p"; var_dump($opOfQuery); 
+             
 
             if(count($opOfQuery)==1)
             {
@@ -38,14 +38,26 @@ require_once '../models/Validation.php';
 
         }
     
+        function  logout(){
+             //if($_SESSION['logged']&&$_SESSION['isAdmin'])
+            //{
+            
+                $_SESSION[]=array();
+                
+             //}
+
+        }
+        
        function  register(){
           
             $obj = ORM::getInstance();
             //if($_SESSION['logged']&&$_SESSION['isAdmin'])
             //{
-            var_dump($_POST);
+            
             if($_POST)
             {  
+                
+                //server side validation
                 $rules = array(
 			'name' => 'required',
 			'email' => 'required|email|unique',
@@ -55,7 +67,7 @@ require_once '../models/Validation.php';
                         'captcha' => 'required|match',
                         'passwordc'=>'required',
                         );
-               
+                //send the data in session to compare with in validation
                 $_SESSION['passwd']=$_POST["passwordc"];
                 $validation = new Validation();
                 $result = $validation->validate($_POST,$rules);
@@ -65,22 +77,27 @@ require_once '../models/Validation.php';
                 
                 
                 if(count($validation->errors)==0 ){
-                        var_dump($_POST);
+                        
+                        //get room id of selected room
                         $obj->setTable('room');
                         $room=$_POST["roomNumber"];
                         $op=$obj->select("roomNumber= '$room' ");
                         $_POST["roomNumber"]=$op[0]['id'];
+                        //set is admin to zero
                         $_POST["isAdmin"]=0;
                         $obj->setTable('user');
+                        //remove from $_post
                         unset($_POST["passwordc"]);
                         unset($_POST["captcha"]);
+                        //insert in database
                         $a=$obj->insert($_POST);
                         $DOCUMENT_ROOT = $_SERVER['DOCUMENT_ROOT'];
                         $upfile="$DOCUMENT_ROOT/Ha3mlk_7ader/Ha3mlk_7ader/static/img/{$_POST['email']}_{$_FILES['picture']['name']}";
 			$imgname = "{$_POST['email']}_{$_FILES['picture']['name']}";
-                        
+                        //save image
 			if (is_uploaded_file($_FILES['picture']['tmp_name']))
 			{
+                                //save image from tmp to thier place
 				if (!move_uploaded_file($_FILES['picture']['tmp_name'], $upfile))
 				{
 					echo 'Problem: Could not move file to destination directory';
@@ -98,35 +115,43 @@ require_once '../models/Validation.php';
                //save data with out file no file sent
                
                else if (count($validation->errors)==1 && $_FILES['picture']['error'] ==4 ){
+                        //get room id of selected room
+                        $obj->setTable('room');
+                        $room=$_POST["roomNumber"];
+                        $op=$obj->select("roomNumber= '$room' ");
+                        //get room id remove capcha and confirmpasswd make isadminto 0
+                        $_POST["roomNumber"]=$op[0]['id'];
                         unset($_POST["passwordc"]);
                         unset($_POST["captcha"]);
-                        unset($_POST["picture"]);
                         $_POST["isAdmin"]=0;
                         $obj->setTable('user');
                         $a=$obj->insert($_POST);
-                        var_dump($a);    
+                            
              }
                //data it self isnot valid
                else{
-                    
+                        //file isnot uploaded    
                         if( $_FILES['picture']['error'] ==4){
 				array_pop($validation->errors);
 			}
 			echo '<ul>';
+                        //get all errors
 			foreach ($validation->errors as $error) {
 				echo '<li>' . $error . '</li>';
 			}
 
 			echo '</ul>';
+                        
 			$nameVal=$_POST["name"];
 			$emailVal=$_POST["email"];
 			$roomVal=$_POST["roomNumber"];
                         $extVal=$_POST["ext"];
-                        $pictureVal=$_POST["picture"];
-		        $capVal=$_POST["captcha"];
+                        
+		        
+                        
                         
 			$errors = implode("^",$validation->errors);
-                        header("Location: ../views/adduser.php?nameVal={$nameVal}&emailVal={$emailVal}&capVal={$capVal}&extVal={$extVal}&roomVal={$roomVal}&pictureVal={$pictureVal}&errors={$errors}");    
+                        header("Location: ../views/adduser.php?nameVal={$nameVal}&emailVal={$emailVal}&extVal={$extVal}&roomVal={$roomVal}&errors={$errors}");    
 
                }
                
@@ -142,7 +167,7 @@ require_once '../models/Validation.php';
            return $op;
        } 
         
-       function getUserWithEmail(){
+       function getUserWithEmail($value,$fieldname){
            $obj = ORM::getInstance();
            $obj->setTable('user');
            $op=$obj->select("$fieldname = '$value' ");
