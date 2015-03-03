@@ -89,13 +89,15 @@ require_once '../models/Validation.php';
                         //remove from $_post
                         unset($_POST["passwordc"]);
                         unset($_POST["captcha"]);
-                        //insert in database
-                        $a=$obj->insert($_POST);
+                       
                         $DOCUMENT_ROOT = $_SERVER['DOCUMENT_ROOT'];
                         $upfile="$DOCUMENT_ROOT/Ha3mlk_7ader/Ha3mlk_7ader/static/img/{$_POST['email']}_{$_FILES['picture']['name']}";
 			$imgname = "{$_POST['email']}_{$_FILES['picture']['name']}";
                         //save image
-			if (is_uploaded_file($_FILES['picture']['tmp_name']))
+			$_POST["picture"]=$upfile;
+                        //insert in database
+                        $a=$obj->insert($_POST);
+                        if (is_uploaded_file($_FILES['picture']['tmp_name']))
 			{
                                 //save image from tmp to thier place
 				if (!move_uploaded_file($_FILES['picture']['tmp_name'], $upfile))
