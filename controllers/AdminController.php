@@ -161,8 +161,12 @@ class AdminController
         
     }
     function saveManualOrder(){
+        
+        // get the current time 
         $phptime =  time();
         echo  $phptime;
+        
+        // get an instance of the the class ORM to preform the database crud operations
         $orm = ORM::getInstance();
         
         // Set table retrieve
@@ -170,35 +174,54 @@ class AdminController
         // Retrieve all products
         $products = $orm->select();
         
+        // get the ajax get request data from the $_GET Array
         $notes = $_GET["notes"];
         $orderUsername = $_GET["orderUsername"];
         $destinationRooms = $_GET["destinationRooms"];
         
+        // an arrays to hold the the quantity of each product associated with the product name
         $productsNums= array();
+        
+        // an arrays to hold the the id of each product associated with the product name
         $productsIDs = array();
+        
+        // go over all the products and get the quantities and the ids .. using the names from the database
         foreach ($products as $product) {
              $productsNums[$product['productName']] = $_GET[$product['productName']];
              $productsIDs[$product['productName']] =$product['productID'];
         }
         print_r( $productsNums);
 //        return $productsNums;
+        
+        // set the working table to user
         $orm->setTable('h3mlk7aderdb.user');
+        // Retrieve all users with this name .. to get the the userID
         $user=$orm->select("username='$orderUsername'");
         
+        // set the working table to room
         $orm->setTable('h3mlk7aderdb.room');
+        
+        // Retrieve the room with this number .. to get the the roomID
         $room=$orm->select("roomNumber='$destinationRooms'");
         var_dump($room);
         
-                
+        // set the working table to cafeOrder                
         $orm->setTable('h3mlk7aderdb.cafeOrder');
         
+        // insert the order into the cafeOrder Table
+        // i will modify it to take the current time soon
         echo $orm->insert(array('date' => $phptime , 'amount' => 200, 'status' => 'preparing', 'destinationRoomNumber' =>  $room[0]['id'], 'orderUserID' => $user[0]['userID'], 'note' => $notes));
        
+        // select the order i just entered to get it's auto incremeted id
         $thisOrder=$orm->select("date=$phptime");
         //var_dump ($thisOrder);
         
+        // set the working table to orderComponent    
         $orm->setTable('h3mlk7aderdb.orderComponent');
+        
         foreach ($products as $product) {
+            // go over all products and if user requested the ihis product (it's value more than 0)
+            // the quantity and the productID and orderID insereted into the db
             if($productsNums[$product['productName']]!=0){
                 $orm->insert(array('orderID' => $thisOrder[0]['orderID'], 'productID' => $productsIDs[$product['productName']]  ,'quantity' => $productsNums[$product['productName']]));             
         
@@ -231,7 +254,6 @@ class AdminController
     // First must check if the user is authorized and he is an admin
     
 
-//$varAdmin = new AdminController();
     if(isset($_GET["fn"])){
         $varAdmin = new AdminController();
         switch ($_GET["fn"])
