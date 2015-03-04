@@ -160,6 +160,51 @@ class AdminController
         } 
         
     }
+    function saveManualOrder(){
+        $phptime =  time();
+        echo  $phptime;
+        $orm = ORM::getInstance();
+        
+        // Set table retrieve
+        $orm->setTable('h3mlk7aderdb.product');
+        // Retrieve all products
+        $products = $orm->select();
+        
+        $notes = $_GET["notes"];
+        $orderUsername = $_GET["orderUsername"];
+        $destinationRooms = $_GET["destinationRooms"];
+        
+        $productsNums= array();
+        $productsIDs = array();
+        foreach ($products as $product) {
+             $productsNums[$product['productName']] = $_GET[$product['productName']];
+             $productsIDs[$product['productName']] =$product['productID'];
+        }
+        print_r( $productsNums);
+//        return $productsNums;
+        $orm->setTable('h3mlk7aderdb.user');
+        $user=$orm->select("username='$orderUsername'");
+        
+        $orm->setTable('h3mlk7aderdb.room');
+        $room=$orm->select("roomNumber='$destinationRooms'");
+        var_dump($room);
+        
+                
+        $orm->setTable('h3mlk7aderdb.cafeOrder');
+        
+        echo $orm->insert(array('date' => $phptime , 'amount' => 200, 'status' => 'preparing', 'destinationRoomNumber' =>  $room[0]['id'], 'orderUserID' => $user[0]['userID'], 'note' => $notes));
+       
+        $thisOrder=$orm->select("date=$phptime");
+        //var_dump ($thisOrder);
+        
+        $orm->setTable('h3mlk7aderdb.orderComponent');
+        foreach ($products as $product) {
+            if($productsNums[$product['productName']]!=0){
+                $orm->insert(array('orderID' => $thisOrder[0]['orderID'], 'productID' => $productsIDs[$product['productName']]  ,'quantity' => $productsNums[$product['productName']]));             
+        
+            }
+            }
+    }
             
     
     function __construct() {
@@ -187,6 +232,16 @@ class AdminController
     
 
 //$varAdmin = new AdminController();
-    
+    if(isset($_GET["fn"])){
+        $varAdmin = new AdminController();
+        switch ($_GET["fn"])
+        {       
+          case "saveManualOrder":
+            $varAdmin->saveManualOrder();
+            break;
+        }
+    }
+
+
 ?>
 

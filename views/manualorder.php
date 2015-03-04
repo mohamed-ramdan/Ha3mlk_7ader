@@ -9,9 +9,9 @@
     <div id="orderform">
         
     </div>
-    <div id="notes">
+    <div >
         Notes:
-        <textarea rows="5" cols="20" ></textarea>
+        <textarea rows="5" cols="20" id="notes" ></textarea>
     </div>
     
     <?php
@@ -96,7 +96,54 @@
 
     ?>
 
+    <input type="button" id="confirmBtn" value="Confirm" />
     
+    <script>
+        ajaxRequest = new XMLHttpRequest();
+        function ajax(url){
+
+                ajaxRequest.open("GET","../controllers/AdminController.php?" + url, true);
+                
+                ajaxRequest.send();
+        }
+        ajaxRequest.onreadystatechange = function(){    
+                        if(ajaxRequest.readyState ===4 && ajaxRequest.status===200){
+                                xmlHttp = ajaxRequest.responseText;
+                                //document.getElementById("underinput").innerHTML = xmlHttp.getElementsByTagName("response")[0].childNodes[0].nodeValue;
+                                //console.log( xmlHttp.getElementsByTagName("response")[0].childNodes[0].nodeValue);
+                        }
+        };
+    
+        document.getElementById("confirmBtn").onclick = function(){
+        var notes = document.getElementById("notes").value;
+        var orderUsername =  document.getElementById("orderUser").value;
+        var destinationRooms = document.getElementById("destinationRooms").value;
+        console.log(notes);
+        console.log(orderUsername);
+        console.log(destinationRooms);
+        var url = "";
+        url = "fn=saveManualOrder&notes="+notes+"&orderUsername="+orderUsername+"&destinationRooms="+destinationRooms;
+        <?php 
+            foreach ($products as $product) {
+                    $productname = $product['productName'];
+                    ?>
+                    if(<?php echo $productname;?>Flag!=0){
+                        var <?php echo $productname ?>Value = document.getElementById("<?php echo $productname ?>Quantity").value;
+                    }
+                    else{
+                        var <?php echo $productname ?>Value = 0;
+                    }
+                    console.log(<?php echo $productname ?>Value);
+                    url+="&<?php echo $productname ?>="+<?php echo $productname ?>Value;
+                    <?php
+                    
+            }
+                    
+        ?>
+            ajax(url);
+        }
+        
+    </script>
     
 </body>
 </html>
