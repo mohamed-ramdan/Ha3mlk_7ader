@@ -6,7 +6,13 @@
 	<title></title>
 </head>
 <body>
-
+    <div id="orderform">
+        
+    </div>
+    <div id="notes">
+        Notes:
+        <textarea rows="5" cols="20" ></textarea>
+    </div>
     
     <?php
         
@@ -48,17 +54,65 @@
             foreach ($products as $product) {
                 $productname = $product['productName'];
                 echo "<button type='button' id='$productname'> $productname </button>";
+                ?>
+    
+    <script>
+         <?php echo $productname; ?>Flag=0;
+        var orderform = document.getElementById("orderform");
+       
+            var <?php echo $productname; ?>Btn =  document.getElementById('<?php echo $productname; ?>');
+            <?php echo $productname; ?>Btn.onclick = function(){
+                
+                 if(<?php echo $productname; ?>Flag===0){
+                
+            var <?php echo $productname; ?>TextNode = document.createTextNode('<?php echo $productname; ?>');
+            var <?php echo $productname; ?>Label = document.createElement('div');
+            <?php echo $productname; ?>Label.appendChild(<?php echo $productname; ?>TextNode );
+            orderform.appendChild(<?php echo $productname; ?>Label);
+            var <?php echo $productname  ?>Quantity=document.createElement("input");
+            <?php echo $productname ?>Quantity.setAttribute("id", "<?php echo $productname ?>Quantity");
+            <?php echo $productname ?>Quantity.setAttribute("type","number");
+            <?php echo $productname ?>Quantity.setAttribute("min",0);
+            <?php echo $productname ?>Quantity.setAttribute("value",1);
+             orderform.appendChild(<?php echo $productname; ?>Quantity);
+             <?php echo $productname; ?>Flag=1;
+                 
+                 }else{
+                 var quantityValue = document.getElementById("<?php echo $productname ?>Quantity").value;
+//            var quantityValue =<?php echo $productname; ?>Quantity.data;
+               document.getElementById("<?php echo $productname ?>Quantity").setAttribute("value",parseInt(quantityValue)+1);
+            //document.getElementById(<?php echo $productname; ?>Quantity).value = parseInt(quantityValue)+1;
+        }
+                 
+            };
+        
+        
+        console.log(<?php echo $productname; ?>Btn);
+    </script>
+                <?php
             }
         }
         echo "<br /><br />";
 
     ?>
-    
-    <div>
-        
-    </div>
-    
+
     
     
 </body>
 </html>
+
+<?php
+/*
+ *                 echo "<script  type='text/javascript'> var $productname"."Btn = document.getElementById('$productname');"
+                        . " $productname"."Btn.onclick = function(){"
+                        . " var orderform =  document.getElementById('orderform');"
+                        . " var $productname"."TextNode = document.createTextNode('$productname'); "
+                        . " var $productname"."Label = document.createElement('div'); "
+                        . " $productname"."Label.appendChild('".$productname."TextNode');"
+                        . " orderform.appendChild('$productname"."Label');};</script>";
+ * 
+ * 
+ *         <?php echo "<input id='".$productname."Quantity' type='number' value='1'/>";?>;
+ */
+
+?>
