@@ -65,7 +65,7 @@ class ORM {
         if (!$state) {
             return $this->dbconn->error;
         }
-
+        
         return $this->dbconn->affected_rows;
     }
      // select function

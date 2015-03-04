@@ -49,9 +49,9 @@
                                 <form class="form-horizontal" method="post" action="../controllers/AuthenticationController.php?fn=register" enctype="multipart/form-data" >
                                     <div class="form-group">
                                         <div class="col-sm-2"></div>
-                                      <label for="name" class="col-sm-2 control-label">Name</label>
+                                      <label for="username" class="col-sm-2 control-label">Username</label>
                                       <div class="col-sm-5">
-                                          <input type="text" class="form-control" name="name" required="1" placeholder="Name" value="<?php if( isset($_GET['nameVal']) ){echo $_GET['nameVal']; }?>">
+                                          <input type="text" class="form-control" name="username" required="1" placeholder="Name" value="<?php if( isset($_GET['nameVal']) ){echo $_GET['nameVal']; }?>">
                                       </div>
                                     </div>
                                     <div class="form-group">
@@ -110,7 +110,7 @@
                                         <div class="col-sm-2"></div>
                                       <label for="pic" class="col-sm-2 control-label">Profile Picture</label>
                                       <div class="col-sm-5">
-                                          <input type="file"  name="picture" class="form-control" />
+                                          <input type="file"  name="userPicture" class="form-control" />
                                       </div>
                                     </div>
                                     

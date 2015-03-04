@@ -54,6 +54,9 @@ function __autoload($classname) {
 				return $imgvalid;
 			}
 			if($data[$fieldname]['type'] != 'image/jpeg'){
+                                echo $data[$fieldname]['type']."<br/>";
+                                //var_dump($data[$fieldname]);
+                                //exit;
 				$this->errors[] = 'Problem: file is not an image';
 				$imgvalid= FALSE; 
 			}

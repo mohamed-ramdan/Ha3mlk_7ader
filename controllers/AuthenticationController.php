@@ -32,8 +32,8 @@ require_once '../models/Validation.php';
             {
                 $_SESSION['logged']=1;
                 $_SESSION['isAdmin']=$opOfQuery[0]['isAdmin'];
-                $_SESSION['userName']=$opOfQuery[0]['name'];
-                $_SESSION['picture']=$opOfQuery[0]['picture'];
+                $_SESSION['username']=$opOfQuery[0]['username'];
+                $_SESSION['userPicture']=$opOfQuery[0]['userPicture'];
             }  
 
         }
@@ -59,7 +59,7 @@ require_once '../models/Validation.php';
                 
                 //server side validation
                 $rules = array(
-			'name' => 'required',
+			'username' => 'required',
 			'email' => 'required|email|unique',
 			'password' => 'required|matchvalues',
 			'roomNumber' => 'required',
@@ -71,7 +71,7 @@ require_once '../models/Validation.php';
                 $_SESSION['passwd']=$_POST["passwordc"];
                 $validation = new Validation();
                 $result = $validation->validate($_POST,$rules);
-                $imgresult = $validation->validateimg($_FILES,'picture');
+                $imgresult = $validation->validateimg($_FILES,'userPicture');
 		
                 //no error at all file and data
                 
@@ -91,16 +91,20 @@ require_once '../models/Validation.php';
                         unset($_POST["captcha"]);
                         $_POST["password"]=  md5($_POST["password"]);
                         $DOCUMENT_ROOT = $_SERVER['DOCUMENT_ROOT'];
-                        $upfile="$DOCUMENT_ROOT/Ha3mlk_7ader/Ha3mlk_7ader/static/img/{$_POST['email']}_{$_FILES['picture']['name']}";
-			$imgname = "{$_POST['email']}_{$_FILES['picture']['name']}";
+                        $upfile="$DOCUMENT_ROOT/Ha3mlk_7ader/static/img/{$_POST['email']}_{$_FILES['userPicture']['name']}";
+			$imgname = "{$_POST['email']}_{$_FILES['userPicture']['name']}";
                         //save image
-			$_POST["picture"]=$upfile;
+			$_POST["userPicture"]=$upfile;
                         //insert in database
+                        //var_dump($_POST);
+                        
                         $a=$obj->insert($_POST);
-                        if (is_uploaded_file($_FILES['picture']['tmp_name']))
+                        //echo $a;
+                        //exit;
+                        if (is_uploaded_file($_FILES['userPicture']['tmp_name']))
 			{
                                 //save image from tmp to thier place
-				if (!move_uploaded_file($_FILES['picture']['tmp_name'], $upfile))
+				if (!move_uploaded_file($_FILES['userPicture']['tmp_name'], $upfile))
 				{
 					echo 'Problem: Could not move file to destination directory';
 					exit; 
@@ -109,14 +113,14 @@ require_once '../models/Validation.php';
 			else
 				{
 					echo 'Problem: Possible file upload attack. Filename: ';
-					echo $_FILES['picture']['name'];
+					echo $_FILES['userPicture']['name'];
                                         exit;
                                 }
               }
                
                //save data with out file no file sent
                
-               else if (count($validation->errors)==1 && $_FILES['picture']['error'] ==4 ){
+               else if (count($validation->errors)==1 && $_FILES['userPicture']['error'] ==4 ){
                         //get room id of selected room
                         $obj->setTable('room');
                         $room=$_POST["roomNumber"];
@@ -134,7 +138,7 @@ require_once '../models/Validation.php';
                //data it self isnot valid
                else{
                         //file isnot uploaded    
-                        if( $_FILES['picture']['error'] ==4){
+                        if( $_FILES['userPicture']['error'] ==4){
 				array_pop($validation->errors);
 			}
 			echo '<ul>';
