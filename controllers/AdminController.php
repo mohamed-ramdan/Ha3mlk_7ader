@@ -8,6 +8,7 @@ class AdminController
 {
  
     /**
+     * @author Mohamed Ramadan
      * getUnFinishedOrders is a function that get all unfinished orders
      * Using ORM select method
      * @param void 
@@ -29,7 +30,9 @@ class AdminController
     }
     
     
+    
     /**
+     * @author Mohamed Ramadan
      * getManualOrderData is a function that get all needed data 
      * to be user for creating a manual order
      * @param void 
@@ -95,6 +98,7 @@ class AdminController
     }
     
     /**
+     * @author Mohamed Ramadan
      * getAllProducts is a function that retrieve all products
      * @param void 
      * @return array products 
@@ -128,6 +132,7 @@ class AdminController
     }
     
     /**
+     * @author Mohamed Ramadan
      * getAddNewProductNeededData is a function that retrieve the requiested data needed for add new product
      * @param void 
      * @return array categories
@@ -160,6 +165,34 @@ class AdminController
         } 
         
     }
+    
+    
+    
+    function  saveNewProduct()
+    {
+       var_dump($_GET['fn']);
+       $orm = ORM::getInstance(); 
+       $orm->setTable('h3mlk7aderdb.category');
+       $catName = $_GET["categoryName"];
+       $categoryData= $orm->select("categoryName = '$catName'");
+       $categoryId = $categoryData['CategoryID'];
+       $orm->setTable('h3mlk7aderdb.product');
+       $orm->insert
+               (
+                    array
+                        (
+                            'productName'     => $_GET['productName'],
+                            'productPrice'    => $_GET['productPrice'],
+                            'productCategory' => $categoryId,
+                            'productPic'      => $_GET['productPic']
+                         ) 
+               );  
+    }
+            
+    
+    
+    
+    
     function saveManualOrder(){
         
         // get the current time 
@@ -191,7 +224,7 @@ class AdminController
              $productsIDs[$product['productName']] =$product['productID'];
         }
         print_r( $productsNums);
-//        return $productsNums;
+        //return $productsNums;
         
         // set the working table to user
         $orm->setTable('h3mlk7aderdb.user');
@@ -248,6 +281,30 @@ class AdminController
       
       */
     }
+   
+    
+    /**
+     * @author Mohamed Ramadan
+     * getAllCategories is a function that get all product categories
+     * Using ORM select method
+     * @param void 
+     * @return array Include all categories
+     */
+    function getAllCategories()
+    {
+        // Get Intance from ORM model
+        $orm = ORM::getInstance();
+        // Set table orders to retrieve
+        $orm->setTable('h3mlk7aderdb.category');
+        // Call function select from ORM instance
+        $categories  = $orm->select();
+        // If there are any categories then retrieve
+        if(!empty($categories))
+        {
+            return $categories;
+        }
+    }
+    
     
 }
     
@@ -258,9 +315,12 @@ class AdminController
         $varAdmin = new AdminController();
         switch ($_GET["fn"])
         {       
-          case "saveManualOrder":
-            $varAdmin->saveManualOrder();
-            break;
+            case "saveManualOrder":
+                $varAdmin->saveManualOrder();
+                break;
+            case "saveNewProduct":
+                $varAdmin->saveNewProduct();
+                break;
         }
     }
 

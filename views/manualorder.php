@@ -142,7 +142,7 @@
         // params:      url: the whole data from the input fields put together and ready to append to the  url of the request
         // this function will be called by the confirmBtn listener
         function ajax(url){
-                // the first parameter is whether the request method is POST OR Ger
+                // the first parameter is whether the request method is POST OR Get
                 // the second parameter is the the actual url
                 // the third parameter is the type of ajax request , Asyncrounous or        usually always true
                 ajaxRequest.open("GET","../controllers/AdminController.php?" + url, true);

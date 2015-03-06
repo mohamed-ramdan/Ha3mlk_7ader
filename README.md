@@ -9,6 +9,7 @@ Orders Status
 2- delivering
 3- done
 4- canceled
+5- pending  (default)
 
 -----------------------------------------
 
