@@ -1,5 +1,6 @@
 <html>
     <head>
+        <title>Add Product</title>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,12 +11,12 @@
         
         <br /> <br />
         <div class="container">
-            <div class="panel panel-default">
+            <div class="panel panel-primary">
                 <div class="panel-heading">
                     <h1>Add Product</h1>
                 </div><!--panel heading-->
                 <div class="panel-body">
-                    <form class="form-horizontal" method="get" action="../controllers/AdminController.php">
+                    <form class="form-horizontal" enctype="multipart/form-data" method="get" action="../controllers/AdminController.php">
                         <div class="form-group">
                             
                             <label for="product" class="col-sm-2 control-label">Product:</label>
