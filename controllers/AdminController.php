@@ -329,7 +329,13 @@ class AdminController
 
 
 
-
+/**
+     * @author Mohamed Ramadan
+     * saveNewCategory is a function that save new categories
+     * Using ORM insert method
+     * @param void 
+     * @return int number of affected rows
+     */
 function saveNewCategory()
 {
     // Get Intance from ORM model
@@ -338,6 +344,7 @@ function saveNewCategory()
         $orm->setTable('h3mlk7aderdb.category');
         //insert data
         $result = $orm->insert($_GET['category']);
+        // number of affected rows
         return $result;
         //header("Location:views/addproduct.php");
 }
