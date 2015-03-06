@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,40 +15,27 @@
     </div>
     
     <?php
-        
-        require_once '../controllers/AdminController.php';
+        require_once '../controllers/NormalUserController.php';
         
         // create an object of the Admin Controller class to execute the necessary code for manual order page
-        $varAdmin = new AdminController();
-        $result = $varAdmin->getManualOrderNeededData(); 
+        $varNormalUser = new NormalUserController();
+        $result = $varNormalUser->getMakeOrderNeededData(); 
         // the return value is an array which consist of products,categories,users 
         //and rooms each of those consists of an array of associated arrays
-
-        echo "<h2>Function getManualOrder</h2>";
-
+        
         if($result!=false){
-            //breaking up the $result into it's components
-            $users = $result['users'];
             $products = $result['products'];
             $rooms = $result['rooms'];
+            $latestOrder = $result['latestOrder'];
+            $categories = $result['categories'];
             
-            //creating the add to user select field
-            echo "Add to User <select id='orderUser'>";
-            foreach ($users as $user) {
-                $username = $user['username'];
-                echo "<option value='$username'> $username</option>";
-            }
-            echo "</select>";
-            echo "<br /><br />";
-            
-            //creating the room select field
             echo "Room <select id='destinationRooms'>";
             foreach ($rooms as $room) {
                 $roomNumber = $room['roomNumber'];
                 echo "<option value='$roomNumber'> $roomNumber</option>";
             }
             echo "</select>";
-
+            
             //creating the products' buttons
             echo "<br /><br /> Products";
             foreach ($products as $product) {
@@ -137,11 +122,10 @@
                 
                 <?php
             } //end of the for each loop
-        } // end of the check to see if result (the return of getManualOrderNeededData from Admin Controller ) is not null 
-        echo "<br /><br />";
-
+            
+            
+        }
     ?>
-     
     <!--
         This button to send all the data to the backend through an ajax request
     -->
@@ -161,7 +145,7 @@
                 // the first parameter is whether the request method is POST OR Ger
                 // the second parameter is the the actual url
                 // the third parameter is the type of ajax request , Asyncrounous or        usually always true
-                ajaxRequest.open("GET","../controllers/AdminController.php?" + url, true);
+                ajaxRequest.open("GET","../controllers/NormalUserController.php?" + url, true);
                 
                 // send the request.. remember we sent the data in the url
                 ajaxRequest.send();
@@ -185,12 +169,12 @@
 
             // get the value from the input fields     
             var notes = document.getElementById("notes").value;
-            var orderUsername =  document.getElementById("orderUser").value;
+            
             var destinationRooms = document.getElementById("destinationRooms").value;
 
             // making the url sent in the ajax get request ready
             var url = "";
-            url = "fn=saveManualOrder&notes="+notes+"&orderUsername="+orderUsername+"&destinationRooms="+destinationRooms;
+            url = "fn=saveOrder&notes="+notes+"&destinationRooms="+destinationRooms;
 
             //openinh php tags to append the quantitiy of each product to the url
             <?php 
@@ -223,6 +207,5 @@
         }
         
     </script>
-    
 </body>
 </html>

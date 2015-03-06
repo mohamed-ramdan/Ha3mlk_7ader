@@ -56,7 +56,7 @@ class AdminController
         // Set table orders to retrieve
         $orm->setTable('h3mlk7aderdb.product');
         // Retrieve all products
-        $products = $orm->select("");
+        $products = $orm->select("productStatus='available'");
         
         // Set table orders to retrieve
         $orm->setTable('h3mlk7aderdb.room');
@@ -189,16 +189,10 @@ class AdminController
                          ) 
                ); 
     }
-            
-    
-    
-    
-    
     function saveManualOrder(){
         
         // get the current time 
-        $phptime =  time();
-        echo  $phptime;
+        $currentTime =  time();
         
         // get an instance of the the class ORM to preform the database crud operations
         $orm = ORM::getInstance();
@@ -224,8 +218,6 @@ class AdminController
              $productsNums[$product['productName']] = $_GET[$product['productName']];
              $productsIDs[$product['productName']] =$product['productID'];
         }
-        print_r( $productsNums);
-        //return $productsNums;
         
         // set the working table to user
         $orm->setTable('h3mlk7aderdb.user');
@@ -244,12 +236,9 @@ class AdminController
         
         // insert the order into the cafeOrder Table
         // i will modify it to take the current time soon
-        echo $orm->insert(array('date' => $phptime , 'amount' => 200, 'status' => 'preparing', 'destinationRoomNumber' =>  $room[0]['id'], 'orderUserID' => $user[0]['userID'], 'note' => $notes));
-       
-        // select the order i just entered to get it's auto incremeted id
-        $thisOrder=$orm->select("date=$phptime");
-        //var_dump ($thisOrder);
         
+        $thisOrderId = $orm->insert(array('date' => date('Y-m-d H:i:s',$currentTime) , 'amount' => 200, 'status' => 'preparing', 'destinationRoomNumber' =>  $room[0]['id'], 'orderUserID' => $user[0]['userID'], 'note' => $notes));
+              
         // set the working table to orderComponent    
         $orm->setTable('h3mlk7aderdb.orderComponent');
         
@@ -257,12 +246,11 @@ class AdminController
             // go over all products and if user requested the ihis product (it's value more than 0)
             // the quantity and the productID and orderID insereted into the db
             if($productsNums[$product['productName']]!=0){
-                $orm->insert(array('orderID' => $thisOrder[0]['orderID'], 'productID' => $productsIDs[$product['productName']]  ,'quantity' => $productsNums[$product['productName']]));             
+                $orm->insert(array('orderID' => $thisOrderId, 'productID' => $productsIDs[$product['productName']]  ,'quantity' => $productsNums[$product['productName']]));             
         
             }
             }
-    }
-            
+    }        
     
     function __construct() {
      /*   

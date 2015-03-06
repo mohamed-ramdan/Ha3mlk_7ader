@@ -31,7 +31,7 @@ class ORM {
     protected function __construct() {
 
         extract($GLOBALS['conf']);
-        @ $this->dbconn = new mysqli("localhost", "root", "admin", "h3mlk7aderdb");
+        @ $this->dbconn = new mysqli("localhost", "root", "123", "h3mlk7aderdb");
 
         if (mysqli_connect_errno()) {
             echo 'Error: Could not connect to database. Please try again later';
@@ -66,7 +66,7 @@ class ORM {
             return $this->dbconn->error;
         }
         
-        return $this->dbconn->affected_rows;
+        return $this->dbconn->insert_id;
     }
      // select function
     function select($cond = "") {
