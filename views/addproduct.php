@@ -15,7 +15,7 @@
                     <h1>Add Product</h1>
                 </div><!--panel heading-->
                 <div class="panel-body">
-                    <form class="form-horizontal" method="get" action="../controllers/AdminController/saveNewProduct">
+                    <form class="form-horizontal" method="get" action="../controllers/AdminController.php">
                         <div class="form-group">
                             
                             <label for="product" class="col-sm-2 control-label">Product:</label>
@@ -75,7 +75,7 @@
                             </div>
                         </div><!--form group-->
                         
-                        
+                        <input type="hidden" name="fn" value="saveNewProduct" />
                         
                         
                         <div class="form-group">

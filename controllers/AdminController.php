@@ -170,14 +170,15 @@ class AdminController
     
     function  saveNewProduct()
     {
-       var_dump($_GET['fn']);
+       //var_dump($_GET['fn']);
+       echo 'inside func save product';
        $orm = ORM::getInstance(); 
        $orm->setTable('h3mlk7aderdb.category');
        $catName = $_GET["categoryName"];
        $categoryData= $orm->select("categoryName = '$catName'");
        $categoryId = $categoryData['CategoryID'];
        $orm->setTable('h3mlk7aderdb.product');
-       $orm->insert
+       echo $orm->insert
                (
                     array
                         (
@@ -186,7 +187,7 @@ class AdminController
                             'productCategory' => $categoryId,
                             'productPic'      => $_GET['productPic']
                          ) 
-               );  
+               ); 
     }
             
     
