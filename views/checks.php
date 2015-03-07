@@ -28,7 +28,7 @@
                     
                     <div class="form-group">
                         <div class="col-sm-10">
-                            <select class="form-control">
+                            <select class="form-control" id="selecteduser">
                                 <?php
                                     include_once '../controllers/AdminController.php';
                                     $thisAdminVar = new AdminController();
@@ -68,10 +68,27 @@
                          include_once '../controllers/AdminController.php';
                                     $thisAdminVar = new AdminController();
                                     $users = $thisAdminVar->getAllUsers();
+                                    echo "<div class='panel-group' id='accordion' role='tablist' aria-multiselectable='true'>";
+                                    $counter = $counterr = 0;
                                     foreach ($users as $usr) 
                                     {
+                                        $counter = $counterr +=1;
                                         echo "<tr>";
-                                        echo "<td><button class='btn btn-success' id='expand'>+</button>&nbsp;<button id='minimize' class='btn btn-danger'>-</button></td>";
+                                        echo "<td>"
+                                                . "<div class='panel panel-primary'>"
+                                                . "<div class='panel-heading' role='tab' id='headingOne'>"
+                                                . "<h4 class='panel-title'>"
+                                                . "<a data-toggle='collapse' data-parent='#accordion' href='#a$counter' aria-expanded='false' aria-controls='a$counter'>See Orders</a></h4></div>"
+                                                . "<div id='a$counter' class='panel-collapse collapse in' role='tabpanel' aria-labelledby='headingOne'><div class='panel-body'>"
+                                                . "<div class='panel panel-default'>"
+                                                . "<div class='panel-heading' role='tab' id='headingTwo'>"
+                                                . "<h4 class='panel-title'>"
+                                                . "<a data-toggle='collapse' data-parent='' href='#b$counterr' aria-expanded='false' aria-controls='b$counterr'>See Order`s Products</a></h4></div>"
+                                                . "<div id='b$counterr' class='panel-collapse collapse in' role='tabpanel' aria-labelledby='headingTwo'><div class='panel-body'>"
+                                                . "see more"
+                                                . "</div></div></div>"
+                                                . "</div></div></div>"
+                                                . "</td>";
                                         
                                         $userName = $usr['username'];
                                         
@@ -79,7 +96,7 @@
                                         echo "<td>"."100"."</td>";
                                         echo "</tr>";
                                     }
-                            
+                                    echo "</div>";
                         ?>
                     </table>
                         </div><!--panel body-->
@@ -94,43 +111,9 @@
                 </div>
                 </div>
                 
-                <script>
-                    var expandBtn = document.getElementById('expand');
-                    var minimizeBtn = document.getElementById('minimize');
-                    var orderProductDiv = document.getElementById('orderproduct');
-                    var miniBtn = document.getElementById('minimize');
-                    // add action listener to expand button
-                    expandBtn.onclick=function()
-                    {
-                        //orderProductDiv.setAttribute('hidden','false');
-                        var tbl = document.createElement('table');
-                        orderProductDiv.setAttribute('class','panel-body');
-                        tbl.setAttribute('class','table table-responsive table-striped');
-                        var tbdy = document.createElement('tbody');
-                        for(i=0;i<5;i++)
-                        {
-                            var tr = document.createElement('tr');
-                             for(var j=0;j<2;j++)
-                             {
-                                 
-                                
-                                    var td=document.createElement('td');
-                                    td.appendChild(document.createTextNode('test test'))
-                                    
-                                    tr.appendChild(td)
-                                
-                             }
-                             tbdy.appendChild(tr);
-                          }
-                          tbl.appendChild(tbdy);
-                          orderProductDiv.appendChild(tbl);
-                        
-                    };
-                    
-                    miniBtn.onclick=function()
-                    {
-                        orderProductDiv.setAttribute('hidden','true');
-                    };
+                <script> 
+                    var selectedUser =document.getElementById('selecteduser');
+                    selectedUser.onchange()
                 
                 </script>
         

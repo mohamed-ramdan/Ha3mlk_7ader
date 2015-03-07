@@ -220,66 +220,76 @@ class AdminController
                    );
        
        $validation = new Validation();
-       $result = $validation->validate($_POST,$rules);
+       $result = $validation->validate($data,$rules);
        $imgresult = $validation->validateimg($_FILES,'pic');
 	
-       echo $validation->errors;
+       
        $orm = ORM::getInstance(); 
        $orm->setTable('h3mlk7aderdb.category');
-       $catName = $_POST["categoryName"];
+       $catName = $_POST["category"];
        $categoryData= $orm->select("categoryName = '$catName'");
-       $categoryId = $categoryData['CategoryID'];
+       
+       $categoryId = $categoryData[0]['categoryID'];
+       
        $orm->setTable('h3mlk7aderdb.product');
        
        	
        if(count($validation->errors)==0 ){
-       
-                
-                $DOCUMENT_ROOT = $_SERVER['DOCUMENT_ROOT'];
-                $upfile="$DOCUMENT_ROOT/Ha3mlk_7ader/static/img/{$_POST['product']}_{$_FILES['pic']['name']}";
-                $imgname = "{$_POST['product']}_{$_FILES['pic']['name']}";
+            $id=$orm->insert(
+                                             array
+                                                 (
+                                                     'productName'     => $_POST['product'],
+                                                     'price'    => $_POST['price'],
+                                                     'categoryID' => $categoryId,
+                                                     'productPicture'=>$upfile,
+                                                  ) 
+                                        );       
+           
+                $upfile="../static/img/{$id}_{$_FILES['pic']['name']}";
+               
+                $imgname = "{$id}_{$_FILES['pic']['name']}";
 
                 $_POST["userPicture"]=$upfile;
 
                 if (is_uploaded_file($_FILES['pic']['tmp_name']))
                 {
                         //save image from tmp to thier place
-                    echo move_uploaded_file($_FILES['pic']['tmp_name'], $upfile);
-                        if (!move_uploaded_file($_FILES['pic']['tmp_name'], $upfile))
+                     if (!move_uploaded_file($_FILES['pic']['tmp_name'], $upfile))
                         {
                                 echo 'Problem: Could not move file to destination directory';
                                 exit; 
                         }
-                }        
+                        else{
+                        
+                            
+                        
+                        }        
+                }
                 else
                         {
+                                    
+            
+                    
                                 echo 'Problem: Possible file upload attack. Filename: ';
                                 echo $_FILES['pic']['name'];
                                 exit;
                         }
-                echo $orm->insert
-               (
-                    array
-                        (
-                            'productName'     => $_POST['productName'],
-                            'price'    => $_POST['productPrice'],
-                            'categoryID' => $categoryId,
-                            'productPicture'=>$upfile,
-                         ) 
-               ); 
+                 
+                
                         
                         
                 }
                  else if (count($validation->errors)==1 && $_FILES['pic']['error'] ==4 ){
                         //get room id of selected room
-                        $obj->setTable('user');
+                        
+                        $orm->setTable('h3mlk7aderdb.product');
                         echo $orm->insert
                             (
                                  array
                                      (
-                                         'product'     => $_POST['productName'],
-                                         'price'    => $_POST['productPrice'],
-                                         'category' => $categoryId,
+                                         'productName'     => $_POST['product'],
+                                         'price'    => $_POST['price'],
+                                         'categoryID' => $categoryId,
 
                                       ) 
                             ); 
@@ -305,7 +315,7 @@ class AdminController
 			$priceVal=$_POST["price"];
                         $categoryVal=$_POST["category"];
                         $errors = implode("^",$validation->errors);
-                        header("Location: ../views/adduser.php?nameVal={$nameVal}&priceVal={$priceVal}&categoryVal={$categoryVal}&errors={$errors}");    
+                        header("Location: ../views/addproduct.php?nameVal={$nameVal}&priceVal={$priceVal}&categoryVal={$categoryVal}&errors={$errors}");    
 
                }
        
@@ -314,6 +324,12 @@ class AdminController
        
        
     }
+    /**
+     * saveManualOrder is a function that handle insert new order from admin site manually.
+     * @author Hesham Adel
+     * @param void
+     * @return int number of affected rows 
+     */
     function saveManualOrder(){
         
         // get the current time 
@@ -418,9 +434,17 @@ class AdminController
             return $categories;
         }
     }
+    
+    /**
+     * @author Mohamed Ramadan
+     * saveNewCategory is a function that save new categories
+     * Using ORM insert method
+     * @param void 
+     * @return int number of affected rows
+     */
     function saveNewCategory()
     {
-        // Get Intance from ORM model
+            // Get Intance from ORM model
             echo 'vcccc'.$_GET['category'];
             $orm = ORM::getInstance();
             // Set table orders to retrieve
@@ -434,17 +458,37 @@ class AdminController
             //header("Location:views/addproduct.php");
     }
     
+    /**
+     * @author Mohamed Ramadan
+     * getChecksNeededData is a function that retrieve users orders with its components
+     * Using ORM select_ join method
+     * @param void 
+     * @return array of orders, products, users related.
+     */
+    function getChecksNeededData()
+    {
+        // Get Intance from ORM model
+        $orm = ORM::getInstance();
+        $result = $orm-> selectjoin(array('cafeOrder','user','orderComponent','product'),
+                "cafeOrder.orderUserID=user.userID and cafeOrder.orderID = orderComponent.orderID and orderComponent.productID = product.productID"
+                . "order by user.username, cafeOrder.orderID, product.productID DESC");
+        if(!empty($result))
+        {
+            return $result;
+        }
+        
+        
+    }
+    
+    
+    
+    
+    
 }
 
 
 
-/**
-     * @author Mohamed Ramadan
-     * saveNewCategory is a function that save new categories
-     * Using ORM insert method
-     * @param void 
-     * @return int number of affected rows
-     */
+
 
 
     
@@ -463,9 +507,11 @@ class AdminController
                 $varAdmin->saveNewProduct();
                 break;
             case "saveNewCategory":
-               
                 $varAdmin->saveNewCategory();
-                
+                break;
+            case "getChecksNeededData":
+                $varAdmin->getChecksNeededData();
+                break;
         }
     }
 
