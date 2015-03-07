@@ -8,6 +8,21 @@
         <link type="text/css" rel="stylesheet" href="../static/css/bootstrap.min.css" /> 
 </head>
 <body>
+        <script>
+        // script for defining the websocket
+        var conn = new WebSocket('ws://localhost:8080');
+	
+        conn.onopen = function(e) {
+	    console.log("Connection established!");
+	};
+
+	conn.onmessage = function(e) {
+            var obj= JSON.parse(e.data)
+	    console.log(obj);
+	    //resultdiv.innerHTML += e.data + "<br/>";
+	}; 
+        var order;
+    </script>
     <br ><br />
     <div class="container">
      <div class="panel panel-primary">
@@ -160,6 +175,7 @@
     -->
     <input type="button" class="btn btn-success" id="confirmBtn" value="Confirm" />
     
+        
     <script>
         // Script to provide the logic of the ajax request and the listener for the confirm button 
         
@@ -187,9 +203,11 @@
                         // 200 means the server and file were successufly found
                         if(ajaxRequest.readyState ===4 && ajaxRequest.status===200){
                                 // the actual response text
-                                xmlHttp = ajaxRequest.responseText;
+                                thisOrderID = ajaxRequest.responseText;
                                 //document.getElementById("underinput").innerHTML = xmlHttp.getElementsByTagName("response")[0].childNodes[0].nodeValue;
                                 //console.log( xmlHttp.getElementsByTagName("response")[0].childNodes[0].nodeValue);
+                                order['id'] = thisOrderID;
+                                conn.send(JSON.stringify(order));
                         }
         };
     
@@ -206,10 +224,11 @@
             url = "fn=saveManualOrder&notes="+notes+"&orderUsername="+orderUsername+"&destinationRooms="+destinationRooms;
 
             //openinh php tags to append the quantitiy of each product to the url
+            var arr = [];
             <?php 
                 // go over all the available products
                 foreach ($products as $product) {
-                        // extract the the name of each product
+                        // extract the the name of each product  
                         $productname = $product['productName'];
                         ?>
 
@@ -217,12 +236,17 @@
                         // exist in the orderform and the user choose at least one
                         if(<?php echo $productname;?>Flag!=0){
                             var <?php echo $productname ?>Value = document.getElementById("<?php echo $productname ?>Quantity").value;
+                            pname = <?php echo $productname  ?>.getAttribute("id");
+                            arr.push({
+                                "ProductName": pname,
+                                "Quantity": <?php echo $productname ?>Value
+                            });
                         }
                         else{
                             // if the flag was zero then put the value =0
                             var <?php echo $productname ?>Value = 0;
                         }
-                        console.log(<?php echo $productname ?>Value);
+                        //console.log(<?php echo $productname ?>Value);
 
                         //append the the value to the url
                         url+="&<?php echo $productname ?>="+<?php echo $productname ?>Value;
@@ -232,10 +256,32 @@
 
             ?>
             // call the ajax javascript function
+            function pad2(number) {
+
+                return (number < 10 ? '0' : '') + number;
+
+            }
             ajax(url);
+            
+            xdate = new Date();
+            thisMonth = parseInt(xdate.getMonth()) + 1;
+
+            thisDay = parseInt(xdate.getDay()) + 1;
+            
+            xdate2= xdate.getFullYear() + '-' + pad2(thisMonth) + '-' + pad2(thisDay) + ' ' +pad2(xdate.getHours())+':'+ pad2(xdate.getMinutes())+':'+ pad2(xdate.getSeconds());  
+            order = {
+                "orderDate": xdate2,
+                "Name": "Mark",
+                "Room": destinationRooms,
+                "Ext": "4444",
+                "notes": notes,
+                "Products":arr,
+                "type": "newOrder"
+            }
         }
         
     </script>
+    
     
     
     

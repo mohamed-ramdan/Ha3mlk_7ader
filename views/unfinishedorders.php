@@ -1,6 +1,57 @@
 
 
+    <script>
+        // Script to provide the logic of the ajax request and the listener for the confirm button 
+        
+        //create an ajax XML Http Request 
+        ajaxRequest = new XMLHttpRequest();
+        
+    
+        // the function that will open and send the ajax requst to the intended backend page
+        // params:      url: the whole data from the input fields put together and ready to append to the  url of the request
+        // this function will be called by the confirmBtn listener
+        function ajax(url){
+                // the first parameter is whether the request method is POST OR Ger
+                // the second parameter is the the actual url
+                // the third parameter is the type of ajax request , Asyncrounous or        usually always true
+                ajaxRequest.open("GET","../controllers/AdminController.php?" + url, true);
+                
+                // send the request.. remember we sent the data in the url
+                ajaxRequest.send();
+        }
+        
+        // onlick action listener for the ajax request
+        // it's useful because through it we can control what to do when the request come back to the client with a response 
+        ajaxRequest.onreadystatechange = function(){    
+                        // readyState = 4  means the request is done and came back to the client
+                        // 200 means the server and file were successufly found
+                        if(ajaxRequest.readyState ===4 && ajaxRequest.status===200){
+                                // the actual response text
+                                
+                                //console.log(updatedOrder);
+                                if(ajaxRequest.responseText.trim()!='false'){
+                                    
+                                    comeResponse=(ajaxRequest.responseText).split('@');
+                                    updateOrderID = parseInt(comeResponse[0]);
+                                    updateOrderStatus = comeResponse[1].trim();
+                                    document.getElementById('textstatus'+ updateOrderID ).innerHTML= updateOrderStatus;
+                                    
+                                    
+                                    var orderChanged = {
+                                        "orderID": updateOrderID,
+                                        "newStatus": updateOrderStatus,
+                                        "type": "changeStatus"
+                                    }
+                                    conn.send(JSON.stringify(orderChanged));
+                                   
+                                }
+                                
+                        }
+        };
+    
+            // call the ajax javascript function
 
+    </script>
 <?php
     require_once '../controllers/AdminController.php';
     
@@ -40,7 +91,7 @@
                     echo '<td>'.$order['username'].'</td>'; 
                     echo '<td>'.$order['roomNumber'].'</td>'; 
                     echo '<td>'.$order['ext'].'</td>'; 
-                    echo '<td>'.$order['status'].'</td>'; 
+                    echo "<td id='textstatus$thisOrderID'>".$order['status'].'</td>'; 
                     echo '<td>'."<select id='change$thisOrderID'".">"
                             . "<option value='preparing'> preparing </option>"
                             . "<option value='delivering'> delivering </option>"
@@ -48,7 +99,29 @@
                             . "</select>".'</td>';
                     echo '</tr>';
                     echo '<tr>';
-                    echo '<td>'.$order['productName'].'</td>'; 
+                    echo '<td>'.$order['productName'].'</td>';
+                    ?>
+                        <script>
+                            if( document.getElementById('textstatus<?php echo $thisOrderID; ?>' ).innerHTML.trim()!='Canceled'){
+                             //console.log(element.selectedIndex);
+                                var element = document.getElementById('change<?php echo $thisOrderID; ?>');
+                                //console.log(element);
+                                element.value = '<?php echo $order['status']; ?>';
+                                element.onchange= function(){
+                                    newStatus =  this.options[ this.selectedIndex ].value 
+                                    var url =  "fn=changeOrderStatus&newStatus="+newStatus+"&orderID="+"<?php echo $thisOrderID; ?>";
+                                    console.log(url);
+                                    ajax(url);
+                                }
+                                }else{
+                                   document.getElementById('change<?php echo $thisOrderID; ?>').parentNode.removeChild(document.getElementById('change<?php echo $thisOrderID; ?>')); 
+                                }    
+                                    
+                                
+                                
+                        </script>
+                    <?php
+                    
                 }
                 else{
                     echo '<td>'.$order['productName'].'</td>'; 
@@ -79,6 +152,7 @@
 
 	conn.onmessage = function(e) {
             var obj= JSON.parse(e.data)
+            if(obj.type=='newOrder'){
 	    console.log(obj);
                       
             var table = document.getElementById("mytable");
@@ -90,6 +164,7 @@
             var cell4 = row.insertCell(3);
             var cell5 = row.insertCell(4);
             var cell6 = row.insertCell(5);
+            var cell7= row.insertCell(6);
             var row2 = table.insertRow(2);
                 
             cell1.innerHTML = obj['id'];
@@ -97,14 +172,46 @@
             cell3.innerHTML = obj['Name'];
             cell4.innerHTML = obj['Room'];
             cell5.innerHTML = obj['Ext'];
-            cell6.innerHTML = "do Something";
+            cell6.innerHTML = "preparing";
+            
+            var changeStatusSelect = document.createElement("select");
+            changeStatusSelect.setAttribute("id","change"+obj['id']);
+            var prepOption = document.createElement("option");
+            prepOption.setAttribute("value","preparing");
+            prepOption.innerHTML = "preparing";
+            var delvOption = document.createElement("option");
+            delvOption.setAttribute("value","delivering");
+            delvOption.innerHTML = "delivering";
+            var doneOption = document.createElement("option");
+            doneOption.setAttribute("value","done");
+            doneOption.innerHTML = "done";
+            changeStatusSelect.appendChild(prepOption);
+            changeStatusSelect.appendChild(delvOption);
+            changeStatusSelect.appendChild(doneOption);
+            
+            changeStatusSelect.onchange= function(){
+                newStatus =  changeStatusSelect.options[ changeStatusSelect.selectedIndex ].value 
+                var url =  "fn=changeOrderStatus&newStatus="+newStatus+"&orderID="+obj['id'];
+                console.log(url);
+                ajax(url);
+            }
+            
+            cell7.appendChild(changeStatusSelect);
+            
+            
             for(i=0;i< obj['Products'].length;i++){
-                var cell7 = row2.insertCell(0);
-                cell7.innerHTML +=  obj['Products'][i]['ProductName'];
+                var cell8 = row2.insertCell(0);
+                cell8.innerHTML +=  obj['Products'][i]['ProductName'];
                 
             }
+        }
+        else if(obj.type=='cancelOrderStatus') {
+            document.getElementById('textstatus'+ parseInt(obj.orderID) ).innerHTML= obj.newStatus;
+            document.getElementById('change'+parseInt(obj.orderID)).parentNode.removeChild(document.getElementById('change'+parseInt(obj.orderID)));
+        }
             
 	    //resultdiv.innerHTML += e.data + "<br/>";
 	}; 
         var order;
     </script>
+    

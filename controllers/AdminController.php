@@ -241,7 +241,7 @@ class AdminController
                                                      'productName'     => $_POST['product'],
                                                      'price'    => $_POST['price'],
                                                      'categoryID' => $categoryId,
-                                                     'productPicture'=>$upfile,
+                                                     //'productPicture'=>$upfile,
                                                   ) 
                                         );       
            
@@ -260,7 +260,12 @@ class AdminController
                                 exit; 
                         }
                         else{
-                        
+                                    $orm->update(
+                                             array
+                                                 (
+                                                   'productPicture'=>$upfile,
+                                                  ),"productID=$id" 
+                                        );      
                             
                         
                         }        
@@ -341,7 +346,7 @@ class AdminController
         // Set table retrieve
         $orm->setTable('h3mlk7aderdb.product');
         // Retrieve all products
-        $products = $orm->select();
+        $products = $orm->select("productStatus='available'");
         
         // get the ajax get request data from the $_GET Array
         $notes = $_GET["notes"];
@@ -370,7 +375,7 @@ class AdminController
         
         // Retrieve the room with this number .. to get the the roomID
         $room=$orm->select("roomNumber='$destinationRooms'");
-        var_dump($room);
+        //var_dump($room);
         
         // set the working table to cafeOrder                
         $orm->setTable('h3mlk7aderdb.cafeOrder');
@@ -391,6 +396,7 @@ class AdminController
         
             }
             }
+        echo $thisOrderId;
     }        
     
     function __construct() {
@@ -559,7 +565,7 @@ class AdminController
                 //    unlink(trim($product[0]["productPicture"]));    
                 //}
                 //$product = $orm->delete("productID='$id'");  
-                $product = $orm->update(array("visibilty"=>'hidden'),"productID='$id'");
+                $product = $orm->update(array("visibilty"=>0),"productID='$id'");
                 //header("Location: ../views/allproducts.php");    
 echo "$id"."@delete" ;
     }
@@ -623,7 +629,51 @@ echo "$id"."@delete" ;
        
     }
 
-    }         
+    }
+    
+    
+    function changeOrderStatus(){
+        $newStatus = $_GET["newStatus"];
+        $thisOrderID = $_GET["orderID"];
+        $orm = ORM::getInstance(); 
+        $orm->setTable('h3mlk7aderdb.cafeOrder');
+        if($newStatus == 'preparing'){
+            $orm->update
+               (
+                    array
+                        (  
+                            'status'  => 'preparing'
+                        )
+               ,"orderID=$thisOrderID"
+               );
+            echo $thisOrderID."@preparing";
+        }
+        else if ($newStatus == 'delivering'){
+               $orm->update
+               (
+                    array
+                        (  
+                            'status'  => 'delivering'
+                        )
+               ,"orderID=$thisOrderID"
+               );
+               echo $thisOrderID."@delivering";
+        }
+        else if($newStatus == 'done'){
+               $orm->update
+               (
+                    array
+                        (  
+                            'status'  => 'done'
+                        )
+               ,"orderID=$thisOrderID"
+               );
+               echo $thisOrderID."@done";
+        }
+        else{
+            echo false;
+        }
+    }
     
     
 }
@@ -636,7 +686,6 @@ echo "$id"."@delete" ;
     
     // First must check if the user is authorized and he is an admin
     
-    var_dump($_GET);
     if(isset($_GET["fn"])){
         $varAdmin = new AdminController();
         
@@ -662,6 +711,9 @@ echo "$id"."@delete" ;
                 break;
             case "editProduct":
                 $varAdmin->editProduct();
+                break;
+            case "changeOrderStatus":
+                $varAdmin->changeOrderStatus();
                 break;
             
         }

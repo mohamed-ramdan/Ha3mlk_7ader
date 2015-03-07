@@ -35,7 +35,12 @@
                                 // the actual response text
                                 id = ajaxRequest.responseText;
                                 console.log(ajaxRequest.responseText);
-                              
+                                var orderChanged = {
+                                        "orderID": id,
+                                        "newStatus": "canceled",
+                                        "type": "cancelOrderStatus"
+                                    }
+                                conn.send(JSON.stringify(orderChanged));
                         }
         };
     
@@ -78,9 +83,9 @@
                     var cancelBtn =  document.getElementById("<?php echo 'cancel'.$thisOrderID ?>");
                     cancelBtn.onclick = function(){
                         var myStatusCol = document.getElementById('status<?PHP echo $thisOrderID; ?>');
-                        console.log(myStatusCol);
+                        //console.log(myStatusCol);
                         myStatusCol.innerHTML = 'Canceled';
-                        console.log(<?PHP echo $thisOrderID; ?>);
+                        //console.log(<?PHP echo $thisOrderID; ?>);
                         url = "fn=cancelOrder&orderID="+"<?PHP echo $thisOrderID; ?>";
                         
                         ajax(url);
@@ -102,6 +107,27 @@
                 
                     </div><!--panel primary-->
                 </div><!--container-->
+        <script>
+                // script for defining the websocket
+                var conn = new WebSocket('ws://localhost:8080');
+
+                conn.onopen = function(e) {
+                    console.log("Connection established!");
+                };
+
+                conn.onmessage = function(e) {
+                    var obj= JSON.parse(e.data)
+                    if(obj.type=='changeStatus'){
+                        var myStatusCol = document.getElementById('status<?PHP echo $thisOrderID; ?>');
+                        console.log(myStatusCol);
+                        myStatusCol.innerHTML = obj.newStatus;   
+                    }
+
+
+                    //resultdiv.innerHTML += e.data + "<br/>";
+                }; 
+                var order;
+            </script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
         <script src="../static/js/bootstrap.min.js" type="text/javascript"></script>
 </body>

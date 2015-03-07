@@ -151,7 +151,7 @@
         
         $result =$orm->update(array('status' => 'Canceled'),"orderID=$thisOrderID");
         
-        echo $result;
+        echo $thisOrderID;
     }
     
  }

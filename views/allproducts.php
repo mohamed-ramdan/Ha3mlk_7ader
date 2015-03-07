@@ -102,7 +102,7 @@ $i=0;
 //echo "</br>";
 $length=count($products);
 while($length>=1){
-if($products[$i]['visibilty']!="hidden"){    
+if($products[$i]['visibilty']!=0){    
 $id=$products[$i]['productID'];
 echo "<tr id='row".$id."'>";
 $productstatus=$products[$i]["productStatus"];
