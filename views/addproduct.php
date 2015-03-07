@@ -16,7 +16,7 @@
                     <h1>Add Product</h1>
                 </div><!--panel heading-->
                 <div class="panel-body">
-                    <form class="form-horizontal" enctype="multipart/form-data" method="get" action="../controllers/AdminController.php">
+                    <form class="form-horizontal" enctype="multipart/form-data" method="post" action="../controllers/AdminController.php?fn=saveNewProduct">
                         <div class="form-group">
                             
                             <label for="product" class="col-sm-2 control-label">Product:</label>
@@ -72,11 +72,11 @@
                             <label for="pic" class="col-sm-2 control-label">Product Picture:</label>
                             
                             <div class="col-sm-5">
-                                <input class="form-control" type="file" id="pic"  name="pic" />
+                                
+                                <input type="file"  name="pic" class="form-control" />
+                                     
                             </div>
                         </div><!--form group-->
-                        
-                        <input type="hidden" name="fn" value="saveNewProduct" />
                         
                         
                         <div class="form-group">
@@ -89,7 +89,14 @@
                             
                         </div><!--form group-->
                         
-                        
+                       <?php
+                                        if(isset($_GET['errors'])){
+                                                $errorarr = explode('^', $_GET['errors']);
+                                                foreach ($errorarr as $error) {
+                                                        echo "<br/><font color='red'>".$error."</font>";
+                                                }
+                                        }
+	                ?> 
                         
                         
                     </form>

@@ -26,6 +26,7 @@
                             </div>
                         </div><!--form group-->
                         
+                                
                         
                          <div class="form-group">
                             
@@ -39,7 +40,7 @@
                         </div><!--form group-->
                         
                         
-                        
+                        <input type="hidden" id="fn" name="fn"  value="saveNewCategory"/>
                                  </form>
                 </div><!--panel body-->
             </div><!--panel default-->

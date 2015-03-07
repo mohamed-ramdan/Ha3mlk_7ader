@@ -7,7 +7,7 @@
         <link type="text/css" rel="stylesheet" href="../static/css/bootstrap.min.css" />
     </head>
     <body>
-        <?php $dt = new DateTime(); echo $dt->format('Y-m-d h-m-s'); ?>
+        <?php $dt = new DateTime(); echo $dt->format('Y-m-d h-i-sa'); ?>
         
         
         
@@ -88,11 +88,11 @@
                 </div><!--panel body-->
         
                 
-                
+                <div class="panel panel-default">
                 <div id="orderproduct">
                     
                 </div>
-                
+                </div>
                 
                 <script>
                     var expandBtn = document.getElementById('expand');
@@ -104,6 +104,7 @@
                     {
                         //orderProductDiv.setAttribute('hidden','false');
                         var tbl = document.createElement('table');
+                        orderProductDiv.setAttribute('class','panel-body');
                         tbl.setAttribute('class','table table-responsive table-striped');
                         var tbdy = document.createElement('tbody');
                         for(i=0;i<5;i++)

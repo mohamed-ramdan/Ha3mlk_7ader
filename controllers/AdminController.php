@@ -2,6 +2,7 @@
 
 // Include Needed Models 
 include_once '../models/ORM.php';
+require_once '../models/Validation.php';
 
 
 class AdminController
@@ -200,24 +201,116 @@ class AdminController
      */
     function  saveNewProduct()
     {
-       //var_dump($_GET['fn']);
+        var_dump($_FILES);
+        var_dump($_POST); 
+        
        echo 'inside func save product';
+       $rules = array(
+			'product' => 'required',
+			'price' => 'required',
+			'category' => 'required',
+                        
+                        );
+       $data = array(
+                        'product' => $_POST['product'],
+			'price' => $_POST['price'],
+			'category' => $_POST["category"],
+                   );
+       
+       $validation = new Validation();
+       $result = $validation->validate($_POST,$rules);
+       $imgresult = $validation->validateimg($_FILES,'pic');
+	
+       echo $validation->errors;
        $orm = ORM::getInstance(); 
        $orm->setTable('h3mlk7aderdb.category');
-       $catName = $_GET["categoryName"];
+       $catName = $_POST["categoryName"];
        $categoryData= $orm->select("categoryName = '$catName'");
        $categoryId = $categoryData['CategoryID'];
        $orm->setTable('h3mlk7aderdb.product');
-       echo $orm->insert
+       
+       	
+       if(count($validation->errors)==0 ){
+       
+                
+                $DOCUMENT_ROOT = $_SERVER['DOCUMENT_ROOT'];
+                $upfile="$DOCUMENT_ROOT/Ha3mlk_7ader/static/img/{$_POST['product']}_{$_FILES['pic']['name']}";
+                $imgname = "{$_POST['product']}_{$_FILES['pic']['name']}";
+
+                $_POST["userPicture"]=$upfile;
+
+                if (is_uploaded_file($_FILES['pic']['tmp_name']))
+                {
+                        //save image from tmp to thier place
+                    echo move_uploaded_file($_FILES['pic']['tmp_name'], $upfile);
+                        if (!move_uploaded_file($_FILES['pic']['tmp_name'], $upfile))
+                        {
+                                echo 'Problem: Could not move file to destination directory';
+                                exit; 
+                        }
+                }        
+                else
+                        {
+                                echo 'Problem: Possible file upload attack. Filename: ';
+                                echo $_FILES['pic']['name'];
+                                exit;
+                        }
+                echo $orm->insert
                (
                     array
                         (
-                            'productName'     => $_GET['productName'],
-                            'productPrice'    => $_GET['productPrice'],
-                            'productCategory' => $categoryId,
-                            'productPic'      => $_GET['productPic']
+                            'productName'     => $_POST['productName'],
+                            'price'    => $_POST['productPrice'],
+                            'categoryID' => $categoryId,
+                            'productPicture'=>$upfile,
                          ) 
                ); 
+                        
+                        
+                }
+                 else if (count($validation->errors)==1 && $_FILES['pic']['error'] ==4 ){
+                        //get room id of selected room
+                        $obj->setTable('user');
+                        echo $orm->insert
+                            (
+                                 array
+                                     (
+                                         'product'     => $_POST['productName'],
+                                         'price'    => $_POST['productPrice'],
+                                         'category' => $categoryId,
+
+                                      ) 
+                            ); 
+                       
+                      
+                            
+             }
+               //data it self isnot valid
+               else{
+                        //file isnot uploaded    
+                        if( $_FILES['userPicture']['error'] ==4){
+				array_pop($validation->errors);
+			}
+			echo '<ul>';
+                        //get all errors
+			foreach ($validation->errors as $error) {
+				echo '<li>' . $error . '</li>';
+			}
+
+			echo '</ul>';
+                        
+			$nameVal=$_POST["product"];
+			$priceVal=$_POST["price"];
+                        $categoryVal=$_POST["category"];
+                        $errors = implode("^",$validation->errors);
+                        header("Location: ../views/adduser.php?nameVal={$nameVal}&priceVal={$priceVal}&categoryVal={$categoryVal}&errors={$errors}");    
+
+               }
+       
+       
+      
+       
+       
     }
     function saveManualOrder(){
         
@@ -323,7 +416,21 @@ class AdminController
             return $categories;
         }
     }
-    
+    function saveNewCategory()
+    {
+        // Get Intance from ORM model
+            echo 'vcccc'.$_GET['category'];
+            $orm = ORM::getInstance();
+            // Set table orders to retrieve
+            $orm->setTable('h3mlk7aderdb.category');
+            //insert data
+            //$result = $orm->insert($_GET['category']);
+            $categoryName = $_GET['category'];
+            $result = $orm->insert(array('categoryName'=>$categoryName));
+            // number of affected rows
+            return $result;
+            //header("Location:views/addproduct.php");
+    }
     
 }
 
@@ -336,18 +443,7 @@ class AdminController
      * @param void 
      * @return int number of affected rows
      */
-function saveNewCategory()
-{
-    // Get Intance from ORM model
-        $orm = ORM::getInstance();
-        // Set table orders to retrieve
-        $orm->setTable('h3mlk7aderdb.category');
-        //insert data
-        $result = $orm->insert($_GET['category']);
-        // number of affected rows
-        return $result;
-        //header("Location:views/addproduct.php");
-}
+
 
     
     // First must check if the user is authorized and he is an admin
@@ -355,6 +451,7 @@ function saveNewCategory()
 
     if(isset($_GET["fn"])){
         $varAdmin = new AdminController();
+        
         switch ($_GET["fn"])
         {       
             case "saveManualOrder":
@@ -364,7 +461,9 @@ function saveNewCategory()
                 $varAdmin->saveNewProduct();
                 break;
             case "saveNewCategory":
+               
                 $varAdmin->saveNewCategory();
+                
         }
     }
 
