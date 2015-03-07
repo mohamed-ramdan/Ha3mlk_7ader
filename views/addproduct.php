@@ -31,8 +31,8 @@
                             
                             <label for="price" class="col-sm-2 control-label">Price:</label>
                             
-                            <div class="col-sm-5">
-                                <input class="form-control" id="price" type="number" style="width: 100px;" name="price" />
+                            <div class="col-sm-5s">
+                                <input class="" id="price" type="number" min="0" value="0" style="width: 100px;" name="price"  />EGP
                             </div>
                         </div><!--form group-->
                         
@@ -50,7 +50,7 @@
                                     if(!empty($result))
                                     {                                       
                                         echo "<select class='form-control' type='number' id='category' name='category'>";
-                                        echo "<option> -- choose category -- </option>";
+                                        
                                             foreach ($result as $cat)
                                             {
                                                 $categoryName = $cat['categoryName'];
