@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<title>Normal Order</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link type="text/css" rel="stylesheet" href="../static/css/bootstrap.min.css" />
 </head>
 <body>
     <script>
@@ -39,20 +43,24 @@
         
         
         </script>
+        <br > <br>
+        <div class="container">
+            <div class='panel panel-primary'>
     <?php
         require_once '../controllers/NormalUserController.php';
         $varNormalUser = new NormalUserController();
         $result = $varNormalUser->getUserorders();
         
         //print_r($result);
-        echo 'My Orders';
-        echo '<table>';
+        echo "<div class='panel-heading'><h1>My Orders</h1></div>";
+        echo "<div class='panel-body'>";
+        echo "<table class='table table-responsice table-striped' >";
         echo '<tr>' 
-            . '<td> Order ID</td>'
-            . '<td> Order Date</td>'
-            . '<td> Status</td>'
-            . '<td> Amount</td>'
-            . '<td> Action</td>'
+            . '<th> Order ID</td>'
+            . '<th> Order Date</th>'
+            . '<th> Status</th>'
+            . '<th> Amount</th>'
+            . '<th> Action</th>'
             . '</tr>';
         $lastOrder = 0; 
         foreach ($result as $key => $order) {
@@ -64,7 +72,7 @@
                     . '<td>'. $order['date'] .'</td>'
                     . "<td id = 'status".$thisOrderID."'>" .$order['status'] .'</td>'
                     . '<td>'. '100' .'</td>'
-                    . '<td>'. "<input type='button' value='Cancel' id='cancel".$thisOrderID."'" .'</td>';
+                    . '<td>'. "<input type='button' class='btn btn-danger' value='Cancel' id='cancel".$thisOrderID."'" .'</td>';
                 ?>
                 <script>
                     var cancelBtn =  document.getElementById("<?php echo 'cancel'.$thisOrderID ?>");
@@ -85,7 +93,16 @@
             $lastOrder = $thisOrderID;
         }
         echo '</table>';
+        echo "</div><!-- panelbody -->"; //panel body div close
     ?>
-
+                
+                
+                
+                
+                
+                    </div><!--panel primary-->
+                </div><!--container-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script src="../static/js/bootstrap.min.js" type="text/javascript"></script>
 </body>
 </html>

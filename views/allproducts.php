@@ -1,20 +1,26 @@
-
-
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="css/bootstrap.css"> 
-<link rel="stylesheet" href="css/bootstrap-theme.css"> 
+<title>All Product</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link type="text/css" rel="stylesheet" href="../static/css/bootstrap.min.css" /> 
 </head>
 <body>
-<div class="container-fluid">
-<table class="table table-striped" style="width:100%" >
+    <br ><br >
+<div class="container">
+    <div class="panel panel-primary">
+        <div class="panel-heading"><h1>All Products</h1></div>
+        <div class="panel-body">
+        <table class="table table-responsive table-striped">
 	<tr>
-	<td>name</td>
-	<td>price</td>		
-	<td>picture</td>
-        <td>delete</td> 
-	<td>edit</td> 
+	<th>Name</th>
+	<th>Price</th>		
+	<th>Picture</th>
+        <th>Status</th>
+        <th>Delete</th> 
+	<th>Edit</th> 
 	</tr>
 
        
@@ -93,21 +99,21 @@ $adminObj=new AdminController;
 
 $products=$adminObj->getProducts();
 $i=0;
-echo "</br>";
+//echo "</br>";
 $length=count($products);
 while($length>=1){
 if($products[$i]['visibilty']!="hidden"){    
 $id=$products[$i]['productID'];
 echo "<tr id='row".$id."'>";
 $productstatus=$products[$i]["productStatus"];
-echo "</br>";
+//echo "</br>";
 echo "<td id='name.$id'>". $products[$i]['productName']." </td>";
 echo "<td id='price.$id'> ".$products[$i]['price'] ."</td>";
 echo "<td id='pic.$id'>  <img src=".trim($products[$i]['productPicture'])." height='50' width='50'> </td>";
 
 
 
-echo "<td> <input type='button'  id='$id'  onclick =\"ajax('id=$id&fn=changeState')\"";
+echo "<td> <input type='button' class='btn btn-warning' id='$id'  onclick =\"ajax('id=$id&fn=changeState')\"";
 echo "value=\"";
 if($productstatus=='available')
 {echo 'unavailable';}
@@ -117,7 +123,7 @@ echo ">";
 echo "</input>";
 echo "</td>";
 
-echo "<td> <input type='button'  id='$id'  onclick =\"ajax('id=$id&fn=deleteProduct')\"";
+echo "<td> <input type='button' class='btn btn-danger'  id='$id'  onclick =\"ajax('id=$id&fn=deleteProduct')\"";
 echo "value=\"";
 echo 'delete';
 echo "\"";
@@ -128,7 +134,7 @@ echo "</td>";
 
 
 //echo "<td><a href=http://localhost/Ha3mlk_7ader/Ha3mlk_7ader/controllers/AdminController.php?id=$id&fn=deleteProduct>delete</a> </td>";
-echo "<td><a href=http://localhost/Ha3mlk_7ader/Ha3mlk_7ader/views/productprofile.php?id=$id>edit</a></td>";
+echo "<td><a class='btn btn-success' href=http://localhost/Ha3mlk_7ader/Ha3mlk_7ader/views/productprofile.php?id=$id>edit</a></td>";
 }
 $length=$length-1;	
 $i=$i+1;
@@ -138,7 +144,16 @@ $i=$i+1;
 
 
 </table>
-</div>
+            </div><!--panel body-->
+        </div><!--panel-->
+</div><!--container-->
+    
+    
+    
+    
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="../static/js/bootstrap.min.js" type="text/javascript"></script>
 </body>
 </html>
 

@@ -1,19 +1,26 @@
-
-
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<title>Manual Order</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link type="text/css" rel="stylesheet" href="../static/css/bootstrap.min.css" /> 
 </head>
 <body>
+    <br ><br />
+    <div class="container">
+     <div class="panel panel-primary">
+        <div class="panel-heading"><h1>Make New Order</h1></div>
+        <div class="panel-body">
+    
     <div id="orderform">
         <!--
             Here we dynamically put all our number inputs and labels to each product 
         -->
     </div>
-    <div>
-        Notes:
-        <textarea rows="5" cols="20" id="notes" ></textarea>
+    <div class="form-group">    
+        <div class="col-sm-3"><label class="label label-default">Notes:</label><textarea class="form-control " placeholder=" Add extra notes for your order" rows="5" cols="20" id="notes" ></textarea></div>
     </div>
     
     <?php
@@ -26,36 +33,41 @@
         // the return value is an array which consist of products,categories,users 
         //and rooms each of those consists of an array of associated arrays
 
-        echo "<h2>Function getManualOrder</h2>";
+        //echo "<h2>Function getManualOrder</h2>";
 
         if($result!=false){
             //breaking up the $result into it's components
             $users = $result['users'];
             $products = $result['products'];
             $rooms = $result['rooms'];
-            
+            echo "<hr>";
             //creating the add to user select field
-            echo "Add to User <select id='orderUser'>";
-            foreach ($users as $user) {
+            echo "<div class='form-group'> ";
+            echo "<div class='col-sm-10'></div>";
+            echo "<div class='col-sm-3'><label class='labe'>Add to User</label> <select id='orderUser' class='form-control'>";
+            foreach ($users as $user)  {
                 $username = $user['username'];
                 echo "<option value='$username'> $username</option>";
             }
             echo "</select>";
-            echo "<br /><br />";
+            echo "</div></div>";
+            
             
             //creating the room select field
-            echo "Room <select id='destinationRooms'>";
+            echo "<div class='form-group'> ";
+            echo "<div class='col-sm-10'></div>";
+            echo "<div class='col-sm-3'> <label class='labe'> Room </label><select class='form-control' id='destinationRooms'>";
             foreach ($rooms as $room) {
                 $roomNumber = $room['roomNumber'];
                 echo "<option value='$roomNumber'> $roomNumber</option>";
             }
-            echo "</select>";
+            echo "</select></div></div>";
 
             //creating the products' buttons
-            echo "<br /><br /> Products";
+            echo "<label class='labe'> Choose Products </label> &nbsp;";
             foreach ($products as $product) {
                 $productname = $product['productName'];
-                echo "<button type='button' id='$productname'> $productname </button>";
+                echo "<button class='btn btn-primary' type='button' id='$productname'> $productname </button>";
                 ?>
     
                 <script>
@@ -83,7 +95,7 @@
                         // create a text node that holds the label of the product and a div that will contains this textNode
                         var <?php echo $productname; ?>TextNode = document.createTextNode('<?php echo $productname; ?>');
                         var <?php echo $productname; ?>Label = document.createElement('div');
-
+                        <?php echo $productname; ?>Label.setAttribute('class','label label-danger');
                         // add the product text node to the product label 
                         <?php echo $productname; ?>Label.appendChild(<?php echo $productname; ?>TextNode );
 
@@ -94,6 +106,7 @@
                         var <?php echo $productname  ?>Quantity=document.createElement("input");
                         <?php echo $productname ?>Quantity.setAttribute("id", "<?php echo $productname ?>Quantity");
                         <?php echo $productname ?>Quantity.setAttribute("type","number");
+                        <?php echo $productname ?>Quantity.setAttribute("style","width:70px !important;");    
                         <?php echo $productname ?>Quantity.setAttribute("min",0);
                         <?php echo $productname ?>Quantity.setAttribute("value",1);
 
@@ -138,14 +151,14 @@
                 <?php
             } //end of the for each loop
         } // end of the check to see if result (the return of getManualOrderNeededData from Admin Controller ) is not null 
-        echo "<br /><br />";
+        //echo "<br /><br />";
 
     ?>
      
     <!--
         This button to send all the data to the backend through an ajax request
     -->
-    <input type="button" id="confirmBtn" value="Confirm" />
+    <input type="button" class="btn btn-success" id="confirmBtn" value="Confirm" />
     
     <script>
         // Script to provide the logic of the ajax request and the listener for the confirm button 
@@ -224,5 +237,10 @@
         
     </script>
     
+    
+    
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="../static/js/bootstrap.min.js" type="text/javascript"></script>
 </body>
 </html>

@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<title>Make Order</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link type="text/css" rel="stylesheet" href="../static/css/bootstrap.min.css" /> 
 </head>
 <body>
     <script>
@@ -19,16 +23,18 @@
 	}; 
         var order;
     </script>
-    
-    
+    <br ><br />
+    <div class="container">
+     <div class="panel panel-primary">
+        <div class="panel-heading"><h1>Make Order</h1></div>
+        <div class="panel-body">
     <div id="orderform">
         <!--
             Here we dynamically put all our number inputs and labels to each product 
         -->
     </div>
-    <div>
-        Notes:
-        <textarea rows="5" cols="20" id="notes" ></textarea>
+    <div class="form-group">    
+        <div class="col-sm-3"><label class="label label-default">Notes:</label><textarea class="form-control " placeholder=" Add extra notes for your order" rows="5" cols="20" id="notes" ></textarea></div>
     </div>
     
     <?php
@@ -45,19 +51,24 @@
             $rooms = $result['rooms'];
             $latestOrder = $result['latestOrder'];
             $categories = $result['categories'];
-            
-            echo "Room <select id='destinationRooms'>";
+            echo "<hr>";
+            echo "<div class='form-group'> ";
+            echo "<div class='col-sm-10'></div>";
+            echo "<div class='col-sm-3'> <label class='labe'> Room </label> <select class='form-control' id='destinationRooms'>";
             foreach ($rooms as $room) {
                 $roomNumber = $room['roomNumber'];
                 echo "<option value='$roomNumber'> $roomNumber</option>";
             }
-            echo "</select>";
+            echo "</select></div></div>";
             
             //creating the products' buttons
-            echo "<br /><b  <?php echr /> Products";
+           
+            echo "<label class='labe'> Choose Products </label> &nbsp;";
             foreach ($products as $product) {
                 $productname = $product['productName'];
-                echo "<button type='button' id='$productname'> $productname </button>";
+                echo "<button class='btn btn-primary' type='button' id='$productname'> $productname </button>";
+                
+                
                 ?>
     
                 <script>
@@ -68,7 +79,7 @@
                     // flag for each product (if it was added to the div or not
                     // if added before then just increase it's value by 1
                     // we set it at first = 0
-                     <?php echo $productname; ?>Flag=0;
+                    <?php echo $productname; ?>Flag=0;
 
                     // get the element order form: the one we put our dynamically created input fields into     
                     var orderform = document.getElementById("orderform");
@@ -85,7 +96,7 @@
                         // create a text node that holds the label of the product and a div that will contains this textNode
                         var <?php echo $productname; ?>TextNode = document.createTextNode('<?php echo $productname; ?>');
                         var <?php echo $productname; ?>Label = document.createElement('div');
-
+                        <?php echo $productname; ?>Label.setAttribute('class','label label-danger');
                         // add the product text node to the product label 
                         <?php echo $productname; ?>Label.appendChild(<?php echo $productname; ?>TextNode );
 
@@ -96,6 +107,8 @@
                         var <?php echo $productname  ?>Quantity=document.createElement("input");
                         <?php echo $productname ?>Quantity.setAttribute("id", "<?php echo $productname ?>Quantity");
                         <?php echo $productname ?>Quantity.setAttribute("type","number");
+                         
+                        <?php echo $productname ?>Quantity.setAttribute("style","width:70px !important;");
                         <?php echo $productname ?>Quantity.setAttribute("min",0);
                         <?php echo $productname ?>Quantity.setAttribute("value",1);
 
@@ -111,6 +124,7 @@
                         var <?php echo $productname  ?>Delete=document.createElement("input");
                         <?php echo $productname ?>Delete.setAttribute("id", "<?php echo $productname ?>Delete");
                         <?php echo $productname ?>Delete.setAttribute("type","button");
+                            
                         <?php echo $productname ?>Delete.setAttribute("value","x");
                         orderform.appendChild(<?php echo $productname; ?>Delete);
                         <?php echo $productname; ?>Delete.onclick = function(){
@@ -146,7 +160,7 @@
     <!--
         This button to send all the data to the backend through an ajax request
     -->
-    <input type="button" id="confirmBtn" value="Confirm" />
+    <input type="button" class="btn btn-success" id="confirmBtn" value="Confirm" />
     
     <script>
         // Script to provide the logic of the ajax request and the listener for the confirm button 
@@ -261,5 +275,12 @@
         }
         
     </script>
+    
+    </div><!--panel body-->
+        </div><!--panel-->
+</div><!--container-->
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="../static/js/bootstrap.min.js" type="text/javascript"></script>
 </body>
 </html>
