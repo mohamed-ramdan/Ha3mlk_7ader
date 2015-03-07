@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+
+	<input type="text" id="mytext" />
+	<input type="button" id="sendbtn" />
+	<div id="result">
+	</div>
+<script type="text/javascript">
+	var conn = new WebSocket('ws://localhost:8080');
+	var resultdiv =document.getElementById("result");
+	
+	conn.onopen = function(e) {
+	    console.log("Connection established!");
+	};
+
+	conn.onmessage = function(e) {
+	    console.log(e.data);
+	    resultdiv.innerHTML += e.data + "<br/>";
+	};
+
+	var sendbtn = document.getElementById("sendbtn");
+	sendbtn.onclick = function(){
+		var txt = document.getElementById("mytext").value;
+		conn.send(txt);
+	}
+
+</script>
+</body>
+</html>

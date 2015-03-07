@@ -23,10 +23,12 @@ class AdminController
         $orm->setTable('h3mlk7aderdb.cafeOrder');
         // Call function sekect from ORM instance
         //$unFinishedOrders = $orm->select("status!='done' and status!='canceled' ");
-        $unFinishedOrders  = $orm->selectjoin(array('cafeOrder','user','orderComponent','product'),
-                "cafeOrder.orderUserID=user.userID and cafeOrder.orderID = orderComponent.orderID and orderComponent.productID = product.productID");
+        $unFinishedOrders  = $orm->selectjoin(array('cafeOrder','user','orderComponent','product','room'),
+                "cafeOrder.orderUserID=user.userID and cafeOrder.orderID = orderComponent.orderID and orderComponent.productID = product.productID and cafeOrder.destinationRoomNumber = room.id "
+                . "order by cafeOrder.orderID DESC");
         // If there are any unfinished orders
-        
+        //print_r($unFinishedOrders);
+        //exit;
         return $unFinishedOrders;
     }
     
