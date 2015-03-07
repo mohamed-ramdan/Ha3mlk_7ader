@@ -53,7 +53,7 @@ require_once '../models/Validation.php';
             $obj = ORM::getInstance();
             //if($_SESSION['logged']&&$_SESSION['isAdmin'])
             //{
-            
+            //var_dump($_GET);
             if($_POST)
             {  
                 
@@ -68,6 +68,9 @@ require_once '../models/Validation.php';
                         'passwordc'=>'required',
                         );
                 //send the data in session to compare with in validation
+                if(isset($_GET["edit"])){
+                    $rules["email"]='required|email';
+                }
                 $_SESSION['passwd']=$_POST["passwordc"];
                 $validation = new Validation();
                 $result = $validation->validate($_POST,$rules);
@@ -91,32 +94,69 @@ require_once '../models/Validation.php';
                         unset($_POST["captcha"]);
                         $_POST["password"]=  md5($_POST["password"]);
                         $DOCUMENT_ROOT = $_SERVER['DOCUMENT_ROOT'];
-                        $upfile="$DOCUMENT_ROOT/Ha3mlk_7ader/static/img/{$_POST['email']}_{$_FILES['userPicture']['name']}";
+                        $upfile="../static/img/{$_POST['email']}_{$_FILES['userPicture']['name']}";
 			$imgname = "{$_POST['email']}_{$_FILES['userPicture']['name']}";
                         //save image
 			$_POST["userPicture"]=$upfile;
                         //insert in database
-                        //var_dump($_POST);
                         
-                        $a=$obj->insert($_POST);
-                        //echo $a;
-                        //exit;
-                        if (is_uploaded_file($_FILES['userPicture']['tmp_name']))
-			{
-                                //save image from tmp to thier place
-				if (!move_uploaded_file($_FILES['userPicture']['tmp_name'], $upfile))
-				{
-					echo 'Problem: Could not move file to destination directory';
-					exit; 
-				}
-                        }        
-			else
-				{
-					echo 'Problem: Possible file upload attack. Filename: ';
-					echo $_FILES['userPicture']['name'];
-                                        exit;
+                        if(isset($_GET["edit"])){
+                                $id=$_GET["id"];
+                                $user=$obj->select("userID=$id");
+                                $userEdited=$obj->update($_POST,"userID='$id'");
+                                
+                                if(isset($_FILES['userPicture'])){
+                                    if($user[0]["userPicture"]!="upload/image/user/default.png"){
+                                        unlink(trim($user[0]["userPicture"]));    
+                                    }
+                                    
+                                    if (is_uploaded_file($_FILES['userPicture']['tmp_name']))
+                                    {
+                                            //save image from tmp to thier place
+                                            if (!move_uploaded_file($_FILES['userPicture']['tmp_name'], $upfile))
+                                            {
+                                                    echo 'Problem: Could not move file to destination directory';
+                                                    exit; 
+                                            }
+                                    } 
+
+
+                                    else
+                                        {
+                                                echo 'Problem: Possible file upload attack. Filename: ';
+                                                echo $_FILES['userPicture']['name'];
+                                                exit;
+                                        }
                                 }
-              }
+                                
+                                
+                                
+                        }
+                        else{
+                                $a=$obj->insert($_POST);
+                                //echo $a;
+                                //exit;
+                                if (is_uploaded_file($_FILES['userPicture']['tmp_name']))
+                                {
+                                        //save image from tmp to thier place
+                                        if (!move_uploaded_file($_FILES['userPicture']['tmp_name'], $upfile))
+                                        {
+                                                echo 'Problem: Could not move file to destination directory';
+                                                exit; 
+                                        }
+                                } 
+
+
+                                else
+                                    {
+                                            echo 'Problem: Possible file upload attack. Filename: ';
+                                            echo $_FILES['userPicture']['name'];
+                                            exit;
+                                    }
+                        }
+                                
+               }
+              
                
                //save data with out file no file sent
                
@@ -132,8 +172,19 @@ require_once '../models/Validation.php';
                         $_POST["password"]=  md5($_POST["password"]);
                         $_POST["isAdmin"]=0;
                         $obj->setTable('user');
+                        if (isset($_GET["edit"])){
+                            if(!isset($_FILES['userPicture'])){
+                                        rename($oldfile,$upfile);
+                                    }
+                            $id=$_GET["id"];
+                            $user=$obj->select("userID=$id");
+                            $oldfile=$user[0]["userPicture"];
+                            $userEdited=$obj->update($_POST,"userID=$id");
+                                        
+                        }
+                        else{
                         $a=$obj->insert($_POST);
-                            
+                        }   
              }
                //data it self isnot valid
                else{
@@ -149,7 +200,7 @@ require_once '../models/Validation.php';
 
 			echo '</ul>';
                         
-			$nameVal=$_POST["name"];
+			$nameVal=$_POST["username"];
 			$emailVal=$_POST["email"];
 			$roomVal=$_POST["roomNumber"];
                         $extVal=$_POST["ext"];
@@ -158,8 +209,14 @@ require_once '../models/Validation.php';
                         
                         
 			$errors = implode("^",$validation->errors);
-                        header("Location: ../views/adduser.php?nameVal={$nameVal}&emailVal={$emailVal}&extVal={$extVal}&roomVal={$roomVal}&errors={$errors}");    
-
+                        if(isset($_GET["edit"])){
+                            $id=$_GET['id'];
+                            header("Location: ../views/profile.php?id=$id&errors={$errors}");    
+                        }
+                        else{
+                            header("Location: ../views/adduser.php?nameVal={$nameVal}&emailVal={$emailVal}&extVal={$extVal}&roomVal={$roomVal}&errors={$errors}");    
+                        
+                        }
                }
                
                     
@@ -171,15 +228,70 @@ require_once '../models/Validation.php';
            $obj = ORM::getInstance();
            $obj->setTable('room');
            $op=$obj->select();
-           return $op;
+           
+           
+          return $op;
+     
        } 
+       
+       function getAllUsers(){
         
+            $orm = ORM::getInstance();  
+            $orm->setTable('user');
+              // Retrieve all users
+            $users = $orm->selectjoin(array('user','room')," user.roomNumber=room.id ");  
+            return $users;  
+
+       }
+       
+       
        function getUserWithEmail($value,$fieldname){
            $obj = ORM::getInstance();
            $obj->setTable('user');
            $op=$obj->select("$fieldname = '$value' ");
            return $op;
        } 
+       function editUser(){
+            $orm = ORM::getInstance();  
+            $orm->setTable('user');
+              // Retrieve all users
+            $id=$_GET['id'];
+            $user = $orm->select("userId='$id'");
+            
+
+        
+        
+        }
+        function user($id){
+            $orm = ORM::getInstance();  
+            $orm->setTable('user');
+            // Retrieve all users
+            
+            $user = $orm->select("userId='$id'");
+            var_dump($user);
+            return $user[0];
+        
+        
+        }
+        
+        
+        
+        function deleteUser(){
+        
+                $orm = ORM::getInstance();  
+                $orm->setTable('user');
+                  // Retrieve all users
+                $id=$_GET['id'];
+                $user = $orm->select("userId='$id'");
+                if($user[0]["userPicture"]!="upload/image/user/default.png"){
+                    unlink(trim($user[0]["userPicture"]));    
+                }
+                $user = $orm->delete("userId='$id'");  
+                header("Location: ../views/allusers.php");    
+
+    }
+       
+       
         
     }
    
@@ -194,6 +306,11 @@ require_once '../models/Validation.php';
       case "register":  
         $userAuth->register();
         break;
+      case "deleteUser":  
+        $userAuth->deleteUser();
+        break;
+    
+    
     
     }
 

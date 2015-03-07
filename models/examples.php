@@ -79,7 +79,7 @@ echo "user";
 
 
 $obj->setTable('user');
-echo $obj->insert(array('name' => 'merityttttttr', 'email' => 'rtrttttrtrmyero378@yahoo.com', 'password' => md5('123'), 'roomNumber' => 200, 'ext' => 100, 'picture' => 'upload/image/user/default.png', 'isAdmin' => 1));
+echo $obj->insert(array('name' => 'merit', 'email' => 'rtrttttrtrmyero378@yahoo.com', 'password' => md5('123'), 'roomNumber' => 200, 'ext' => 100, 'picture' => 'upload/image/user/default.png', 'isAdmin' => 1));
 
 echo "</br>";
 

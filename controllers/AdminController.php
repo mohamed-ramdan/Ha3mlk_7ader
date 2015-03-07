@@ -495,7 +495,135 @@ class AdminController
     }
     
     
+   function getProducts(){
+        // Get Intance from ORM model
+        $orm = ORM::getInstance();
+        
+        // Set table retrieve
+        $orm->setTable('h3mlk7aderdb.product');
+        // Retrieve all products
+        $products = $orm->select();
+        return $products;
+        
+    }
     
+    
+    function product($id){
+        // Get Intance from ORM model
+        $orm = ORM::getInstance();
+        
+        // Set table retrieve
+        $orm->setTable('h3mlk7aderdb.product');
+        // Retrieve all products
+        //$id=$_GET["productID"];
+        $products = $orm->select("productID=$id");
+        return $products[0];
+        
+    }
+    
+    function changeState(){
+      
+       $orm = ORM::getInstance();
+        //header("Location: ../views/allproducts.php");
+        // Set table retrieve
+        $orm->setTable('h3mlk7aderdb.product');
+        // Retrieve all products
+        $id=$_GET['id'];
+        $product = $orm->select("$id=productID");   
+        $productStatus=$product[0]["productStatus"];
+        
+        if($productStatus=="available"){
+            $orm->update(array("productStatus"=>"unavailable"),"productID=$id");
+        }
+        else{
+            $orm->update(array("productStatus"=>"available"),"productID=$id");    
+        }
+        
+        //header("Location: ../views/allproducts.php");
+        //return $http_response_header;
+        //return ("hihi");
+        //header('Content-Type: application/json');
+        //return json_encode(array('id' => $id));
+        echo "$id"."@changestate" ;
+    }
+    
+    
+    function deleteProduct(){
+        
+                $orm = ORM::getInstance();  
+                $orm->setTable('product');
+                  // Retrieve all users
+                $id=$_GET['id'];
+                //$product = $orm->select("productID='$id'");
+                //if($product[0]["userPicture"]!="upload/image/user/default.png"){
+                //    unlink(trim($product[0]["productPicture"]));    
+                //}
+                //$product = $orm->delete("productID='$id'");  
+                $product = $orm->update(array("visibilty"=>'hidden'),"productID='$id'");
+                //header("Location: ../views/allproducts.php");    
+echo "$id"."@delete" ;
+    }
+    
+    function editProduct(){
+        
+        
+       $orm = ORM::getInstance(); 
+       $orm->setTable('h3mlk7aderdb.category');
+       $catName = $_POST["categoryName"];
+       $categoryData= $orm->select("categoryName = '$catName'");
+       var_dump($categoryData);
+       $categoryId = $categoryData[0]['categoryID'];
+       $orm->setTable('h3mlk7aderdb.product');
+       $id=$_GET["id"];
+       $product=$orm->select("productID=$id");
+                               
+       echo $orm->update
+               (
+                    array
+                        (
+                            'productName'     => $_POST['productName'],
+                            'price'           => $_POST['price'],
+                            'categoryID' => $categoryId,
+                            
+                         )
+               ,"productID=$id"
+               );
+       
+        if(isset($_FILES['userPicture'])){
+        if($product[0]["userPicture"]!="upload/image/user/default.png"){
+            unlink(trim($product[0]["productsPicture"]));    
+        }
+
+        if (is_uploaded_file($_FILES['productPicture']['tmp_name']))
+        {
+                //save image from tmp to thier place
+                if (!move_uploaded_file($_FILES['productPicture']['tmp_name'], $upfile))
+                {
+                        echo 'Problem: Could not move file to destination directory';
+                        exit; 
+                }
+        } 
+
+
+        else
+            {
+                    echo 'Problem: Possible file upload attack. Filename: ';
+                    echo $_FILES['productPicture']['name'];
+                    exit;
+            }
+            echo $orm->update
+               (
+                    array
+                        (
+                            
+                            'productPicture'  => $_POST['productPicture']
+                         )
+               ,"productID=$id"
+               );
+       
+    }
+
+    }         
     
     
 }
@@ -526,6 +654,16 @@ class AdminController
             case "getChecksNeededData":
                 $varAdmin->getChecksNeededData();
                 break;
+            case "changeState":
+                $varAdmin->changeState();
+                break;
+            case "deleteProduct":
+                $varAdmin->deleteProduct();
+                break;
+            case "editProduct":
+                $varAdmin->editProduct();
+                break;
+            
         }
     }
 

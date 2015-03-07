@@ -1,3 +1,17 @@
+<?php
+
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+    include_once "../controllers/AuthenticationController.php";
+    $authObj=new Authenticate();
+    $id=$_GET['id'];
+    $userInfo=$authObj->user($id);
+    
+    ?>
 <html>
     <head>
         <meta charset="utf-8">
@@ -6,9 +20,7 @@
         <link href="../static/css/bootstrap.min.css" rel="stylesheet">
     </head>
     <body>
-        <?php 
- 
-                                                ?>
+        
         <nav class="navbar navbar-inverse navbar-fixed-top " style="height: 70px;">
             
             <div class="navbar-header navbar-right" >
@@ -42,23 +54,32 @@
                     <div class="container">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
-                                <h1>Add User</h1>
+                                <h1>profile</h1>
+                                <h1>welcome: <?php echo $userInfo["username"]?> </h1>
                             </div>
                             <div class="panel-body">
                                 
-                                <form class="form-horizontal" method="post" action="../controllers/AuthenticationController.php?fn=register" enctype="multipart/form-data" >
+                                <form class="form-horizontal" method="post" action="../controllers/AuthenticationController.php?fn=register&edit=1&id=<?php echo $_GET['id'];?>" enctype="multipart/form-data" >
+                                    
                                     <div class="form-group">
                                         <div class="col-sm-2"></div>
-                                      <label for="username" class="col-sm-2 control-label">Username</label>
+                                      <label for="name" class="col-sm-2 control-label">profile picture</label>
+                                      <div class="col-sm-10">
+                                         <?php echo "<img class='col-sm-2 control-label' src=".trim($userInfo['userPicture'])." height='100' width='100'>";?> 
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-2"></div>
+                                      <label for="name" class="col-sm-2 control-label">Name</label>
                                       <div class="col-sm-5">
-                                          <input type="text" class="form-control" name="username" required="1" placeholder="Name" value="<?php if( isset($_GET['nameVal']) ){echo $_GET['nameVal']; }?>">
+                                          <input type="text" class="form-control" name="username" required="1" placeholder="Name" value="<?php if( isset($userInfo['username']) ){echo $userInfo['username']; } if( isset($_GET['nameVal']) ){echo $_GET['nameVal'];}?>">
                                       </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="col-sm-2"></div>
                                       <label for="email" class="col-sm-2 control-label">Email</label>
                                       <div class="col-sm-5">
-                                          <input type="email" class="form-control" name="email"  placeholder="Email" value="<?php if( isset($_GET['emailVal']) ){echo $_GET['emailVal']; }?>">
+                                          <input type="email" class="form-control" readonly="1" name="email" required="1" placeholder="Email"  value="<?php if( isset($userInfo['email']) ){echo $userInfo['email']; }if( isset($_GET['emailVal']) ){echo $_GET['emailVal']; }?>">
                                       </div>
                                     </div>
                                     <div class="form-group">
@@ -79,7 +100,7 @@
                                         <div class="col-sm-2"></div>
                                       <label for="ext" class="col-sm-2 control-label">EXT.</label>
                                       <div class="col-sm-5">
-                                          <input type="text" class="form-control" name="ext" required="1" placeholder="Tel Number" value="<?php if( isset($_GET['extVal']) ){echo $_GET['extVal']; }?>">
+                                          <input type="text" class="form-control" name="ext" required="1" placeholder="Tel Number" value="<?php if( isset($userInfo['ext']) ){echo $userInfo['ext']; }if( isset($_GET['extVal']) ){echo $_GET['extVal']; }?>">
                                       </div>
                                     </div>
                                     <div class="form-group">
@@ -87,27 +108,20 @@
                                       
                                        <label for="room" class="col-sm-2 control-label">Room No.</label>
                                       <div class="col-sm-5">
-                                           
                                           <select name="roomNumber">
                                                     <?php  
                                                        include_once "../controllers/AuthenticationController.php";
                                                        $authobj=new Authenticate;
-                                                        
-                                                            
-                                                       $rooms=$authobj->getRooms();
-                                                       
-                                                        if(isset($_GET['roomVal'])){
-                                                            $getroom=$_GET['roomVal'];
-                                                            
-                                                        }
-                                                       for ($i = 0; $i < count($rooms); $i++){
-                                                            
-                                                           echo "<option value=\"".$rooms[$i]['roomNumber']."\"";
-                                                           if(isset($_GET['roomVal'])&&$getroom==$rooms[$i]['roomNumber'])
-                                                            {echo 'selected';} 
-                                                            echo ">";
-                                                            echo $rooms[$i]['roomNumber']."</option>";
-                                                            echo "<br/>";
+                                                        $rooms=$authobj->getRooms();
+                                                        var_dump($userInfo); 
+                                                        var_dump($rooms);
+                                                        $getroom=$userInfo['roomNumber'];
+                                                        for ($i = 0; $i < count($rooms); $i++){
+                                                            echo "<option value=\"".$rooms[$i]['roomNumber']."\""."<?php if(".$getroom."===".$rooms[$i]['roomNumber']."){echo 'selected';} ?>" 
+. $rooms[$i]['roomNumber']."</option>";
+
+echo "<br/>";
+
 
                                                     }
                                                     ?>
