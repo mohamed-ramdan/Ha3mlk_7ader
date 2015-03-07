@@ -56,7 +56,7 @@ class ORM {
         foreach ($data as $col => $value) {
             $query .= $col . "= '" . $value . "' , ";
         }
-        echo $query;
+        //echo $query;
         //remove last ','
         $query[strlen($query) - 2] = " ";
         //output of the query

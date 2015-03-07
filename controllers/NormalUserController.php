@@ -66,11 +66,11 @@
         // Set table retrieve
         $orm->setTable('h3mlk7aderdb.product');
         // Retrieve all products
-        $products = $orm->select();
+        $products = $orm->select("productStatus='available'");
         
         // get the ajax get request data from the $_GET Array
         $notes = $_GET["notes"];
-        $orderUsername = $_GET["orderUsername"];
+        //$orderUsername = $_GET["orderUsername"];
         $destinationRooms = $_GET["destinationRooms"];
         
         // an arrays to hold the the quantity of each product associated with the product name
@@ -111,7 +111,10 @@
         
             }
             }
+    
+    return $thisOrderId;         
     }
+    
     }
 
     if(isset($_GET["fn"])){
@@ -119,8 +122,8 @@
         switch ($_GET["fn"])
         {       
           case "saveOrder":
-            $varNormalUser->saveOrder();
-            break;
+            echo $varNormalUser->saveOrder();
+            
         }
     }
 
