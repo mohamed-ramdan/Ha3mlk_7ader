@@ -54,7 +54,7 @@
             echo "</select>";
             
             //creating the products' buttons
-            echo "<br /><br /> Products";
+            echo "<br /><b  <?php echr /> Products";
             foreach ($products as $product) {
                 $productname = $product['productName'];
                 echo "<button type='button' id='$productname'> $productname </button>";
@@ -225,10 +225,24 @@
                 }
 
             ?>
+            
+            function pad2(number) {
+
+                return (number < 10 ? '0' : '') + number;
+
+            }
+            
             // call the ajax javascript function
             ajax(url);
             xdate = new Date();
-            xdate2= xdate.getFullYear() + '-' + xdate.getMonth() + '-' + xdate.getDay() + ' ' +xdate.getHours()+':'+ xdate.getMinutes()+':'+ xdate.getSeconds();  
+            thisMonth = parseInt(xdate.getMonth()) + 1;
+
+            thisDay = parseInt(xdate.getDay()) + 1;
+            console.log("vvvvvvvvvv")
+            console.log(thisMonth);
+            console.log(thisDay);
+            
+            xdate2= xdate.getFullYear() + '-' + pad2(thisMonth) + '-' + pad2(thisDay) + ' ' +pad2(xdate.getHours())+':'+ pad2(xdate.getMinutes())+':'+ pad2(xdate.getSeconds());  
             order = {
                 "orderDate": xdate2,
                 "Name": "Mark",

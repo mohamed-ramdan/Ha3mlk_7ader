@@ -203,8 +203,8 @@ class AdminController
      */
     function  saveNewProduct()
     {
-        var_dump($_FILES);
-        var_dump($_POST); 
+        //var_dump($_FILES);
+        //var_dump($_POST); 
         
        echo 'inside func save product';
        $rules = array(
@@ -255,7 +255,7 @@ class AdminController
                         {
                                 echo 'Problem: Possible file upload attack. Filename: ';
                                 echo $_FILES['pic']['name'];
-                                exit;
+                                
                         }
                 echo $orm->insert
                (
@@ -268,7 +268,7 @@ class AdminController
                          ) 
                ); 
                         
-                        
+                  return 1;      
                 }
                  else if (count($validation->errors)==1 && $_FILES['pic']['error'] ==4 ){
                         //get room id of selected room
@@ -421,7 +421,7 @@ class AdminController
     function saveNewCategory()
     {
         // Get Intance from ORM model
-            echo 'vcccc'.$_GET['category'];
+            
             $orm = ORM::getInstance();
             // Set table orders to retrieve
             $orm->setTable('h3mlk7aderdb.category');
@@ -450,7 +450,7 @@ class AdminController
     
     // First must check if the user is authorized and he is an admin
     
-
+    var_dump($_GET);
     if(isset($_GET["fn"])){
         $varAdmin = new AdminController();
         
@@ -462,9 +462,9 @@ class AdminController
             case "saveNewProduct":
                 $varAdmin->saveNewProduct();
                 break;
-            case "saveNewCategory":
-               
-                $varAdmin->saveNewCategory();
+            case "saveNewCategory":              
+               $varAdmin->saveNewCategory();
+                break;
                 
         }
     }

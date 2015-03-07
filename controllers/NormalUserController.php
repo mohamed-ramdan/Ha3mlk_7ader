@@ -112,17 +112,66 @@
             }
             }
     
-    return $thisOrderId;         
+        return $thisOrderId;         
     }
     
+    function getUserorders()
+    {
+        $userID="1";    
+        
+        // Get Intance from ORM model
+        $orm = ORM::getInstance();
+        // Set table orders to retrieve
+        $orm->setTable('h3mlk7aderdb.cafeOrder');
+        // Call function select from ORM instance
+        //$orders  = $orm->selectjoin(array(user,cafeOrder,product,orderComponent),"username='$userName' and user.userID=cafeOrder.orderUserId and orderComponent.orderID=cafeOrder.orderID and orderComponent.productID=product.productID");
+        $orders  = $orm->selectjoin(array('cafeOrder','product','orderComponent'),"cafeOrder.orderUserId = '$userID' and orderComponent.orderID=cafeOrder.orderID and orderComponent.productID=product.productID");
+                
+        // If there are any categories then retrieve
+        //var_dump($orders);
+        if(!empty($orders))
+        {
+            //print_r($orders);
+            return $orders;
+        }
+        else{
+            echo false;
+            return false;
+        }
+        
+        
     }
+    function cancelOrder(){
+        $thisOrderID = $_GET['orderID'];
+        
+        // Get Intance from ORM model
+        $orm = ORM::getInstance();
+        // Set table orders to retrieve
+        $orm->setTable('h3mlk7aderdb.cafeOrder');
+        
+        $result =$orm->update(array('status' => 'Canceled'),"orderID=$thisOrderID");
+        
+        echo $result;
+    }
+    
+ }
 
     if(isset($_GET["fn"])){
+       
         $varNormalUser = new NormalUserController();
         switch ($_GET["fn"])
         {       
           case "saveOrder":
             echo $varNormalUser->saveOrder();
+            break;
+              
+          case "getUserorders":  
+            $varNormalUser->getUserorders();
+            break;
+          case "cancelOrder":
+            
+            $varNormalUser->cancelOrder();
+            break;
             
         }
     }

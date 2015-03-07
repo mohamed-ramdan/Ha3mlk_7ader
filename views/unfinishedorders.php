@@ -1,3 +1,6 @@
+
+
+
 <?php
     require_once '../controllers/AdminController.php';
     
@@ -22,11 +25,12 @@
             echo '<td>Name</td>';
             echo '<td>Room</td>';
             echo '<td>Ext.</td>';
+            echo '<td>Status</td>';
             echo '<td>Action</td>';
             echo '</tr>';
             $lastOrder = 0;
             foreach ($result as $order) {
-                
+                $thisOrderID=$order['orderID'];
                 if($order['orderID']!=$lastOrder){
                     //echo "<tr id='a".$order['orderID']."'";
                     echo "<tr id='a".$order['orderID']."'>";
@@ -36,10 +40,15 @@
                     echo '<td>'.$order['username'].'</td>'; 
                     echo '<td>'.$order['roomNumber'].'</td>'; 
                     echo '<td>'.$order['ext'].'</td>'; 
-                    echo '<td>'."do something".'</td>';
+                    echo '<td>'.$order['status'].'</td>'; 
+                    echo '<td>'."<select id='change$thisOrderID'".">"
+                            . "<option value='preparing'> preparing </option>"
+                            . "<option value='delivering'> delivering </option>"
+                            . "<option value='done'> done </option>"
+                            . "</select>".'</td>';
                     echo '</tr>';
                     echo '<tr>';
-                        echo '<td>'.$order['productName'].'</td>'; 
+                    echo '<td>'.$order['productName'].'</td>'; 
                 }
                 else{
                     echo '<td>'.$order['productName'].'</td>'; 
@@ -59,7 +68,7 @@
     echo "<br />";
 
 ?>
-
+    
     <script>
         // script for defining the websocket
         var conn = new WebSocket('ws://localhost:8080');
@@ -71,10 +80,10 @@
 	conn.onmessage = function(e) {
             var obj= JSON.parse(e.data)
 	    console.log(obj);
-            
-            
+                      
             var table = document.getElementById("mytable");
             var row = table.insertRow(1);
+            row.id = obj['id'];
             var cell1 = row.insertCell(0);
             var cell2 = row.insertCell(1);
             var cell3 = row.insertCell(2);
@@ -82,7 +91,7 @@
             var cell5 = row.insertCell(4);
             var cell6 = row.insertCell(5);
             var row2 = table.insertRow(2);
-            var cell7 = row2.insertCell(0);    
+                
             cell1.innerHTML = obj['id'];
             cell2.innerHTML = obj['orderDate'];
             cell3.innerHTML = obj['Name'];
@@ -90,7 +99,9 @@
             cell5.innerHTML = obj['Ext'];
             cell6.innerHTML = "do Something";
             for(i=0;i< obj['Products'].length;i++){
+                var cell7 = row2.insertCell(0);
                 cell7.innerHTML +=  obj['Products'][i]['ProductName'];
+                
             }
             
 	    //resultdiv.innerHTML += e.data + "<br/>";
