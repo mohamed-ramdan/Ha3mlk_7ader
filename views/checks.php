@@ -27,7 +27,7 @@
                     
                     
                     <div class="form-group">
-                        <div class="col-sm-10">
+                        <div class="col-sm-10" >
                             <select class="form-control" id="selecteduser">
                                 <?php
                                     include_once '../controllers/AdminController.php';
@@ -36,7 +36,8 @@
                                     foreach ($users as $usr) 
                                     {
                                         $userName = $usr['username'];
-                                        echo "<option>".$userName."</option>";
+                                        $usrId = $usr['userID'];
+                                        echo "<option id='$usrId'>".$userName."</option>";
                                     }
                                 ?>
                             </select>                      
@@ -48,8 +49,8 @@
                     <br /><br />
                     
                     
-                    <div class="container col-sm-10">
-                        <div class="panel panel-default">
+                    <div class="container col-sm-10" id="accParent">
+                        <div class="panel panel-default" >
                         <div class="panel-body">
                     <table class="table table-responsive table-striped ">
                         <tr>
@@ -68,12 +69,12 @@
                          include_once '../controllers/AdminController.php';
                                     $thisAdminVar = new AdminController();
                                     $users = $thisAdminVar->getAllUsers();
-                                    echo "<div class='panel-group' id='accordion' role='tablist' aria-multiselectable='true'>";
+                                    echo "<div class='panel-group' id='accordion' role='tablist' aria-multiselectable='false'>";
                                     $counter = $counterr = 0;
                                     foreach ($users as $usr) 
                                     {
                                         $counter = $counterr +=1;
-                                        echo "<tr>";
+                                        echo "<tr id='row$usrId'>";
                                         echo "<td>"
                                                 . "<div class='panel panel-primary'>"
                                                 . "<div class='panel-heading' role='tab' id='headingOne'>"
@@ -113,7 +114,58 @@
                 
                 <script> 
                     var selectedUser =document.getElementById('selecteduser');
-                    selectedUser.onchange()
+                    var row = document.getElementById('accordion');
+                   
+                    selectedUser.onchange=function(){
+                        // filter data code here 
+                        
+                    //row.remove();
+                    document.getElementById('accParent').parentNode.removeChild(document.getElementById('accParent'));
+                    
+                    //retrieve selected user data through ajax
+                    ajaxRequest = new XMLHttpRequest();
+                    function ajax(url){
+                        
+                        ajaxRequest.open("GET","../controllers/AdminController.php?"+url, true);
+                        ajaxRequest.send();
+                    }
+                    
+                    
+                    
+                    ajaxRequest.onreadystatechange = function(){
+                        
+                    if(ajaxRequest.readyState ===4 && ajaxRequest.status===200){
+                                // the actual response text
+                                result = ajaxRequest.responseText;
+                                // create element collapse with ajax data
+                                var container = document.createElement('div');
+                                container.setAttribute('class','panel-group');
+                                container.setAttribute('id','accordion');
+                                container.setAttribute('role','tablist');
+                                container.setAttribute('aria-multiselectable','false');
+                                
+                                
+                                /* hena hankmlk rasm men awel line 73 ya 7lawa */
+                                
+                                
+                               
+                        }
+                    };    
+                        
+                     var url = "userid=1&fn=getChecksNeededData";
+                     ajax(url);   
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                    };
                 
                 </script>
         

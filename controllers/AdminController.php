@@ -467,14 +467,26 @@ class AdminController
      */
     function getChecksNeededData()
     {
-        // Get Intance from ORM model
         $orm = ORM::getInstance();
-        $result = $orm-> selectjoin(array('cafeOrder','user','orderComponent','product'),
+        if(isset($_GET['userid'])){
+            $thisUserID = $_GET['userid'];
+            $result = $orm-> selectjoin(array('cafeOrder','user','orderComponent','product'),
+                "cafeOrder.orderUserID=user.userID and cafeOrder.orderID = orderComponent.orderID and orderComponent.productID = product.productID and user.userID= $thisUserID "
+                . "order by user.username, cafeOrder.orderID, product.productID DESC");
+        }
+        else{
+            $result = $orm-> selectjoin(array('cafeOrder','user','orderComponent','product'),
                 "cafeOrder.orderUserID=user.userID and cafeOrder.orderID = orderComponent.orderID and orderComponent.productID = product.productID"
                 . "order by user.username, cafeOrder.orderID, product.productID DESC");
+        }
+        // Get Intance from ORM model
+        
+        
         if(!empty($result))
         {
-            return $result;
+           // echo 'ccc';
+           var_dump($result);
+            
         }
         
         
