@@ -170,6 +170,36 @@ class AdminController
     
     
     
+    /**
+     * getAllUsers is a function that return array of all users.
+     * @author Mohamed Ramadan.
+     * @param void 
+     * @return array that contain all usersName
+     */
+    function getAllUsers()
+    {
+        //get instance from orm 
+        $orm = ORM::getInstance();
+        //set table for retieve
+        $orm->setTable('h3mlk7aderdb.user');
+        //select all users
+        $users = $orm->select();      
+        return $users;    
+    }
+
+
+
+
+
+
+
+
+    /**
+     * saveNewProduct is a function that insert new product into the database
+     * @author Mohamed Ramadan
+     * @param void 
+     * @return void
+     */
     function  saveNewProduct()
     {
        //var_dump($_GET['fn']);
@@ -298,6 +328,29 @@ class AdminController
     
     
 }
+
+
+
+/**
+     * @author Mohamed Ramadan
+     * saveNewCategory is a function that save new categories
+     * Using ORM insert method
+     * @param void 
+     * @return int number of affected rows
+     */
+function saveNewCategory()
+{
+    // Get Intance from ORM model
+        $orm = ORM::getInstance();
+        // Set table orders to retrieve
+        $orm->setTable('h3mlk7aderdb.category');
+        //insert data
+        $result = $orm->insert($_GET['category']);
+        // number of affected rows
+        return $result;
+        //header("Location:views/addproduct.php");
+}
+
     
     // First must check if the user is authorized and he is an admin
     
@@ -312,6 +365,8 @@ class AdminController
             case "saveNewProduct":
                 $varAdmin->saveNewProduct();
                 break;
+            case "saveNewCategory":
+                $varAdmin->saveNewCategory();
         }
     }
 
