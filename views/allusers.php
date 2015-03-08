@@ -19,6 +19,40 @@
    
         ?>
     
+           
+<script>
+
+//create an ajax XML Http Request 
+        ajaxRequest = new XMLHttpRequest();
+function ajax(url){
+                // the first parameter is whether the request method is POST OR Ger
+                // the second parameter is the the actual url
+                // the third parameter is the type of ajax request , Asyncrounous or        usually always true
+              
+        ajaxRequest.open("GET","../controllers/AuthenticationController.php?" + url, true);
+             
+                // send the request.. remember we sent the data in the url
+                ajaxRequest.send();
+                  
+        }
+        
+        // onlick action listener for the ajax request
+        // it's useful because through it we can control what to do when the request come back to the client with a response 
+        ajaxRequest.onreadystatechange = function(){    
+                        // readyState = 4  means the request is done and came back to the client
+                        // 200 means the server and file were successufly found
+                       
+        if(ajaxRequest.readyState ===4 && ajaxRequest.status===200){
+                                
+                            response=parseInt(ajaxRequest.responseText);
+                            alert(response);
+                            document.getElementById('row'+response).parentNode.removeChild(document.getElementById('row'+response));
+              }
+        };
+    
+</script>
+
+    
     <nav class="navbar navbar-inverse navbar-fixed-top " style="height: 70px;">
             
             <div class="navbar-header navbar-right" >
@@ -70,15 +104,18 @@ $i=0;
 echo "</br>";
 $length=count($users);
 while($length>=1){
-echo '<tr>';
-//echo $users[$i]['userPicture'];
+$e=$i+1;    
+echo "<tr id='row".$e."'>";
+////echo $users[$i]['userPicture'];
 //echo "</br>";
 echo "<td>". $users[$i]['username']." </td>";
 echo "<td> ".$users[$i]['roomNumber'] ."</td>";
 echo "<td>  <img src=".trim($users[$i]['userPicture'])." height='50' width='50'> </td>";
 echo "<td>". $users[$i]['ext']." </td>";
 $id=$users[$i]['userID'];
-echo "<td> <a class='btn btn-danger' href=http://localhost/Ha3mlk_7ader/Ha3mlk_7ader/controllers/AuthenticationController.php?id=$id&fn=deleteUser>delete</a> </td>";
+echo "<td> <input  class='btn btn-danger' value='delete' type='button' class='btn btn-warning' id='$id'  onclick =\"ajax('id=$id&fn=deleteUser')\"";
+echo "</td>";
+//echo "<td> <a class='btn btn-danger' href=http://localhost/Ha3mlk_7ader/Ha3mlk_7ader/controllers/AuthenticationController.php?id=$id&fn=deleteUser>delete</a> </td>";
 echo "<td> <a class='btn btn-success' href=http://localhost/Ha3mlk_7ader/Ha3mlk_7ader/views/profile.php?id=$id>edit</a> </td>";
 $length=$length-1;	
 $i=$i+1;

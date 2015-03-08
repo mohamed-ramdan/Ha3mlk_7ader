@@ -100,7 +100,7 @@ function ajax(url){
                         //alert(comeResponse[0]);
                         //alert(comeResponse[1]); 
                         if(comeResponse[1].trim()=="changestate"){
-                           alert(comeResponse[1]);
+                          
                         if(productstatus=='available')
                         {
                            // alert("response");

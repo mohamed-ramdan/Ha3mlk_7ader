@@ -7,6 +7,17 @@
         <link type="text/css" rel="stylesheet" href="../static/css/bootstrap.min.css" />
     </head>
     <body>
+         <?php @session_start();
+    if(!($_SESSION['check']))
+       {    
+           header("Location: ../views/login.php");
+
+       }    
+      ?>
+        
+        
+        
+        
         <br ><br >
         <div class="container">
             <div class="panel panel-primary">
@@ -17,48 +28,41 @@
                         <div class="form-group">
                             <div class="col-sm-2"></div>
                             <label class="control-label col-sm-2" for="q">Your Question:</label>
-                            <div class="col-sm-5"><input type="text" name="q" class="form-control " value="<?php if(isset($_GET['question'])){echo $_GET['question'];}?>" disabled /></div>
+                            <div class="col-sm-5"><input type="text" name="q" class="form-control " value="<?php if(isset($_GET['question'])){echo $_GET['question'];}?>" readonly='1' /></div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-2"></div>
                             <label class="control-label col-sm-2" for="ans">Your Answer:</label>
-                            <div class="col-sm-5"><input type="text" name="ans" class="form-control" placeholder="Enter your Answer" value="<?php $_GET['quest']?>"/></div>
+                            <div class="col-sm-5"><input type="text" name="ans" class="form-control" placeholder="Enter your Answer" /></div>
                         </div>
+                        
+                        
+                        
+                         <div class="form-group">
+                              
+                             <?php
+                       
+                            if(isset($_GET['error'])){
+                                   
+                            echo "<br/><font color='red'>".$_GET['error']."</font>";
+                               
+                            }
+                            ?>  
+                        
+                        
                         <div class="form-group">
                             <div class="col-sm-5"></div>
+                            
+                            
+                            
                             <input type="submit" value="Save" class="btn btn-success" />
                             <input type="reset" value="Cancel" class="btn btn-danger" />
-                            <input type="hidden" value="securityQuestion" name="fn" />
+                            <input type="hidden" value="securityQestionTest" name="fn" />
+                             <input type="hidden" value="<?php echo $_GET['email'];?>" name="email" />
                         </div>
                     </form>
                     
-                    <span <?php 
-                    if(isset($_GET['tstrslt']))
-                    {
-                        if($_GET['tstrslt']=='invalid answer !!')
-                        {
-                            echo "style='color:red;'";
-                        }
-                        else 
-                        {
-                            echo "style='color:green;'";
-                        }
-                    }
                     
-                    ?> > <?php
-                    if(isset($_GET['tstrslt']))
-                    {
-                            if($_GET['tstrslt']=='invalid answer !!')
-                        {
-                            echo "invalid answer";
-                        }
-                        else
-                        {
-                            header('location: makeOrder.php');
-                            //echo "valid answer";
-                        }
-                    }
-                    ?></span>
                 </div>
             </div>
         </div>
