@@ -150,8 +150,8 @@
                                                 <script>
                                                     var myTable = document.createElement("table");
                                                     myTable.setAttribute("id",'userTable<?php echo $thisUserID; ?>');
-                                                    myTable.setAttribute("border",'1');
-                                                    myTable.setAttribute("class",'table table-responsice table-striped');
+                                                    //myTable.setAttribute("border",'1');
+                                                    myTable.setAttribute("class",'table table-responsive table-striped');
                                                     var th1 = document.createElement('th');
                                                     th1.innerHTML='User Name';
                                                     var th2 = document.createElement('th');
@@ -318,6 +318,7 @@
                                    if(thisOrderID!=lastOrderID){
                                            
                                            var myTable = document.getElementById('userTable'+thisUserID);
+                                           myTable.setAttribute('class','table table-responsive table-striped');
                                            var row = myTable.insertRow(1);
                                            row.setAttribute("id","orderRow"+thisOrderID);
                                            var cell1 = row.insertCell(0);

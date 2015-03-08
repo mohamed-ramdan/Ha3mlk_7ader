@@ -44,7 +44,11 @@ require_once '../models/Validation.php';
                 {    
                  header("Location: ../views/unfinishedorders.php");
                 }
-            }  
+            }
+            else{
+               header("Location: ../views/login.php?error='in valid email or password'"); 
+                
+            }
             
         }
     
@@ -324,7 +328,9 @@ require_once '../models/Validation.php';
                     unlink(trim($user[0]["userPicture"]));    
                 }
                 $user = $orm->delete("userId='$id'");  
-                header("Location: ../views/allusers.php");    
+                echo "$id" ;
+
+                //header("Location: ../views/allusers.php");    
 
     }
       
@@ -341,29 +347,38 @@ require_once '../models/Validation.php';
         // Get instance from ORM model
         $orm = ORM::getInstance(); 
         // Set table user for retrieve question answers
+        
         $orm->setTable('user');
         $ans = $_GET['ans'];
-        $result = $orm-> select();
+        $mail= $_GET['email'];
+        $q= $_GET['q'];
         
-        $existanceFlag='invalid answer !!';
-        if (!empty($result))
-        {
-            foreach ($result as $answer)
-            {
-                if($ans == $answer['secretAnswer'])
-                {
-                    $existanceFlag='Valid Answer :) ';
-                    //header("location:../views/securityquestion.php?tstrslt=$existanceFlag");
-                    header("Location: ../views/NormalMyOrders.php");
-                    
+        $result = $orm-> select("email='$mail' and secretAnswer= '$ans' ");
+        
+        if (count($result))
+            
+        { 
+                $_SESSION['logged']=1;
+                $_SESSION['isAdmin']=$opOfQuery[0]['isAdmin'];
+                $_SESSION['userID']=$opOfQuery[0]['userID'];
+                $_SESSION['username']=$opOfQuery[0]['username'];
+                $_SESSION['userPicture']=$opOfQuery[0]['userPicture'];
+                $_SESSION['ext']=$opOfQuery[0]['ext'];
+                if($opOfQuery[0]['isAdmin']==0)
+                {    
+                 header("Location: ../views/makeOrder.php");
                 }
-                
-            }
-            //header("location:../views/securityquestion.php?tstrslt=$existanceFlag");
-      
-            header("Location: ../views/securityquestion.php?error='not mattch&q= '");
+                elseif($opOfQuery[0]['isAdmin']==1)
+                {    
+                 header("Location: ../views/unfinishedorders.php");
+                }
+               
+        }
+            
+      else{
+            header("Location: ../views/securityquestion.php?email=$mail&error='not mattch'&question=$q");
        }
-        //return $existanceFlag;
+       
         
     }
     
@@ -383,15 +398,15 @@ require_once '../models/Validation.php';
         $orm = ORM::getInstance(); 
         // Set table user for retrieve question answers
         $orm->setTable('user');
-        $umail = $_GET['mail'];
-        
-        $result = $orm-> select("email='$umail'");
+        $mail = $_GET['mail'];
+        $_SESSION['check']=1;
+        $result = $orm-> select("email='$mail'");
         //echo $result[0]['secretQuestion'];
         if(!empty($result))
         {
             $question = $result[0]['secretQuestion'];
             //return $question;
-            header("location: ../views/securityquestion.php?question=$question");
+            header("location: ../views/securityquestion.php?question=$question&email=$mail");
         }
         
     }
@@ -448,7 +463,7 @@ require_once '../models/Validation.php';
         }
         break;
         
-      case "securityQuestion":
+      case "securityQestionTest":
           $userAuth->securityQestionTest();
           break;
       

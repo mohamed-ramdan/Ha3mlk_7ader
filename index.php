@@ -13,6 +13,8 @@ Ha3melk 7ader is cafe management web application.
             echo 'Ha3mlek 7ader launching';
 	    // for testing too
 	    echo 'Mohamed joined ha3mlk_7ader';
+            header("location: ../views/login.php");
+
         ?>
     </body>
 </html>

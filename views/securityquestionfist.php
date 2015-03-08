@@ -7,6 +7,7 @@
         <link type="text/css" rel="stylesheet" href="../static/css/bootstrap.min.css" />
     </head>
     <body>
+       
         <br ><br >
         <div class="container">
             <div class="panel panel-primary">
@@ -19,11 +20,15 @@
                             <div class="col-sm-5"><input type="text" name="mail" class="form-control panel-success"  placeholder="Enter your Email" /></div>
                         </div>
                         
-                        <div class="form-group">
+                       
+                            </div>
+                            <div class="form-group">
                             <div class="col-sm-5"></div>
                             <input type="submit" value="Next" class="btn btn-success" />
                             <input type="hidden" name="fn" value="getSecurityQuestion" />
                         </div>
+                        
+                       
                     </form>
                 </div>
             </div>

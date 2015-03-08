@@ -8,11 +8,15 @@
     <body style="background-color:#2554C7;">
         <?php
         @session_start();
-         if(isset($_SESSION['logged']))
+         if(isset($_SESSION['logged'])&&$_SESSION['isAdmin'])
             {    
-                header("Location: ../views/makeOrder.php");
+                header("Location: ../views/unfinishedorders.php");
 
             }
+          elseif(isset($_SESSION['logged'])){
+              
+              header("Location: ../views/makeOrder.php");
+          }  
    
         ?>
         
@@ -68,6 +72,16 @@
                                           <a href="securityquestionfist.php"> Forgot Your Password?</a>
                                       </div>
                                     </div>
+                                  
+                                     <?php
+                       
+                            if(isset($_GET['error'])){
+                                   
+                            echo "<br/><font color='red'>".$_GET['error']."</font>";
+                               
+                            }
+                            ?>  
+                        
                                     
                                  </form>
                                 
