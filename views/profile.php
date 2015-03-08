@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
          @session_start();
-         if(!($_SESSION['logged']&&$_SESSION['isAdmin']))
+         if(!($_SESSION['logged']))
             {    
                 header("Location: ../views/login.php");
 
@@ -38,7 +38,7 @@
                     
                      <img alt="Brand" src="<?php echo trim($_SESSION['userPicture']);?>"  style="width: 50px;height: 50px;float:right;margin-right: 15px;">
                  </a> 
-                <a href="http://localhost/Ha3mlk_7ader/Ha3mlk_7ader/views/profile.php?id=<?php echo trim($_SESSION['userID']);?>" style="margin-right: 20px;"><?php echo trim($_SESSION['username']);?></a>
+                <a href="profile.php?id=<?php echo trim($_SESSION['userID']);?>" style="margin-right: 20px;"><?php echo trim($_SESSION['username']);?></a>
                 
             </div>
             <div class="container">

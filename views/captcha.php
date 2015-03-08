@@ -10,7 +10,7 @@
   // Adapted for The Art of Web: www.the-art-of-web.com
   // Please acknowledge use of this code by including this header.
   @session_start();
-  if(!($_SESSION['logged']&&$_SESSION['isAdmin']))
+  if(!($_SESSION['logged']))
             {    
                 header("Location: ../views/login.php");
 

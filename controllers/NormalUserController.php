@@ -177,10 +177,14 @@
             
         }
         }
+        
+        }
         else{
             
             header("Location: ../views/login.php");
         }
-    }
+        
+        
+    
 
 ?>

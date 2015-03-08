@@ -9,7 +9,7 @@
 </head>
 <body>
     <?php
-        @session_start();
+       @session_start();
          if(!($_SESSION['logged']))
             {    
                 header("Location: ../views/login.php");
