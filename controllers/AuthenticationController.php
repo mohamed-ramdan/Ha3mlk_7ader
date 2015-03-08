@@ -1,11 +1,7 @@
 <?php
 require_once '../models/ORM.php';
 require_once '../models/Validation.php';
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 
 
 //session already opended in validation.
@@ -36,7 +32,10 @@ require_once '../models/Validation.php';
                 $_SESSION['userID']=$opOfQuery[0]['userID'];
                 $_SESSION['username']=$opOfQuery[0]['username'];
                 $_SESSION['userPicture']=$opOfQuery[0]['userPicture'];
+
                 $_SESSION['Ext']=$opOfQuery[0]['ext'];
+
+                $_SESSION['ext']=$opOfQuery[0]['ext'];
                 if($opOfQuery[0]['isAdmin']==0)
                 {    
                  header("Location: ../views/makeOrder.php");
@@ -77,6 +76,9 @@ require_once '../models/Validation.php';
                 
                 $_SESSION['passwd']=$_POST["passwordc"];
                 $validation = new Validation();
+                if($_GET["edit"]){
+                    $rules[email]='required|email';
+                }
                 $result = $validation->validate($_POST,$rules);
                 $imgresult = $validation->validateimg($_FILES,'userPicture');
 		//no error at all file and data
@@ -153,8 +155,25 @@ require_once '../models/Validation.php';
                                             exit;
                                     }
                         }
-                header("Location: ../views/NormalMyOrders.php");                  
-               }
+                if($_SESSION['userID']==$_GET["id"]){
+                    $id=$_GET["id"];
+                    $opOfQuery=$obj->select(" userID= $id");
+                    $_SESSION['userID']=$opOfQuery[0]['userID'];
+                    $_SESSION['username']=$opOfQuery[0]['username'];
+                    $_SESSION['userPicture']=$opOfQuery[0]['userPicture']; 
+
+                }        
+                        
+                        
+                if($_SESSION['isAdmin']==1)
+                {    
+                  header("Location: ../views/unfinishedorders.php");                  
+                }
+                else{
+                  header("Location: ../views/NormalMyOrders.php");   
+                }
+                
+              }
               
                
                //save data with out file no file sent
@@ -183,8 +202,27 @@ require_once '../models/Validation.php';
                         }
                         else{
                         $a=$obj->insert($_POST);
-                        } 
-                header("Location: ../views/NormalMyOrders.php");          
+                        }
+               if($_SESSION['userID']==$_GET["id"]){
+                    $id=$_GET["id"];
+                    $opOfQuery=$obj->select(" userID= $id");
+                    
+                    $_SESSION['userID']=$opOfQuery[0]['userID'];
+                    $_SESSION['username']=$opOfQuery[0]['username'];
+                    $_SESSION['userPicture']=$opOfQuery[0]['userPicture']; 
+
+                }          
+                        
+                        
+               if($_SESSION['isAdmin']==1)
+                {    
+                  header("Location: ../views/unfinishedorders.php");                  
+                }
+                else{
+                    
+                    
+                  header("Location: ../views/NormalMyOrders.php");   
+                }         
              }
                //data it self isnot valid
                else{
@@ -207,8 +245,19 @@ require_once '../models/Validation.php';
                         $errors = implode("^",$validation->errors);
                         if(isset($_GET["edit"])){
                             $id=$_GET['id'];
-                            header("Location: ../views/profile.php?id=$id&nameVal={$nameVal}&emailVal={$emailVal}&extVal={$extVal}&roomVal={$roomVal}&errors={$errors}");    
-                        }
+                          if($_SESSION['isAdmin']==1)
+                            {    
+                               header("Location: ../views/profile.php?id=$id&edit=1&nameVal={$nameVal}&emailVal={$emailVal}&extVal={$extVal}&roomVal={$roomVal}&errors={$errors}");    
+
+                            }
+                            else{
+
+
+                              header("Location: ../views/profileuser.php?id=$id&edit=1&nameVal={$nameVal}&emailVal={$emailVal}&extVal={$extVal}&roomVal={$roomVal}&errors={$errors}");    
+
+                            }
+                            
+                       }
                         else{
                             header("Location: ../views/adduser.php?nameVal={$nameVal}&emailVal={$emailVal}&extVal={$extVal}&roomVal={$roomVal}&errors={$errors}");    
                         
@@ -278,7 +327,74 @@ require_once '../models/Validation.php';
                 header("Location: ../views/allusers.php");    
 
     }
-       
+      
+    
+    /**
+     * securityQestionTest is a function that assure from security question 
+     * in forgetting password cases. 
+     * @author Mohamed Ramadan
+     * @param  void 
+     * @return int one if the answer was correct and zero if not.
+     */
+    function securityQestionTest()
+    {
+        // Get instance from ORM model
+        $orm = ORM::getInstance(); 
+        // Set table user for retrieve question answers
+        $orm->setTable('user');
+        $ans = $_GET['ans'];
+        $result = $orm-> select();
+        
+        $existanceFlag='invalid answer !!';
+        if (!empty($result))
+        {
+            foreach ($result as $answer)
+            {
+                if($ans == $answer['secretAnswer'])
+                {
+                    $existanceFlag='Valid Answer :) ';
+                    //header("location:../views/securityquestion.php?tstrslt=$existanceFlag");
+                    header("Location: ../views/NormalMyOrders.php");
+                    
+                }
+                
+            }
+            //header("location:../views/securityquestion.php?tstrslt=$existanceFlag");
+      
+            header("Location: ../views/securityquestion.php?error='not mattch&q= '");
+       }
+        //return $existanceFlag;
+        
+    }
+    
+    
+    
+    /**
+     * getSecurityQuestion is a function that get the stored secret question 
+     * for specific user
+     * @author Mohamed Ramadan
+     * @param void 
+     * @return void the question as string to $_GET global array
+     */
+    function getSecurityQuestion()
+    {
+        
+        // Get instance from ORM model
+        $orm = ORM::getInstance(); 
+        // Set table user for retrieve question answers
+        $orm->setTable('user');
+        $umail = $_GET['mail'];
+        
+        $result = $orm-> select("email='$umail'");
+        //echo $result[0]['secretQuestion'];
+        if(!empty($result))
+        {
+            $question = $result[0]['secretQuestion'];
+            //return $question;
+            header("location: ../views/securityquestion.php?question=$question");
+        }
+        
+    }
        
         
     }
@@ -286,6 +402,7 @@ require_once '../models/Validation.php';
 
     $userAuth=new Authenticate();
     @session_start();
+    
     switch ($_GET["fn"])
     {
       case "login":
@@ -312,7 +429,7 @@ require_once '../models/Validation.php';
         break;  
         
       case "register":
-        if($_SESSION['logged']&&$_SESSION['isAdmin'])
+        if($_SESSION['logged']&&$_SESSION['isAdmin']||$_SESSION['logged']&&($_GET["id"]==$_SESSION["userID"]))
         {  
             $userAuth->register();
         }
@@ -330,8 +447,15 @@ require_once '../models/Validation.php';
             header("Location: ../views/login.php");
         }
         break;
-    
-    
+        
+      case "securityQuestion":
+          $userAuth->securityQestionTest();
+          break;
+      
+      case "getSecurityQuestion":
+          
+          $userAuth->getSecurityQuestion();
+          break;
     
     }
 

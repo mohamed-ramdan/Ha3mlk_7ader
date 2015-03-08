@@ -92,18 +92,37 @@
         // Retrieve the room with this number .. to get the the roomID
         $room=$orm->select("roomNumber='$destinationRooms'");
         
+        
+        
         // set the working table to cafeOrder                
         $orm->setTable('h3mlk7aderdb.cafeOrder');
         
         // insert the order into the cafeOrder Table
         // i will modify it to take the current time soon
         
+
         
         
         
         $thisOrderId = $orm->insert(array('date' => date('Y-m-d H:i:s',$currentTime) , 'amount' => 200, 'status' => 'preparing', 'destinationRoomNumber' =>  $room[0]['id'], 'orderUserID' => 3, 'note' => $notes));
+
+        $id=$_SESSION['userID'];
+        $currentCafeOrder=$orm->selectjoin(array('user','cafeOrder')," user.userID=cafeOrder.orderUserID and user.userID=$id and cafeOrder.status='preparing'");
+        
+        if(count($currentCafeOrder)>0){
+              $thisOrderId=$currentCafeOrder[0]["orderID"];
+
               
-        // set the working table to orderComponent    
+          }
+          else{
+                // set the working table to cafeOrder                
+                $orm->setTable('h3mlk7aderdb.cafeOrder');
+
+                // insert the order into the cafeOrder Table
+                // i will modify it to take the current time soon
+                 $thisOrderId = $orm->insert(array('date' => date('Y-m-d H:i:s',$currentTime) , 'amount' => 200, 'status' => 'preparing', 'destinationRoomNumber' =>  $room[0]['id'], 'orderUserID' => 6, 'note' => $notes));
+            }
+          
         $orm->setTable('h3mlk7aderdb.orderComponent');
         
         foreach ($products as $product) {

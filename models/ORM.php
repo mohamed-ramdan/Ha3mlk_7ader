@@ -99,8 +99,7 @@ class ORM {
     function custom($myqeury="") {
         
         if (!empty($myqeury)) {
-           // var_dump($myqeury);
-           // exit;
+            
             $query=$myqeury;
         }
         
@@ -137,7 +136,7 @@ class ORM {
             $query .= " where  ";
             $query .= $cond;
         }
-
+        echo $query;    
         $result = $this->dbconn->query($query);
         //there is an object or empty object 
         if (!$result) {

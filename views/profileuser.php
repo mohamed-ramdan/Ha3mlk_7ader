@@ -1,24 +1,25 @@
-<?php
+<<?php
 
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+         @session_start();
+         if(!($_SESSION['logged']))
+            {    
+                header("Location: ../views/login.php");
 
-    @session_start();
-    if(!($_SESSION['logged']&&$_SESSION['isAdmin']))
-       {    
-           header("Location: ../views/login.php");
-
-       }
-
-    include_once "../controllers/AdminController.php";
-    $adminObj=new AdminController();
+            }
+    include_once "../controllers/AuthenticationController.php";
+    $authObj=new Authenticate();
     $id=$_GET['id'];
-    $productInfo=$adminObj->product($id);
+    $userInfo=$authObj->user($id);
     
     
+       
+   
+       
     ?>
 <html>
     <head>
@@ -37,24 +38,21 @@
                     
                      <img alt="Brand" src="<?php echo trim($_SESSION['userPicture']);?>"  style="width: 50px;height: 50px;float:right;margin-right: 15px;">
                  </a> 
-                <a href="http://localhost/Ha3mlk_7ader/Ha3mlk_7ader/views/profile.php?id=<?php echo trim($_SESSION['userID']);?>" style="margin-right: 20px;"><?php echo trim($_SESSION['username']);?></a>
+                <a href="profile.php?id=<?php echo trim($_SESSION['userID']);?>" style="margin-right: 20px;"><?php echo trim($_SESSION['username']);?></a>
                 
             </div>
             <div class="container">
-                <ul class="nav navbar-nav">
-                    <li><a href="unfinishedorders.php">Home</a></li>
-                    <li><a href="allproducts.php">Products</a></li>
-                    <li><a href="allusers.php">Users</a></li>
-                    <li><a href="manualorder.php">Manual Orders</a></li>
-                    <li><a href="checks.php">Checks</a></li>
-                    <li><a href="../controllers/AuthenticationController.php?fn=logout">logout</a></li>
-                    
-                    
-                    
-                </ul>
+              <ul class="nav navbar-nav">
+              <li><a href="makeOrder.php">Home</a></li>
+              <li><a href="NormalMyOrders.php">MyOrders</a></li>
+              <li><a href="../controllers/AuthenticationController.php?fn=logout">logout</a></li>
+
+              </ul>
             </div>
         </nav>
 
+
+        
         
         
         
@@ -65,62 +63,83 @@
                         <div class="panel panel-primary">
                             <div class="panel-heading">
                                 <h1>profile</h1>
-                                <h1> <?php echo $productInfo["productName"]?> </h1>
+                                <h1>welcome: <?php echo $userInfo["username"]?> </h1>
                             </div>
                             <div class="panel-body">
                                 
-                                <form class="form-horizontal" method="post" action="../controllers/AdminController.php?fn=saveNewProduct&edit=1&id=<?php echo $_GET['id'];?>" enctype="multipart/form-data" >
+                                <form class="form-horizontal" method="post" action="../controllers/AuthenticationController.php?fn=register&edit=1&id=<?php echo $_GET['id'];?>" enctype="multipart/form-data" >
                                     
                                     <div class="form-group">
                                         <div class="col-sm-2"></div>
                                       <label for="name" class="col-sm-2 control-label">profile picture</label>
                                       <div class="col-sm-10">
-                                         <?php echo "<img class='col-sm-2 control-label' src=".trim($productInfo['productPicture'])." height='100' width='100'>";?> 
+                                         <?php echo "<img class='col-sm-2 control-label' src=".trim($userInfo['userPicture'])." height='100' width='100'>";?> 
                                       </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="col-sm-2"></div>
                                       <label for="name" class="col-sm-2 control-label">Name</label>
                                       <div class="col-sm-5">
-                                          <input type="text" class="form-control" readonly="1"  name="productName" required="1" placeholder="Name" value="<?php if( isset($_GET['nameVal']) ){echo $_GET['nameVal'];} elseif( isset($productInfo['productName']) ){echo $productInfo['productName']; } ?>">
+                                          <input type="text" class="form-control" name="username" required="1" placeholder="Name" value="<?php if( isset($userInfo['username']) ){echo $userInfo['username']; } elseif( isset($_GET['nameVal']) ){echo $_GET['nameVal'];}?>">
                                       </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="col-sm-2"></div>
-                                      <label for="price" class="col-sm-2 control-label">Price</label>
+                                      <label for="email" class="col-sm-2 control-label">Email</label>
                                       <div class="col-sm-5">
-                                          <input type="price" class="form-control" name="price" required="1"  placeholder="price"  value="<?php if( isset($_GET['nameVal']) ){echo $_GET['priceVal'];} elseif( isset($productInfo['price']) ){echo $productInfo['price']; }?>">
+                                          <input type="email" class="form-control" readonly="1" name="email" required="1" placeholder="Email"  value="<?php if( isset($userInfo['email']) ){echo $userInfo['email']; }elseif( isset($_GET['emailVal']) ){echo $_GET['emailVal']; }?>">
                                       </div>
                                     </div>
-                                    
-                                    
+                                    <div class="form-group">
+                                        <div class="col-sm-2"></div>
+                                      <label for="password" class="col-sm-2 control-label">Password</label>
+                                      <div class="col-sm-5">
+                                          <input type="password" class="form-control" name="password" required="1" placeholder="Password">
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-2"></div>
+                                      <label for="passwordc" class="col-sm-2 control-label">Confirm Password</label>
+                                      <div class="col-sm-5">
+                                          <input type="password" class="form-control" name="passwordc" required="1" placeholder="Password">
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-2"></div>
+                                      <label for="ext" class="col-sm-2 control-label">EXT.</label>
+                                      <div class="col-sm-5">
+                                          <input type="text" class="form-control" name="ext" required="1" placeholder="Tel Number" value="<?php if( isset($userInfo['ext']) ){echo $userInfo['ext']; }elseif( isset($_GET['extVal']) ){echo $_GET['extVal']; }?>">
+                                      </div>
+                                    </div>
                                     <div class="form-group">
                                         <div class="col-sm-2"></div>
                                       
-                                       <label for="room" class="col-sm-2 control-label">category No.</label>
+                                       <label for="room" class="col-sm-2 control-label">Room No.</label>
                                       <div class="col-sm-5">
-                                          <select name="categoryName">
-                                              
-                                              <?php  
+                                          <select name="roomNumber">
+                                                    <?php  
                                                        include_once "../controllers/AuthenticationController.php";
-                                                       $adminobj=new AdminController;
-                                                        $cats=$adminobj->getAllCategories();
+                                                       $authobj=new Authenticate;
+                                                        $rooms=$authobj->getRooms();
                                                         
                                                         
-                                                        $getcat=$productInfo['categoryID'];
+                                                        $getroom=$userInfo['roomNumber'];
                                                         
-                                                        for ($i = 0; $i < count($cats); $i++){
-                                                            echo "<option value=\"".$cats[$i]['categoryName']."\"";
+                                                        for ($i = 0; $i < count($rooms); $i++){
+                                                            echo "<option value=\"".$rooms[$i]['roomNumber']."\"";
                                                             
-                                                            if($getcat==$cats[$i]['categoryID'])
+                                                            if($getroom==$rooms[$i]['id'])
                                                             {echo 'selected';} 
-                                                            elseif(isset($_GET['categoryVal'])&& $cats[$i]['categoryName']==($_GET['categoryVal']) )
+                                                            elseif(isset($_GET['roomVal'])&& $rooms[$i]['roomNumber']==($_GET['roomVal']) )
                                                             {echo 'selected';}
                                                             echo ">";
-                                                            echo    $cats[$i]['categoryName']."</option>";
-                                                            echo "<br/>"; }
+                                                            echo    $rooms[$i]['roomNumber']."</option>";
+
+echo "<br/>";
+
+
+                                                    }
                                                     ?>
-   
                                           </select> 
                                       
                                       </div>
@@ -130,14 +149,17 @@
                                         <div class="col-sm-2"></div>
                                       <label for="pic" class="col-sm-2 control-label">Profile Picture</label>
                                       <div class="col-sm-5">
-                                          <input type="file"  name="productPicture" class="form-control" />
+                                          <input type="file"  name="userPicture" class="form-control" />
                                       </div>
                                     </div>
                                     
                                     <div class="form-group">
                                         <div class="col-sm-2"></div>
                                       <div class="col-sm-offset-2 col-sm-5">
-                                           <button type="submit" class="btn btn-success" style="width: 220px;">Save</button>
+                                          <p><img src="captcha.php" width="120" height="30" border="1" alt="CAPTCHA"></p>
+                                          <p><input type="text" required="1" size="6" maxlength="5" name="captcha" value=""> <br/>
+                                          <small>copy the digits from the image into this box</small></p>
+                                          <button type="submit" class="btn btn-success" style="width: 220px;">Save</button>
                                           
                                           <button type="reset" class="btn btn-danger" style="width: 220px;">Cancel</button>
                                       </div>
@@ -149,7 +171,7 @@
                                                         echo "<br/><font color='red'>".$error."</font>";
                                                 }
                                         }
-	                ?> 
+	                              ?>
                                     
                                  </form>
                                 

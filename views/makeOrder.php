@@ -27,7 +27,7 @@
                     
                      <img alt="Brand" src="<?php echo trim($_SESSION['userPicture']);?>"  style="width: 50px;height: 50px;float:right;margin-right: 15px;">
                  </a> 
-                <a href="http://localhost/Ha3mlk_7ader/Ha3mlk_7ader/views/profile.php?id=<?php echo trim($_SESSION['userID']);?>" style="margin-right: 20px;"><?php echo trim($_SESSION['username']);?></a>
+                <a href="http://localhost/Ha3mlk_7ader/Ha3mlk_7ader/views/profileuser.php?id=<?php echo trim($_SESSION['userID']);?>" style="margin-right: 20px;"><?php echo trim($_SESSION['username']);?></a>
                 
             </div>
             <div class="container">
@@ -57,7 +57,7 @@
 	}; 
         var order;
     </script>
-    <br ><br />
+    <br/> ><br /> <br /><br />
     <div class="container">
      <div class="panel panel-primary">
         <div class="panel-heading"><h1>Make Order</h1></div>
