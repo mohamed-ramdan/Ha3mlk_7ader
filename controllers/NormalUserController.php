@@ -155,7 +155,9 @@
     }
     
  }
-
+    @session_start();  
+    if($_SESSION['logged'])
+        {
     if(isset($_GET["fn"])){
        
         $varNormalUser = new NormalUserController();
@@ -173,6 +175,11 @@
             $varNormalUser->cancelOrder();
             break;
             
+        }
+        }
+        else{
+            
+            header("Location: ../views/login.php");
         }
     }
 

@@ -8,6 +8,38 @@
         <link type="text/css" rel="stylesheet" href="../static/css/bootstrap.min.css" />
 </head>
 <body>
+    
+    <?php @session_start();
+    if(!($_SESSION['logged']))
+       {    
+           header("Location: ../views/login.php");
+
+       }    
+      ?>
+    
+    <nav class="navbar navbar-inverse navbar-fixed-top " style="height: 70px;">
+            
+            <div class="navbar-header navbar-right" >
+                
+               
+                 <a class="navbar-brand " href="#">
+                    
+                     <img alt="Brand" src="<?php echo trim($_SESSION['userPicture']);?>"  style="width: 50px;height: 50px;float:right;margin-right: 15px;">
+                 </a> 
+                <a href="http://localhost/Ha3mlk_7ader/Ha3mlk_7ader/views/profile.php?id=<?php echo trim($_SESSION['userID']);?>" style="margin-right: 20px;"><?php echo trim($_SESSION['username']);?></a>
+                
+            </div>
+            <div class="container">
+                <ul class="nav navbar-nav">
+                    <li><a href="makeOrder.php">Home</a></li>
+                    <li><a href="NormalMyOrders.php">MyOrders</a></li>
+                    <li><a href="../controllers/AuthenticationController.php?fn=logout">logout</a></li>
+                    
+                    
+                    
+                </ul>
+            </div>
+        </nav>
     <script>
         ajaxRequest = new XMLHttpRequest();
         

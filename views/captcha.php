@@ -9,7 +9,12 @@
 
   // Adapted for The Art of Web: www.the-art-of-web.com
   // Please acknowledge use of this code by including this header.
-  session_start();
+  @session_start();
+  if(!($_SESSION['logged']&&$_SESSION['isAdmin']))
+            {    
+                header("Location: ../views/login.php");
+
+            }
   // initialise image with dimensions of 120 x 30 pixels
   $image = @imagecreatetruecolor(120, 30) or die("Cannot Initialize new GD image stream");
 

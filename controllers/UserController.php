@@ -28,15 +28,5 @@ function getUserorders()
 }   
 
 
-if(isset($_GET["fn"])){
-        $varUser = new UserController();
-        switch ($_GET["fn"])
-        {       
-            case "getUserorders":
-                $varUser->getUserorders();
-                break;
-            
-            
-        }
-    }
 
+    

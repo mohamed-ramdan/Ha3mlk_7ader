@@ -6,6 +6,13 @@
  * and open the template in the editor.
  */
 
+    @session_start();
+    if(!($_SESSION['logged']&&$_SESSION['isAdmin']))
+       {    
+           header("Location: ../views/login.php");
+
+       }
+
     include_once "../controllers/AdminController.php";
     $adminObj=new AdminController();
     $id=$_GET['id'];
@@ -13,6 +20,33 @@
     var_dump($productInfo);
     
     ?>
+
+<nav class="navbar navbar-inverse navbar-fixed-top " style="height: 70px;">
+            
+            <div class="navbar-header navbar-right" >
+                
+               
+                 <a class="navbar-brand " href="#">
+                    
+                     <img alt="Brand" src="<?php echo trim($_SESSION['userPicture']);?>"  style="width: 50px;height: 50px;float:right;margin-right: 15px;">
+                 </a> 
+                <a href="http://localhost/Ha3mlk_7ader/Ha3mlk_7ader/views/profile.php?id=<?php echo trim($_SESSION['userID']);?>" style="margin-right: 20px;"><?php echo trim($_SESSION['username']);?></a>
+                
+            </div>
+            <div class="container">
+                <ul class="nav navbar-nav">
+                    <li><a href="unfinishedorders.php">Home</a></li>
+                    <li><a href="allproducts.php">Products</a></li>
+                    <li><a href="allusers.php">Users</a></li>
+                    <li><a href="manualorder.php">Manual Orders</a></li>
+                    <li><a href="checks.php">Checks</a></li>
+                    <li><a href="../controllers/AuthenticationController.php?fn=logout">logout</a></li>
+                    
+                    
+                    
+                </ul>
+            </div>
+        </nav>
 <html>
     <head>
         <meta charset="utf-8">

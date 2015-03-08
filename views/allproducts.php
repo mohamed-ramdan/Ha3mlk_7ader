@@ -8,6 +8,42 @@
         <link type="text/css" rel="stylesheet" href="../static/css/bootstrap.min.css" /> 
 </head>
 <body>
+    <?php
+        @session_start();
+         if(!($_SESSION['logged']&&$_SESSION['isAdmin']))
+            {    
+                header("Location: ../views/login.php");
+
+            }
+   
+        ?>
+   <nav class="navbar navbar-inverse navbar-fixed-top " style="height: 70px;">
+            
+            <div class="navbar-header navbar-right" >
+                
+               
+                 <a class="navbar-brand " href="#">
+                    
+                     <img alt="Brand" src="<?php echo trim($_SESSION['userPicture']);?>"  style="width: 50px;height: 50px;float:right;margin-right: 15px;">
+                 </a> 
+                <a href="http://localhost/Ha3mlk_7ader/Ha3mlk_7ader/views/profile.php?id=<?php echo trim($_SESSION['userID']);?>" style="margin-right: 20px;"><?php echo trim($_SESSION['username']);?></a>
+                
+            </div>
+            <div class="container">
+                <ul class="nav navbar-nav">
+                    <li><a href="unfinishedorders.php">Home</a></li>
+                    <li><a href="allproducts.php">Products</a></li>
+                    <li><a href="allusers.php">Users</a></li>
+                    <li><a href="manualorder.php">Manual Orders</a></li>
+                    <li><a href="checks.php">Checks</a></li>
+                    <li><a href="../controllers/AuthenticationController.php?fn=logout">logout</a></li>
+
+                    
+                    
+                </ul>
+            </div>
+        </nav>
+    
     <br ><br >
 <div class="container">
     <div class="panel panel-primary">

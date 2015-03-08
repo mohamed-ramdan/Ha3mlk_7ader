@@ -7,7 +7,7 @@ require_once '../models/Validation.php';
  * and open the template in the editor.
  */
 
- //session_start();
+
 //session already opended in validation.
     class Authenticate{
     /*
@@ -30,30 +30,35 @@ require_once '../models/Validation.php';
 
             if(count($opOfQuery)==1)
             {
+                
                 $_SESSION['logged']=1;
                 $_SESSION['isAdmin']=$opOfQuery[0]['isAdmin'];
+                $_SESSION['userID']=$opOfQuery[0]['userID'];
                 $_SESSION['username']=$opOfQuery[0]['username'];
                 $_SESSION['userPicture']=$opOfQuery[0]['userPicture'];
+                if($opOfQuery[0]['isAdmin']==0)
+                {    
+                 header("Location: ../views/makeOrder.php");
+                }
+                elseif($opOfQuery[0]['isAdmin']==1)
+                {    
+                 header("Location: ../views/unfinishedorders.php");
+                }
             }  
-
+            
         }
     
         function  logout(){
-             //if($_SESSION['logged']&&$_SESSION['isAdmin'])
-            //{
             
-                $_SESSION[]=array();
-                
-             //}
-
+             $_SESSION=array();
+             header("Location: ../views/login.php"); 
         }
         
        function  register(){
           
             $obj = ORM::getInstance();
-            //if($_SESSION['logged']&&$_SESSION['isAdmin'])
-            //{
-            //var_dump($_GET);
+          
+           
             if($_POST)
             {  
                 
@@ -68,17 +73,12 @@ require_once '../models/Validation.php';
                         'passwordc'=>'required',
                         );
                 //send the data in session to compare with in validation
-                if(isset($_GET["edit"])){
-                    $rules["email"]='required|email';
-                }
+                
                 $_SESSION['passwd']=$_POST["passwordc"];
                 $validation = new Validation();
                 $result = $validation->validate($_POST,$rules);
                 $imgresult = $validation->validateimg($_FILES,'userPicture');
-		
-                //no error at all file and data
-                
-                
+		//no error at all file and data
                 if(count($validation->errors)==0 ){
                         
                         //get room id of selected room
@@ -93,7 +93,6 @@ require_once '../models/Validation.php';
                         unset($_POST["passwordc"]);
                         unset($_POST["captcha"]);
                         $_POST["password"]=  md5($_POST["password"]);
-                        $DOCUMENT_ROOT = $_SERVER['DOCUMENT_ROOT'];
                         $upfile="../static/img/{$_POST['email']}_{$_FILES['userPicture']['name']}";
 			$imgname = "{$_POST['email']}_{$_FILES['userPicture']['name']}";
                         //save image
@@ -130,12 +129,11 @@ require_once '../models/Validation.php';
                                 }
                                 
                                 
-                                
+                               
                         }
                         else{
                                 $a=$obj->insert($_POST);
-                                //echo $a;
-                                //exit;
+                               
                                 if (is_uploaded_file($_FILES['userPicture']['tmp_name']))
                                 {
                                         //save image from tmp to thier place
@@ -154,7 +152,7 @@ require_once '../models/Validation.php';
                                             exit;
                                     }
                         }
-                                
+                header("Location: ../views/NormalMyOrders.php");                  
                }
               
                
@@ -184,7 +182,8 @@ require_once '../models/Validation.php';
                         }
                         else{
                         $a=$obj->insert($_POST);
-                        }   
+                        } 
+                header("Location: ../views/NormalMyOrders.php");          
              }
                //data it self isnot valid
                else{
@@ -204,14 +203,10 @@ require_once '../models/Validation.php';
 			$emailVal=$_POST["email"];
 			$roomVal=$_POST["roomNumber"];
                         $extVal=$_POST["ext"];
-                        
-		        
-                        
-                        
-			$errors = implode("^",$validation->errors);
+                        $errors = implode("^",$validation->errors);
                         if(isset($_GET["edit"])){
                             $id=$_GET['id'];
-                            header("Location: ../views/profile.php?id=$id&errors={$errors}");    
+                            header("Location: ../views/profile.php?id=$id&nameVal={$nameVal}&emailVal={$emailVal}&extVal={$extVal}&roomVal={$roomVal}&errors={$errors}");    
                         }
                         else{
                             header("Location: ../views/adduser.php?nameVal={$nameVal}&emailVal={$emailVal}&extVal={$extVal}&roomVal={$roomVal}&errors={$errors}");    
@@ -221,7 +216,7 @@ require_once '../models/Validation.php';
                
                     
             }
-           // }    
+        
         } 
         
        function getRooms(){
@@ -257,21 +252,13 @@ require_once '../models/Validation.php';
               // Retrieve all users
             $id=$_GET['id'];
             $user = $orm->select("userId='$id'");
-            
-
-        
-        
         }
         function user($id){
             $orm = ORM::getInstance();  
             $orm->setTable('user');
             // Retrieve all users
-            
             $user = $orm->select("userId='$id'");
-            var_dump($user);
-            return $user[0];
-        
-        
+           return $user[0];
         }
         
         
@@ -297,17 +284,50 @@ require_once '../models/Validation.php';
    
 
     $userAuth=new Authenticate();
-    
+    @session_start();
     switch ($_GET["fn"])
     {
-      case "login":  
-        $userAuth->login();
+      case "login":
+         
+        if(isset($_SESSION['logged'])){  
+          
+          header("Location: ../views/makeOrder.php");
+        }
+        else{
+           
+          $userAuth->login();  
+        }
+        
         break;
-      case "register":  
-        $userAuth->register();
-        break;
-      case "deleteUser":  
-        $userAuth->deleteUser();
+      
+      case "logout": 
+        if(isset($_SESSION['logged'])){ 
+          $userAuth->logout();
+          
+        }
+        else{
+        header("Location: ../views/login.php");  
+        }
+        break;  
+        
+      case "register":
+        if($_SESSION['logged']&&$_SESSION['isAdmin'])
+        {  
+            $userAuth->register();
+        }
+        else{
+            header("Location: ../views/login.php");
+            
+        }
+            break;
+      case "deleteUser": 
+        if($_SESSION['logged']&&$_SESSION['isAdmin'])
+        {
+             $userAuth->deleteUser();
+        } 
+        else{
+            header("Location: ../views/login.php");
+        }
         break;
     
     

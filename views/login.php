@@ -6,6 +6,17 @@
         <link href="../static/css/bootstrap.min.css" rel="stylesheet">
     </head>
     <body style="background-color:#2554C7;">
+        <?php
+        @session_start();
+         if(isset($_SESSION['logged']))
+            {    
+                header("Location: ../views/makeOrder.php");
+
+            }
+   
+        ?>
+        
+        
         <br /> <br /><br /><br /><br />
         
             <div class="container">

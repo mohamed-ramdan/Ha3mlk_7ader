@@ -685,8 +685,10 @@ echo "$id"."@delete" ;
 
     
     // First must check if the user is authorized and he is an admin
-    
+    @session_start();
     if(isset($_GET["fn"])){
+        if($_SESSION['logged']&&$_SESSION['isAdmin'])
+        {
         $varAdmin = new AdminController();
         
         switch ($_GET["fn"])
@@ -716,6 +718,10 @@ echo "$id"."@delete" ;
                 $varAdmin->changeOrderStatus();
                 break;
             
+        }
+        } 
+        else{
+            header("Location: ../views/login.php");
         }
     }
 

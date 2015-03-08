@@ -11,7 +11,7 @@ function __autoload($classname) {
 }
 
 
-	session_start();
+	@session_start();
 	class Validation{
 		public $errors =array();
 		public function validate($data, $rules){
