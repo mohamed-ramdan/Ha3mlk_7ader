@@ -100,6 +100,7 @@
             . '<th> Action</th>'
             . '</tr>';
         $lastOrder = 0; 
+        if(isset($result)&&!empty($result)){
         foreach ($result as $key => $order) {
             $thisOrderID =  $order['orderID'];
             if($lastOrder !=$thisOrderID){
@@ -128,6 +129,7 @@
                 
             }   
             $lastOrder = $thisOrderID;
+        }
         }
         echo '</table>';
         echo "</div><!-- panelbody -->"; //panel body div close

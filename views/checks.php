@@ -141,6 +141,7 @@
                                     $lastUserID = 0;
                                     $lastOrderID = 0;
                                     echo '<div id="checksHolder"></div>';
+                                    if(isset($result) && !empty($result) && isset($amountPerUser) && !empty($amountPerUser)){
                                     foreach ($result as $record) 
                                     {
                                         $thisUserID = $record['userID'];
@@ -231,6 +232,7 @@
                                         $lastUserID = $thisUserID; 
                                         $lastOrderID = $thisOrderID; 
                                       
+                                    }
                                     }
                                     
                                     echo "</div>";

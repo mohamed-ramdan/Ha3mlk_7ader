@@ -45,7 +45,7 @@ function ajax(url){
         if(ajaxRequest.readyState ===4 && ajaxRequest.status===200){
                                 
                             response=parseInt(ajaxRequest.responseText);
-                            alert(response);
+                            //alert(response);
                             document.getElementById('row'+response).parentNode.removeChild(document.getElementById('row'+response));
               }
         };
@@ -104,15 +104,16 @@ $i=0;
 echo "</br>";
 $length=count($users);
 while($length>=1){
-$e=$i+1;    
-echo "<tr id='row".$e."'>";
+$id=$users[$i]['userID'];
+$e=$i+1;
+echo "<tr id='row".$id."'>";
 ////echo $users[$i]['userPicture'];
 //echo "</br>";
 echo "<td>". $users[$i]['username']." </td>";
 echo "<td> ".$users[$i]['roomNumber'] ."</td>";
 echo "<td>  <img src=".trim($users[$i]['userPicture'])." height='50' width='50'> </td>";
 echo "<td>". $users[$i]['ext']." </td>";
-$id=$users[$i]['userID'];
+
 echo "<td> <input  class='btn btn-danger' value='delete' type='button' class='btn btn-warning' id='$id'  onclick =\"ajax('id=$id&fn=deleteUser')\"";
 echo "</td>";
 //echo "<td> <a class='btn btn-danger' href=http://localhost/Ha3mlk_7ader/Ha3mlk_7ader/controllers/AuthenticationController.php?id=$id&fn=deleteUser>delete</a> </td>";

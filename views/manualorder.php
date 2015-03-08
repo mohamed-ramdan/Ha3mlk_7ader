@@ -102,10 +102,15 @@
                 $username = $user['username'];                
                 $userExt = $user['ext'];
                 echo "<option value='$username'> $username</option>";
+               
+            }
+            echo "</select>";
+            foreach ($users as $user)  {
+                $username = $user['username'];                
+                $userExt = $user['ext'];
                 echo "<input type='hidden'". "id='$username"."ExtV' value='$userExt'>";
 
             }
-            echo "</select>";
             echo "</div></div>";
             
             

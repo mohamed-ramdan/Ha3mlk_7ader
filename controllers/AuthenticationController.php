@@ -417,7 +417,7 @@ require_once '../models/Validation.php';
 
     $userAuth=new Authenticate();
     @session_start();
-    
+    if(isset($_GET["fn"])){
     switch ($_GET["fn"])
     {
       case "login":
@@ -474,3 +474,4 @@ require_once '../models/Validation.php';
     
     }
 
+    }
