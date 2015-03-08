@@ -32,6 +32,7 @@ require_once '../models/Validation.php';
                 $_SESSION['userID']=$opOfQuery[0]['userID'];
                 $_SESSION['username']=$opOfQuery[0]['username'];
                 $_SESSION['userPicture']=$opOfQuery[0]['userPicture'];
+                $_SESSION['ext']=$opOfQuery[0]['ext'];
                 if($opOfQuery[0]['isAdmin']==0)
                 {    
                  header("Location: ../views/makeOrder.php");
@@ -349,12 +350,16 @@ require_once '../models/Validation.php';
                 if($ans == $answer['secretAnswer'])
                 {
                     $existanceFlag='Valid Answer :) ';
+                    //header("location:../views/securityquestion.php?tstrslt=$existanceFlag");
+                    header("Location: ../views/NormalMyOrders.php");
                     
                 }
                 
             }
-            header("location:../views/securityquestion.php?tstrslt=$existanceFlag");
-        }
+            //header("location:../views/securityquestion.php?tstrslt=$existanceFlag");
+      
+            header("Location: ../views/securityquestion.php?error='not mattch&q= '");
+       }
         //return $existanceFlag;
         
     }

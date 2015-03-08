@@ -379,11 +379,24 @@ class AdminController
         // set the working table to cafeOrder                
         $orm->setTable('h3mlk7aderdb.cafeOrder');
         
-        // insert the order into the cafeOrder Table
-        // i will modify it to take the current time soon
+         $id=$_SESSION['userID'];
+        $currentCafeOrder=$orm->selectjoin(array('user','cafeOrder')," user.userID=cafeOrder.orderUserID and user.userID=$id and cafeOrder.status='preparing'");
         
-        $thisOrderId = $orm->insert(array('date' => date('Y-m-d H:i:s',$currentTime) , 'amount' => 200, 'status' => 'preparing', 'destinationRoomNumber' =>  $room[0]['id'], 'orderUserID' => $user[0]['userID'], 'note' => $notes));
+        if(count($currentCafeOrder)>0){
+              $thisOrderId=$currentCafeOrder[0]["orderID"];
               
+          }
+          else{
+                // set the working table to cafeOrder                
+                $orm->setTable('h3mlk7aderdb.cafeOrder');
+
+                // insert the order into the cafeOrder Table
+                // i will modify it to take the current time soon
+                 $thisOrderId = $orm->insert(array('date' => date('Y-m-d H:i:s',$currentTime) , 'amount' => 200, 'status' => 'preparing', 'destinationRoomNumber' =>  $room[0]['id'], 'orderUserID' => 6, 'note' => $notes));
+            }
+          
+        
+          
         // set the working table to orderComponent    
         $orm->setTable('h3mlk7aderdb.orderComponent');
         
