@@ -86,7 +86,7 @@
                                     
                                     <div class="form-group">
                                         <div class="col-sm-2"></div>
-                                      
+                                      <a href="addcategory.php">addcategory</a>
                                        <label for="room" class="col-sm-2 control-label">category No.</label>
                                       <div class="col-sm-5">
                                           <select name="categoryName">

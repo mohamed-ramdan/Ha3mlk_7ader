@@ -47,7 +47,7 @@
                     <h1>Add Category</h1>
                 </div><!--panel heading-->
                 <div class="panel-body">
-                    <form class="form-horizontal" enctype="multipart/form-data" method="get" action="../controllers/AdminController.php?fn=saveNewCategory">
+                    <form class="form-horizontal" enctype="multipart/form-data" method="get" action="../controllers/AdminController.php">
                         <div class="form-group">
                             
                             <label for="category" class="col-sm-2 control-label">Category:</label>
@@ -64,7 +64,7 @@
                             <div  class="col-sm-2 control-label"></div>
                             
                             <div class="col-sm-7">
-                                <input class="btn btn-success " id="save" type="button"  name="save" value="Save"/>
+                                <input class="btn btn-success " id="save" type="submit"  name="save" value="Save"/>
                                 
                                 <input class=" btn btn-danger" id="cancel" type="reset"  name="cancel" value="Cancel"/>
                             </div>

@@ -474,9 +474,9 @@ class AdminController
     function saveNewCategory()
     {
             // Get Intance from ORM model
-            echo 'vcccc'.$_GET['category'];
+            //echo 'vcccc'.$_GET['category'];
         // Get Intance from ORM model
-            
+         
             $orm = ORM::getInstance();
             // Set table orders to retrieve
             $orm->setTable('h3mlk7aderdb.category');
@@ -485,8 +485,9 @@ class AdminController
             $categoryName = $_GET['category'];
             $result = $orm->insert(array('categoryName'=>$categoryName));
             // number of affected rows
-            return $result;
+            //return $result;
             //header("Location:views/addproduct.php");
+            header("Location: ../views/addproduct.php");
     }
     
     /**
@@ -759,6 +760,7 @@ echo "$id"."@delete" ;
     
     // First must check if the user is authorized and he is an admin
 //    @session_start();
+
     if(isset($_GET["fn"])){
 //        if($_SESSION['logged']&&$_SESSION['isAdmin'])
  //       {
