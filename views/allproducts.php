@@ -153,7 +153,10 @@ echo "<td id='pic.$id'>  <img src=".trim($products[$i]['productPicture'])." heig
 echo "<td> <input type='button' class='btn btn-warning' id='$id'  onclick =\"ajax('id=$id&fn=changeState')\"";
 echo "value=\"";
 if($productstatus=='available')
-{echo 'unavailable';}
+{
+    echo 'unavailable';
+    
+}
 else{echo 'available';}
 echo "\"";
 echo ">";

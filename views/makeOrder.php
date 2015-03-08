@@ -290,9 +290,9 @@
             xdate2= xdate.getFullYear() + '-' + pad2(thisMonth) + '-' + pad2(thisDay) + ' ' +pad2(xdate.getHours())+':'+ pad2(xdate.getMinutes())+':'+ pad2(xdate.getSeconds());  
             order = {
                 "orderDate": xdate2,
-                "Name": "Mark",
+                "Name": <?PHP echo "'".$_SESSION['username']."'"; ?>,
                 "Room": destinationRooms,
-                "Ext": "4444",
+                "Ext": <?PHP echo "'".$_SESSION['Ext']."'"; ?>,
                 "notes": notes,
                 "Products":arr,
                 "type": "newOrder"

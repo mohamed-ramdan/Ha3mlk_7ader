@@ -92,14 +92,18 @@
             $users = $result['users'];
             $products = $result['products'];
             $rooms = $result['rooms'];
+            $usersN = array();
             echo "<hr>";
             //creating the add to user select field
             echo "<div class='form-group'> ";
             echo "<div class='col-sm-10'></div>";
             echo "<div class='col-sm-3'><label class='labe'>Add to User</label> <select id='orderUser' class='form-control'>";
             foreach ($users as $user)  {
-                $username = $user['username'];
+                $username = $user['username'];                
+                $userExt = $user['ext'];
                 echo "<option value='$username'> $username</option>";
+                echo "<input type='hidden'". "id='$username"."ExtV' value='$userExt'>";
+
             }
             echo "</select>";
             echo "</div></div>";
@@ -244,6 +248,7 @@
                                 //document.getElementById("underinput").innerHTML = xmlHttp.getElementsByTagName("response")[0].childNodes[0].nodeValue;
                                 //console.log( xmlHttp.getElementsByTagName("response")[0].childNodes[0].nodeValue);
                                 order['id'] = thisOrderID;
+                                console.log(order);
                                 conn.send(JSON.stringify(order));
                         }
         };
@@ -258,7 +263,7 @@
 
             // making the url sent in the ajax get request ready
             var url = "";
-            url = "fn=saveManualOrder&notes="+notes+"&orderUsername="+orderUsername+"&destinationRooms="+destinationRooms;
+            url = "fn=saveManualOrder&notes="+notes+"&orderUsername="+orderUsername+"&destinationRooms="+destinationRooms+"&userID=";
 
             //openinh php tags to append the quantitiy of each product to the url
             var arr = [];
@@ -306,12 +311,13 @@
             thisDay = parseInt(xdate.getDay()) + 1;
             
             xdate2= xdate.getFullYear() + '-' + pad2(thisMonth) + '-' + pad2(thisDay) + ' ' +pad2(xdate.getHours())+':'+ pad2(xdate.getMinutes())+':'+ pad2(xdate.getSeconds());  
-            thisusername = document.getElementById("orderUser").options[document.getElementById("orderUser").options.selectedIndex] ; 
+            thisusername = document.getElementById("orderUser").options[document.getElementById("orderUser").options.selectedIndex].value ; 
+            thisuserExt = document.getElementById(thisusername+'ExtV').value;
             order = {
                 "orderDate": xdate2,
                 "Name": thisusername ,
                 "Room": destinationRooms,
-                "Ext": "2244",
+                "Ext": thisuserExt,
                 "notes": notes,
                 "Products":arr,
                 "type": "newOrder"

@@ -336,9 +336,10 @@ class AdminController
      */
     function saveManualOrder(){
         
+        
         // get the current time 
         $currentTime =  time();
-        
+    
         // get an instance of the the class ORM to preform the database crud operations
         $orm = ORM::getInstance();
         
@@ -379,21 +380,21 @@ class AdminController
         // set the working table to cafeOrder                
         $orm->setTable('h3mlk7aderdb.cafeOrder');
         
-         $id=$_SESSION['userID'];
-        $currentCafeOrder=$orm->selectjoin(array('user','cafeOrder')," user.userID=cafeOrder.orderUserID and user.userID=$id and cafeOrder.status='preparing'");
+        $id=$user[0]['userID'];
+        /*$currentCafeOrder=$orm->selectjoin(array('user','cafeOrder')," user.userID=cafeOrder.orderUserID and user.userID=$id and cafeOrder.status='preparing'");
         
         if(count($currentCafeOrder)>0){
               $thisOrderId=$currentCafeOrder[0]["orderID"];
               
           }
-          else{
+          else{*/
                 // set the working table to cafeOrder                
                 $orm->setTable('h3mlk7aderdb.cafeOrder');
 
                 // insert the order into the cafeOrder Table
                 // i will modify it to take the current time soon
-                 $thisOrderId = $orm->insert(array('date' => date('Y-m-d H:i:s',$currentTime) , 'amount' => 200, 'status' => 'preparing', 'destinationRoomNumber' =>  $room[0]['id'], 'orderUserID' => 6, 'note' => $notes));
-            }
+                 $thisOrderId = $orm->insert(array('date' => date('Y-m-d H:i:s',$currentTime) , 'amount' => 200, 'status' => 'preparing', 'destinationRoomNumber' =>  $room[0]['id'], 'orderUserID' => $id, 'note' => $notes));
+            //}
           
         
           
@@ -407,7 +408,7 @@ class AdminController
                 $orm->insert(array('orderID' => $thisOrderId, 'productID' => $productsIDs[$product['productName']]  ,'quantity' => $productsNums[$product['productName']]));             
                    foreach ($products as $productX) {
                         if($productX['productID'] == $productsIDs[$product['productName']]  ){
-                            echo 'hello';
+                            
                             $orderAmount+= ($productsNums[$product['productName']]) *  ($productX['price']);
                         }
                    }
@@ -423,22 +424,7 @@ class AdminController
     }        
     
     function __construct() {
-     /*   
-        echo '<h2>inside constructor</h2>'."<br />";
-        echo "<h2>Function getUnFinishedOrders</h2>";
-        $this->getUnFinishedOrders();
-        echo "<hr />";
-        echo "<h2>Function getManualOrderNeededData</h2>";
-        $this->getManualOrderNeededData();
-        echo "<hr />";
-        echo "<h2>Function getAllProducts</h2>";
-        $this->getAllProducts();
-        echo "<hr />";
-        echo "<h2>Function getAddNewProductNeededData</h2>";
-        $this->getAddNewProductNeededData();
-        echo "<hr />";
-      
-      */
+
     }
    
     
@@ -760,8 +746,8 @@ echo "$id"."@delete" ;
     // First must check if the user is authorized and he is an admin
 //    @session_start();
     if(isset($_GET["fn"])){
-//        if($_SESSION['logged']&&$_SESSION['isAdmin'])
- //       {
+        if($_SESSION['logged']&&$_SESSION['isAdmin'])
+        {
         $varAdmin = new AdminController();
         
         switch ($_GET["fn"])
@@ -793,10 +779,10 @@ echo "$id"."@delete" ;
             
         }
         } 
-        //else{
-         //   header("Location: ../views/login.php");
-        //}
-    //}
+        else{
+            header("Location: ../views/login.php");
+        }
+    }
 
 
 ?>
