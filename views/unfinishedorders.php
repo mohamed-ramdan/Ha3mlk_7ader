@@ -146,7 +146,7 @@
                             . "</select>".'</td>';
                     echo '</tr>';
                     echo '<tr>';
-                    echo '<td>'.$order['productName'].'</td>';
+                    echo '<td>'."<img src='".$order['productPicture']."' width='50px' height='50px'>".'</td>';
                     ?>
                         <script>
                             if( document.getElementById('textstatus<?php echo $thisOrderID; ?>' ).innerHTML.trim()!='Canceled'){
@@ -171,7 +171,8 @@
                     
                 }
                 else{
-                    echo '<td>'.$order['productName'].'</td>'; 
+                    //echo '<td>'.$order['productName'].'</td>'; 
+                    echo '<td>'."<img src='".$order['productPicture']."' width='50px' height='50px'>".'</td>';
 
                 }
                  $lastOrder = $order['orderID'];
@@ -249,7 +250,7 @@
             for(i=0;i< obj['Products'].length;i++){
                 var cell8 = row2.insertCell(0);
                 cell8.innerHTML +=  obj['Products'][i]['ProductName'];
-                cell8.innerHTML +=  obj['Products'][i]['ProductPicture'];
+                //cell8.innerHTML +=  obj['Products'][i]['productPicture'];
             }
         }
         else if(obj.type=='cancelOrderStatus') {
