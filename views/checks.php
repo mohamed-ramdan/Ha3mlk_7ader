@@ -33,6 +33,7 @@
                 <a href="http://localhost/Ha3mlk_7ader/Ha3mlk_7ader/views/profile.php?id=<?php echo trim($_SESSION['userID']);?>" style="margin-right: 20px;"><?php echo trim($_SESSION['username']);?></a>
                 
             </div>
+            
             <div class="container">
                 <ul class="nav navbar-nav">
                     <li><a href="unfinishedorders.php">Home</a></li>
@@ -52,36 +53,39 @@
         
         
         
-        <br /> <br />
+        <br /> <br /><br /> <br />
         <div class="container">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <h1>Checks</h1>
-                </div><!--panel heading-->
+                </div><!--panel heading -->
                 <div class="panel-body">
                     <div class="form-group">
 <!--                        <div class="col-sm-5">Date From: <input class="form-control" type="date" value="<?php $dt = new DateTime(); echo $dt->format('Y-m-d'); ?>" name="datefrom" /></div>
                         <div class="col-sm-5">Date To: <input class="form-control" type="date" value="<?php $dt = new DateTime(); echo $dt->format('Y-m-d'); ?>" name="dateto" /></div>-->
-                    <div id="datetimepicker" class="input-append date">Date From: 
-                        <input type="text" name="datefrom"></input>
+                    <div id="datetimepicker" class="input-append date col-sm-3">
+                        <label class="control-label "><strong>Date From:</strong></label> 
+                        <input type="text" name="datefrom"  />
                         <span class="add-on">
                           <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
                         </span>
                         </div>
                         
-                        <div id="datetimepicker2" class="input-append date">Date To: 
-                        <input type="text" name="dateto"></input>
+                        <div id="datetimepicker2" class="input-append date col-sm-3 ">
+                            <label class="control-label"><strong>Date To: </strong></label>
+                            <input type="text" name="dateto"  />
                         <span class="add-on">
                           <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
                         </span>
                         </div>
                     </div>
-                    
+                    <div class="container"> <input type="button" class="btn btn-info" id="example" value="ex"/></div>
                     <br /><br /><br />
                     
                     
                     <div class="form-group">
-                        <div class="col-sm-10" >
+                        <div class="col-sm-6" >
+                            <label class="control-label"><strong>User: </strong></label>
                             <select class="form-control" id="selecteduser">
                                 <?php
                                     include_once '../controllers/AdminController.php';
@@ -109,7 +113,7 @@
                     <div class="container col-sm-10" id="accParent">
                         <div class="panel panel-default" >
                         <div class="panel-body">
-                    <table class="table table-responsive table-striped ">
+                  <!--  <table class="table table-responsive table-striped ">
                         <tr>
                              <th style="color: #1569C7;">
                                 Setting
@@ -121,7 +125,7 @@
                                 Total Amount
                             </th>   
                             
-                        </tr>
+                        </tr> -->
                         
                         <?php
                          include_once '../controllers/AdminController.php';
@@ -147,6 +151,19 @@
                                                     var myTable = document.createElement("table");
                                                     myTable.setAttribute("id",'userTable<?php echo $thisUserID; ?>');
                                                     myTable.setAttribute("border",'1');
+                                                    myTable.setAttribute("class",'table table-responsice table-striped');
+                                                    var th1 = document.createElement('th');
+                                                    th1.innerHTML='User Name';
+                                                    var th2 = document.createElement('th');
+                                                    th2.innerHTML="Total Amount";
+                                                    var th3 = document.createElement('th');
+                                                    th3.innerHTML='Order Products';
+                                                    var th4 = document.createElement('th');
+                                                    th4.innerHTML='Order Notes';
+                                                    myTable.appendChild(th1);
+                                                    myTable.appendChild(th2);
+                                                    myTable.appendChild(th3);
+                                                    myTable.appendChild(th4);
                                                         var row = myTable.insertRow(0);
                                                         
                                                         var cell1 = row.insertCell(0);
@@ -218,7 +235,7 @@
                                     
                                     echo "</div>";
                         ?>
-                    </table>
+                  <!--  </table>-->
                         </div><!--panel body-->
                         </div><!--panel default-->
                     </div><!--inner container-->
@@ -345,7 +362,7 @@
                 </script>
         
         
-                <input type="button" id="example" value="ex"/>
+                <!--<div class="container"> <input type="button" class="btn btn-info" id="example" value="ex"/></div>-->
 
 
 
@@ -381,5 +398,6 @@
          }
 
         </script>
+            </div></div>
     </body>
 </html>
