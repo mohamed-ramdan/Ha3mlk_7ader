@@ -21,7 +21,7 @@ require_once '../models/Validation.php';
             $email=$_POST['email']; 
             $password=$_POST['password'];
             $obj->setTable('user');
-            $opOfQuery=$obj->select(" email = '$email' and password = md5($password) ");
+            $opOfQuery=$obj->select(" email = '$email' and password = md5('$password') ");
              
 
             if(count($opOfQuery)==1)
