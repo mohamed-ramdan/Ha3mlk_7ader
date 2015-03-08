@@ -1,3 +1,4 @@
+<html>
 <head>
         <title>checks</title>
         <meta charset="utf-8">
@@ -5,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link type="text/css" rel="stylesheet" href="../static/css/bootstrap.min.css" />
     </head>
-
+<body>
 
 <?php
         @session_start();
@@ -109,17 +110,21 @@
            
             // Show these orders
             echo "<br />";
-            echo "<br /><p style='color:orange';> Unfinished orders <p><br/> ";
+            //echo "<br /><p style='color:orange';> Unfinished orders <p><br/> ";
+            echo "<div class='container'>";
+            echo "<div class='panel panel-primary'>";
+            echo "<div class='panel-heading'><h1>Unfinished Orders</h1></div>";
+            echo "<div class='panel-body'>";
             //extracting each item from $result
-            echo "<table border='1' id='mytable'>";
+            echo "<table  id='mytable' class='table table-responsive table-striped'>";
             echo "<tr id ='mainrow' >";
-            echo '<td>Order ID</td>';
-            echo '<td>Order Date</td>';
-            echo '<td>Name</td>';
-            echo '<td>Room</td>';
-            echo '<td>Ext.</td>';
-            echo '<td>Status</td>';
-            echo '<td>Action</td>';
+            echo '<th>Order ID</th>';
+            echo '<th>Order Date</th>';
+            echo '<th>Name</th>';
+            echo '<th>Room</th>';
+            echo '<th>Ext.</th>';
+            echo '<th>Status</th>';
+            echo '<th>Action</th>';
             echo '</tr>';
             $lastOrder = 0;
             foreach ($result as $order) {
@@ -134,7 +139,7 @@
                     echo '<td>'.$order['roomNumber'].'</td>'; 
                     echo '<td>'.$order['ext'].'</td>'; 
                     echo "<td id='textstatus$thisOrderID'>".$order['status'].'</td>'; 
-                    echo '<td>'."<select id='change$thisOrderID'".">"
+                    echo '<td>'."<select class='form-control' id='change$thisOrderID'".">"
                             . "<option value='preparing'> preparing </option>"
                             . "<option value='delivering'> delivering </option>"
                             . "<option value='done'> done </option>"
@@ -173,7 +178,7 @@
 
                 }
                 echo '</table>';
-                
+                echo "</div></div></div>";
             }
         else
         {
@@ -257,3 +262,9 @@
         var order;
     </script>
     
+    
+    
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="../static/js/bootstrap.min.js" type="text/javascript"></scrip
+</body>
+</html>>
