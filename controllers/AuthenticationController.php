@@ -32,6 +32,9 @@ require_once '../models/Validation.php';
                 $_SESSION['userID']=$opOfQuery[0]['userID'];
                 $_SESSION['username']=$opOfQuery[0]['username'];
                 $_SESSION['userPicture']=$opOfQuery[0]['userPicture'];
+
+                $_SESSION['Ext']=$opOfQuery[0]['ext'];
+
                 $_SESSION['ext']=$opOfQuery[0]['ext'];
                 if($opOfQuery[0]['isAdmin']==0)
                 {    

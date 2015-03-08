@@ -9,7 +9,7 @@
 $GLOBALS['conf'] = array(
     'host'=>'localhost',
     'username'=>'root',
-    'password' =>'01228675292',
+    'password' =>'123',
     'database' =>'h3mlk7aderdb'             
     
 );

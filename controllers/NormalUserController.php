@@ -100,11 +100,18 @@
         // insert the order into the cafeOrder Table
         // i will modify it to take the current time soon
         
+
+        
+        
+        
+        $thisOrderId = $orm->insert(array('date' => date('Y-m-d H:i:s',$currentTime) , 'amount' => 200, 'status' => 'preparing', 'destinationRoomNumber' =>  $room[0]['id'], 'orderUserID' => 3, 'note' => $notes));
+
         $id=$_SESSION['userID'];
         $currentCafeOrder=$orm->selectjoin(array('user','cafeOrder')," user.userID=cafeOrder.orderUserID and user.userID=$id and cafeOrder.status='preparing'");
         
         if(count($currentCafeOrder)>0){
               $thisOrderId=$currentCafeOrder[0]["orderID"];
+
               
           }
           else{

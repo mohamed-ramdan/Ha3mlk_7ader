@@ -224,6 +224,8 @@
             
             var changeStatusSelect = document.createElement("select");
             changeStatusSelect.setAttribute("id","change"+obj['id']);
+            
+            changeStatusSelect.setAttribute("class","form-control");
             var prepOption = document.createElement("option");
             prepOption.setAttribute("value","preparing");
             prepOption.innerHTML = "preparing";
