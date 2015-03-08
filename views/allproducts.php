@@ -49,6 +49,7 @@
     <div class="panel panel-primary">
         <div class="panel-heading"><h1>All Products</h1></div>
         <div class="panel-body">
+        <li><a href="addproduct.php">addProduct</a></li>    
         <table class="table table-responsive table-striped">
 	<tr>
 	<th>Name</th>

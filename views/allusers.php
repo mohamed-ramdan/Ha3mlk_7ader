@@ -50,6 +50,7 @@
      <div class="panel panel-primary">
         <div class="panel-heading"><h1>All Users</h1></div>
         <div class="panel-body">
+         <li><a href="adduser.php">addUser</a></li>    
         <table class="table table-responsive table-striped">
 	<tr>
 	<th>Name</th>

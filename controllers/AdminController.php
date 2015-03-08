@@ -203,10 +203,7 @@ class AdminController
      */
     function  saveNewProduct()
     {
-        //var_dump($_FILES);
-        //var_dump($_POST); 
-        
-       echo 'inside func save product';
+       
        $rules = array(
 			'product' => 'required',
 			'price' => 'required',
@@ -214,98 +211,94 @@ class AdminController
                         
                         );
        $data = array(
-                        'product' => $_POST['product'],
+                        'product' => $_POST['productName'],
 			'price' => $_POST['price'],
-			'category' => $_POST["category"],
+			'category' => $_POST["categoryName"],
                    );
+          
+       
        
        $validation = new Validation();
        $result = $validation->validate($data,$rules);
-       $imgresult = $validation->validateimg($_FILES,'pic');
+       $imgresult = $validation->validateimg($_FILES,'productPicture');
 	
        
        $orm = ORM::getInstance(); 
        $orm->setTable('h3mlk7aderdb.category');
-       $catName = $_POST["category"];
+       $catName = $_POST["categoryName"];
        $categoryData= $orm->select("categoryName = '$catName'");
-       
        $categoryId = $categoryData[0]['categoryID'];
-       
        $orm->setTable('h3mlk7aderdb.product');
-       
-       	
        if(count($validation->errors)==0 ){
-            $id=$orm->insert(
-                                             array
-                                                 (
-                                                     'productName'     => $_POST['product'],
-                                                     'price'    => $_POST['price'],
-                                                     'categoryID' => $categoryId,
-                                                     //'productPicture'=>$upfile,
-                                                  ) 
-                                        );       
-           
-                $upfile="../static/img/{$id}_{$_FILES['pic']['name']}";
+          if(isset($_GET["edit"])){
+            $id=$_GET["id"];
+            $product=$orm->select("productID=$id");
+            $orm->update( array ( 'productName'     => $_POST['productName'],'price'    => $_POST['price'],
+                                      'categoryID' => $categoryId,)  ,"productID='$id'"  ); 
+            }   
+            else{   
+            $id=$orm->insert(array('productName'     => $_POST['productName'],
+            'price'    => $_POST['price'],'categoryID' => $categoryId,));       
+            }
+                $upfile="../static/img/{$id}_{$_FILES['productPicture']['name']}";
                
-                $imgname = "{$id}_{$_FILES['pic']['name']}";
+                $imgname = "{$id}_{$_FILES['productPicture']['name']}";
 
-                $_POST["userPicture"]=$upfile;
+                $_POST["productPicture"]=$upfile;
 
-                if (is_uploaded_file($_FILES['pic']['tmp_name']))
+                if (is_uploaded_file($_FILES['productPicture']['tmp_name']))
                 {
                         //save image from tmp to thier place
-                     if (!move_uploaded_file($_FILES['pic']['tmp_name'], $upfile))
+                     if (!move_uploaded_file($_FILES['productPicture']['tmp_name'], $upfile))
                         {
                                 echo 'Problem: Could not move file to destination directory';
                                 exit; 
                         }
                         else{
-                                    $orm->update(
-                                             array
-                                                 (
-                                                   'productPicture'=>$upfile,
-                                                  ),"productID=$id" 
-                                        );      
+                            $orm->update(array( 'productPicture'=>$upfile),"productID=$id"  );      
                             
                         
                         }        
                 }
-                else
-                        {
-                                    
-            
-                    
-                                echo 'Problem: Possible file upload attack. Filename: ';
-                                echo $_FILES['pic']['name'];
-                                
-                        }
-                 
-                
-                        
-                  return 1;      
-                }
-                 else if (count($validation->errors)==1 && $_FILES['pic']['error'] ==4 ){
-                        //get room id of selected room
-                        
-                        $orm->setTable('h3mlk7aderdb.product');
-                        echo $orm->insert
-                            (
-                                 array
-                                     (
-                                         'productName'     => $_POST['product'],
-                                         'price'    => $_POST['price'],
-                                         'categoryID' => $categoryId,
+                else { 
+                       echo 'Problem: Possible file upload attack. Filename: ';
+                       echo $_FILES['productPicture']['name'];
+                       }
+                 header("Location: ../views/unfinishedorders.php");     
+        }
+        
+        else if (count($validation->errors)==1 && $_FILES['productPicture']['error'] ==4 ){
+               //get room id of selected room
+           
+            if(isset($_GET["edit"])){
+               $id=$_GET["id"];
+               $product=$orm->select("productID=$id");
 
-                                      ) 
-                            ); 
-                       
-                      
-                            
-             }
+               $orm->update( array ( 'productName'=> $_POST['productName'],'price'=> $_POST['price'],
+               'categoryID' => $categoryId,) ,"productID='$id'"  ); 
+              }  
+
+            else{
+               $orm->setTable('h3mlk7aderdb.product');
+               echo $orm->insert
+                   (
+                        array
+                            (
+                                'productName'     => $_POST['productName'],
+                                'price'    => $_POST['price'],
+                                'categoryID' => $categoryId,
+
+                             ) 
+                   ); 
+            }
+
+       header("Location: ../views/unfinishedorders.php");            
+    }
                //data it self isnot valid
                else{
+                                      
                         //file isnot uploaded    
-                        if( $_FILES['userPicture']['error'] ==4){
+                        if( $_FILES['productPicture']['error'] ==4){
 				array_pop($validation->errors);
 			}
 			echo '<ul>';
@@ -315,13 +308,19 @@ class AdminController
 			}
 
 			echo '</ul>';
-                        
-			$nameVal=$_POST["product"];
+                        $id=$_GET['id'];
+			$nameVal=$_POST["productName"];
 			$priceVal=$_POST["price"];
-                        $categoryVal=$_POST["category"];
+                        $categoryVal=$_POST["categoryName"];
                         $errors = implode("^",$validation->errors);
+                        if(isset($_GET["edit"])){
+                            
+                          header("Location: ../views/productprofile.php?id=$id&nameVal=$nameVal&priceVal=$priceVal&categoryVal=$categoryVal&errors={$errors}");    
+  
+                        }
+                        else{
                         header("Location: ../views/addproduct.php?nameVal={$nameVal}&priceVal={$priceVal}&categoryVal={$categoryVal}&errors={$errors}");    
-
+                        }
                }
        
        
@@ -396,7 +395,7 @@ class AdminController
         
             }
             }
-        echo $thisOrderId;
+        //echo $thisOrderId;
     }        
     
     function __construct() {
@@ -595,8 +594,8 @@ echo "$id"."@delete" ;
                ,"productID=$id"
                );
        
-        if(isset($_FILES['userPicture'])){
-        if($product[0]["userPicture"]!="upload/image/user/default.png"){
+        if(isset($_FILES['productPicture'])){
+        if($product[0]["productPicture"]!="upload/image/user/default.png"){
             unlink(trim($product[0]["productsPicture"]));    
         }
 
@@ -628,7 +627,7 @@ echo "$id"."@delete" ;
                );
        
     }
-
+  header("Location: ../views/unfinishedorders.php"); 
     }
     
     

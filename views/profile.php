@@ -42,17 +42,15 @@
                 
             </div>
             <div class="container">
-                <ul class="nav navbar-nav">
-                    <li><a href="unfinishedorders.php">Home</a></li>
+              <ul class="nav navbar-nav">
+                   <li><a href="unfinishedorders.php">Home</a></li>
                     <li><a href="allproducts.php">Products</a></li>
                     <li><a href="allusers.php">Users</a></li>
                     <li><a href="manualorder.php">Manual Orders</a></li>
                     <li><a href="checks.php">Checks</a></li>
                     <li><a href="../controllers/AuthenticationController.php?fn=logout">logout</a></li>
-                                        
-                    
-                    
-                </ul>
+              
+                     </ul>
             </div>
         </nav>
 
@@ -85,14 +83,14 @@
                                         <div class="col-sm-2"></div>
                                       <label for="name" class="col-sm-2 control-label">Name</label>
                                       <div class="col-sm-5">
-                                          <input type="text" class="form-control" name="username" required="1" placeholder="Name" value="<?php if( isset($userInfo['username']) ){echo $userInfo['username']; } if( isset($_GET['nameVal']) ){echo $_GET['nameVal'];}?>">
+                                          <input type="text" class="form-control" name="username" required="1" placeholder="Name" value="<?php if( isset($userInfo['username']) ){echo $userInfo['username']; } elseif( isset($_GET['nameVal']) ){echo $_GET['nameVal'];}?>">
                                       </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="col-sm-2"></div>
                                       <label for="email" class="col-sm-2 control-label">Email</label>
                                       <div class="col-sm-5">
-                                          <input type="email" class="form-control" readonly="1" name="email" required="1" placeholder="Email"  value="<?php if( isset($userInfo['email']) ){echo $userInfo['email']; }if( isset($_GET['emailVal']) ){echo $_GET['emailVal']; }?>">
+                                          <input type="email" class="form-control" readonly="1" name="email" required="1" placeholder="Email"  value="<?php if( isset($userInfo['email']) ){echo $userInfo['email']; }elseif( isset($_GET['emailVal']) ){echo $_GET['emailVal']; }?>">
                                       </div>
                                     </div>
                                     <div class="form-group">
@@ -113,7 +111,7 @@
                                         <div class="col-sm-2"></div>
                                       <label for="ext" class="col-sm-2 control-label">EXT.</label>
                                       <div class="col-sm-5">
-                                          <input type="text" class="form-control" name="ext" required="1" placeholder="Tel Number" value="<?php if( isset($userInfo['ext']) ){echo $userInfo['ext']; }if( isset($_GET['extVal']) ){echo $_GET['extVal']; }?>">
+                                          <input type="text" class="form-control" name="ext" required="1" placeholder="Tel Number" value="<?php if( isset($userInfo['ext']) ){echo $userInfo['ext']; }elseif( isset($_GET['extVal']) ){echo $_GET['extVal']; }?>">
                                       </div>
                                     </div>
                                     <div class="form-group">
@@ -132,8 +130,11 @@
                                                         
                                                         for ($i = 0; $i < count($rooms); $i++){
                                                             echo "<option value=\"".$rooms[$i]['roomNumber']."\"";
+                                                            
                                                             if($getroom==$rooms[$i]['id'])
                                                             {echo 'selected';} 
+                                                            elseif(isset($_GET['roomVal'])&& $rooms[$i]['roomNumber']==($_GET['roomVal']) )
+                                                            {echo 'selected';}
                                                             echo ">";
                                                             echo    $rooms[$i]['roomNumber']."</option>";
 

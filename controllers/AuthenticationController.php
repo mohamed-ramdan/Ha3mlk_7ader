@@ -72,6 +72,9 @@ require_once '../models/Validation.php';
                 
                 $_SESSION['passwd']=$_POST["passwordc"];
                 $validation = new Validation();
+                if($_GET["edit"]){
+                    $rules[email]='required|email';
+                }
                 $result = $validation->validate($_POST,$rules);
                 $imgresult = $validation->validateimg($_FILES,'userPicture');
 		//no error at all file and data
@@ -148,8 +151,25 @@ require_once '../models/Validation.php';
                                             exit;
                                     }
                         }
-                header("Location: ../views/NormalMyOrders.php");                  
-               }
+                if($_SESSION['userID']==$_GET["id"]){
+                    $id=$_GET["id"];
+                    $opOfQuery=$obj->select(" userID= $id");
+                    $_SESSION['userID']=$opOfQuery[0]['userID'];
+                    $_SESSION['username']=$opOfQuery[0]['username'];
+                    $_SESSION['userPicture']=$opOfQuery[0]['userPicture']; 
+
+                }        
+                        
+                        
+                if($_SESSION['isAdmin']==1)
+                {    
+                  header("Location: ../views/unfinishedorders.php");                  
+                }
+                else{
+                  header("Location: ../views/NormalMyOrders.php");   
+                }
+                
+              }
               
                
                //save data with out file no file sent
@@ -178,8 +198,27 @@ require_once '../models/Validation.php';
                         }
                         else{
                         $a=$obj->insert($_POST);
-                        } 
-                header("Location: ../views/NormalMyOrders.php");          
+                        }
+               if($_SESSION['userID']==$_GET["id"]){
+                    $id=$_GET["id"];
+                    $opOfQuery=$obj->select(" userID= $id");
+                    
+                    $_SESSION['userID']=$opOfQuery[0]['userID'];
+                    $_SESSION['username']=$opOfQuery[0]['username'];
+                    $_SESSION['userPicture']=$opOfQuery[0]['userPicture']; 
+
+                }          
+                        
+                        
+               if($_SESSION['isAdmin']==1)
+                {    
+                  header("Location: ../views/unfinishedorders.php");                  
+                }
+                else{
+                    
+                    
+                  header("Location: ../views/NormalMyOrders.php");   
+                }         
              }
                //data it self isnot valid
                else{
@@ -202,8 +241,19 @@ require_once '../models/Validation.php';
                         $errors = implode("^",$validation->errors);
                         if(isset($_GET["edit"])){
                             $id=$_GET['id'];
-                            header("Location: ../views/profile.php?id=$id&nameVal={$nameVal}&emailVal={$emailVal}&extVal={$extVal}&roomVal={$roomVal}&errors={$errors}");    
-                        }
+                          if($_SESSION['isAdmin']==1)
+                            {    
+                               header("Location: ../views/profile.php?id=$id&edit=1&nameVal={$nameVal}&emailVal={$emailVal}&extVal={$extVal}&roomVal={$roomVal}&errors={$errors}");    
+
+                            }
+                            else{
+
+
+                              header("Location: ../views/profileuser.php?id=$id&edit=1&nameVal={$nameVal}&emailVal={$emailVal}&extVal={$extVal}&roomVal={$roomVal}&errors={$errors}");    
+
+                            }
+                            
+                       }
                         else{
                             header("Location: ../views/adduser.php?nameVal={$nameVal}&emailVal={$emailVal}&extVal={$extVal}&roomVal={$roomVal}&errors={$errors}");    
                         
@@ -344,6 +394,7 @@ require_once '../models/Validation.php';
 
     $userAuth=new Authenticate();
     @session_start();
+    
     switch ($_GET["fn"])
     {
       case "login":
@@ -370,7 +421,7 @@ require_once '../models/Validation.php';
         break;  
         
       case "register":
-        if($_SESSION['logged']&&$_SESSION['isAdmin'])
+        if($_SESSION['logged']&&$_SESSION['isAdmin']||$_SESSION['logged']&&($_GET["id"]==$_SESSION["userID"]))
         {  
             $userAuth->register();
         }
