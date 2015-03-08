@@ -43,8 +43,8 @@ function ajax(url){
                         // 200 means the server and file were successufly found
                        
         if(ajaxRequest.readyState ===4 && ajaxRequest.status===200){
-                                
-                            response=parseInt(ajaxRequest.responseText);
+                            //alert(ajaxRequest.responseText);    
+                            response=(ajaxRequest.responseText);
                             //alert(response);
                             document.getElementById('row'+response).parentNode.removeChild(document.getElementById('row'+response));
               }
