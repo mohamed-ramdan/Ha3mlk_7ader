@@ -1,6 +1,6 @@
 <html>
 <head>
-        <title>checks</title>
+        <title>unfinished orders</title>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -249,7 +249,7 @@
             for(i=0;i< obj['Products'].length;i++){
                 var cell8 = row2.insertCell(0);
                 cell8.innerHTML +=  obj['Products'][i]['ProductName'];
-                
+                cell8.innerHTML +=  obj['Products'][i]['ProductPicture'];
             }
         }
         else if(obj.type=='cancelOrderStatus') {
