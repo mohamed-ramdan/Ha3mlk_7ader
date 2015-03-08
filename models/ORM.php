@@ -95,6 +95,31 @@ class ORM {
             return $tmp;
         }
     }
+    
+    function custom($myqeury="") {
+        
+        if (!empty($myqeury)) {
+           // var_dump($myqeury);
+           // exit;
+            $query=$myqeury;
+        }
+        
+        //execute the query
+        $result = $this->dbconn->query($query);
+        //there is an object or empty object
+        if (!$result){ 
+           
+            return $this->dbconn->error;
+        } else {
+            $tmp = array();
+            while ($row = $result->fetch_assoc()) {
+                //load all returned rows into an array
+                $tmp[] = $row;
+            }
+            return $tmp;
+        }
+    }
+    
      //select from more than one table
     function selectjoin($tables,$cond = "") {
         

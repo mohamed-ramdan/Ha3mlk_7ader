@@ -346,7 +346,7 @@ class AdminController
         // Set table retrieve
         $orm->setTable('h3mlk7aderdb.product');
         // Retrieve all products
-        $products = $orm->select("productStatus='available'");
+        $products = $orm->select("productStatus='available' and visibilty = 1");
         
         // get the ajax get request data from the $_GET Array
         $notes = $_GET["notes"];
@@ -387,15 +387,22 @@ class AdminController
               
         // set the working table to orderComponent    
         $orm->setTable('h3mlk7aderdb.orderComponent');
-        
+        $orderAmount=0;
         foreach ($products as $product) {
             // go over all products and if user requested the ihis product (it's value more than 0)
             // the quantity and the productID and orderID insereted into the db
             if($productsNums[$product['productName']]!=0){
                 $orm->insert(array('orderID' => $thisOrderId, 'productID' => $productsIDs[$product['productName']]  ,'quantity' => $productsNums[$product['productName']]));             
-        
+                   foreach ($products as $productX) {
+                        if($productX['productID'] == $productsIDs[$product['productName']]  ){
+                            echo 'hello';
+                            $orderAmount+= ($productsNums[$product['productName']]) *  ($productX['price']);
+                        }
+                   }
             }
             }
+            $orm->setTable('h3mlk7aderdb.cafeOrder');
+            $orm->update(array('amount'=>$orderAmount),"orderID= '$thisOrderId'");
         echo $thisOrderId;
     }        
     
@@ -475,27 +482,77 @@ class AdminController
      */
     function getChecksNeededData()
     {
+        $totalAmountPerUser=false;
         $orm = ORM::getInstance();
+        if(isset($_GET['dateFrom']) && !empty($_GET['dateFrom']) ){
+            $dateFrom = DateTime::createFromFormat('Y-m-d H:i:s', $_GET['dateFrom']);
+            $fromTimeStamp = strtotime($_GET['dateFrom']);
+            $x = $_GET['dateFrom'];
+            
+        }
+        else{
+            $dateFrom = DateTime::createFromFormat('Y-m-d H:i:s', "2010-03-18 06:45:34");
+            $x = "2010-03-01 15:19:15";
+            //$dateFromR = $dateFrom.format('Y-m-d H:i:s'); 
+        }
+        if(isset($_GET['dateTo']) && !empty($_GET['dateTo']) ){
+            
+            $dateTo = date('Y-m-d H:i:s', strtotime($_GET['dateTo']));
+            $toTimeStamp = strtotime($_GET['dateTo']);
+            $x2 = $_GET['dateTo'];
+            
+        }
+        else{
+            $dateTo = DateTime::createFromFormat('Y-m-d H:i:s', "2022-03-18 06:45:34");
+            $x2 = "2030-03-01 15:19:15";
+            //$dateToR = $dateTo.format('Y-m-d H:i:s');
+        }
+            
         if(isset($_GET['userid'])){
+            
             $thisUserID = $_GET['userid'];
             $result = $orm-> selectjoin(array('cafeOrder','user','orderComponent','product'),
                 "cafeOrder.orderUserID=user.userID and cafeOrder.orderID = orderComponent.orderID and orderComponent.productID = product.productID and user.userID= $thisUserID "
-                . "order by user.username, cafeOrder.orderID, product.productID DESC");
+                    . ' AND (cafeOrder.date BETWEEN "'.$x.'" AND "'.$x2.'") '
+                     . "order by user.username, cafeOrder.orderID, product.productID DESC");
+            
+            $totalAmountPerUser = $orm->custom("select sum(cafeOrder.amount), user.userID from user,cafeOrder,orderComponent "
+                    . "where user.userID =  cafeOrder.orderUserID AND "
+                    . "orderComponent.orderID = cafeOrder.orderID "
+                    . ' AND (cafeOrder.date BETWEEN "'.$x.'" AND "'.$x2.'") '
+                    . 'GROUP BY(user.userID)'
+                    ) ;
+            //var_dump($result);
+            //var_dump($totalAmountPerUser);
+            
         }
         else{
             $result = $orm-> selectjoin(array('cafeOrder','user','orderComponent','product'),
-                "cafeOrder.orderUserID=user.userID and cafeOrder.orderID = orderComponent.orderID and orderComponent.productID = product.productID"
-                . "order by user.username, cafeOrder.orderID, product.productID DESC");
+                "cafeOrder.orderUserID=user.userID and cafeOrder.orderID = orderComponent.orderID and orderComponent.productID = product.productID "
+                    . "order by user.username, cafeOrder.orderID, product.productID DESC");
+            $totalAmountPerUser = $orm->custom("select sum(cafeOrder.amount), user.userID from user,cafeOrder,orderComponent "
+                    . "where user.userID =  cafeOrder.orderUserID AND "
+                    . "orderComponent.orderID = cafeOrder.orderID "
+                    . 'GROUP BY(user.userID)'
+                    ) ;
+            
         }
-        // Get Intance from ORM model
         
+        $retValue['result'] = $result;
+        $retValue['amountPerUser'] = $totalAmountPerUser;
         
         if(!empty($result))
         {
            // echo 'ccc';
-           var_dump($result);
+           return $retValue;
             
         }
+            
+        
+        // Get Intance from ORM model
+        
+        
+        
         
         
     }
@@ -685,10 +742,10 @@ echo "$id"."@delete" ;
 
     
     // First must check if the user is authorized and he is an admin
-    @session_start();
+//    @session_start();
     if(isset($_GET["fn"])){
-        if($_SESSION['logged']&&$_SESSION['isAdmin'])
-        {
+//        if($_SESSION['logged']&&$_SESSION['isAdmin'])
+ //       {
         $varAdmin = new AdminController();
         
         switch ($_GET["fn"])
@@ -703,7 +760,7 @@ echo "$id"."@delete" ;
                 $varAdmin->saveNewCategory();
                 break;
             case "getChecksNeededData":
-                $varAdmin->getChecksNeededData();
+                echo json_encode($varAdmin->getChecksNeededData());
                 break;
             case "changeState":
                 $varAdmin->changeState();
@@ -720,10 +777,10 @@ echo "$id"."@delete" ;
             
         }
         } 
-        else{
-            header("Location: ../views/login.php");
-        }
-    }
+        //else{
+         //   header("Location: ../views/login.php");
+        //}
+    //}
 
 
 ?>

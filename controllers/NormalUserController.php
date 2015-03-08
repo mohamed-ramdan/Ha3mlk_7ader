@@ -98,6 +98,9 @@
         // insert the order into the cafeOrder Table
         // i will modify it to take the current time soon
         
+        
+        
+        
         $thisOrderId = $orm->insert(array('date' => date('Y-m-d H:i:s',$currentTime) , 'amount' => 200, 'status' => 'preparing', 'destinationRoomNumber' =>  $room[0]['id'], 'orderUserID' => 3, 'note' => $notes));
               
         // set the working table to orderComponent    

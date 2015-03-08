@@ -306,11 +306,12 @@
             thisDay = parseInt(xdate.getDay()) + 1;
             
             xdate2= xdate.getFullYear() + '-' + pad2(thisMonth) + '-' + pad2(thisDay) + ' ' +pad2(xdate.getHours())+':'+ pad2(xdate.getMinutes())+':'+ pad2(xdate.getSeconds());  
+            thisusername = document.getElementById("orderUser").options[document.getElementById("orderUser").options.selectedIndex] ; 
             order = {
                 "orderDate": xdate2,
-                "Name": "Mark",
+                "Name": thisusername ,
                 "Room": destinationRooms,
-                "Ext": "4444",
+                "Ext": "2244",
                 "notes": notes,
                 "Products":arr,
                 "type": "newOrder"
