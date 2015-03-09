@@ -419,6 +419,9 @@ require_once '../models/Validation.php';
             //return $question;
             header("location: ../views/securityquestion.php?question=$question&email=$mail");
         }
+        else{
+            header("location: ../views/login.php?error='in valid email'");
+        }
         
     }
        
