@@ -87,8 +87,9 @@ require_once '../models/Validation.php';
                 $_SESSION['passwd']=$_POST["passwordc"];
                 $validation = new Validation();
                 if($_GET["edit"]){
-                    $rules[email]='required|email';
+                    $rules['email']='required|email';
                 }
+               
                 $result = $validation->validate($_POST,$rules);
                 $imgresult = $validation->validateimg($_FILES,'userPicture');
 		//no error at all file and data
@@ -190,6 +191,7 @@ require_once '../models/Validation.php';
                //save data with out file no file sent
                
                else if (count($validation->errors)==1 && $_FILES['userPicture']['error'] ==4 ){
+                        
                         //get room id of selected room
                         $obj->setTable('room');
                         $room=$_POST["roomNumber"];

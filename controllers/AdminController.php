@@ -230,25 +230,32 @@ class AdminController
        
        $orm = ORM::getInstance(); 
        $orm->setTable('h3mlk7aderdb.category');
+       //get categoty name
        $catName = $_POST["categoryName"];
+       //get category id
        $categoryData= $orm->select("categoryName = '$catName'");
        $categoryId = $categoryData[0]['categoryID'];
+       //add in product
        $orm->setTable('h3mlk7aderdb.product');
+       //no error in date or picture
        if(count($validation->errors)==0 ){
+           //if edit update
           if(isset($_GET["edit"])){
             $id=$_GET["id"];
             $product=$orm->select("productID=$id");
             $orm->update( array ( 'productName'     => $_POST['productName'],'price'    => $_POST['price'],
                                       'categoryID' => $categoryId,)  ,"productID='$id'"  ); 
             }   
+            //else insert 
             else{   
             $id=$orm->insert(array('productName'     => $_POST['productName'],
             'price'    => $_POST['price'],'categoryID' => $categoryId,));       
             }
+            
                 $imgname = $this->clean("{$id}_{$_FILES['productPicture']['name']}");
                 $upfile="../static/img/$imgname";
                
-                
+                //save the picture
                 
                 $_POST["productPicture"]=$upfile;
 
@@ -272,7 +279,7 @@ class AdminController
                        }
                  header("Location: ../views/unfinishedorders.php");     
         }
-        
+        // if no picture 
         else if (count($validation->errors)==1 && $_FILES['productPicture']['error'] ==4 ){
                //get room id of selected room
            
@@ -596,7 +603,7 @@ class AdminController
     function changeState(){
       
        $orm = ORM::getInstance();
-        //header("Location: ../views/allproducts.php");
+      
         // Set table retrieve
         $orm->setTable('h3mlk7aderdb.product');
         // Retrieve all products
@@ -610,12 +617,7 @@ class AdminController
         else{
             $orm->update(array("productStatus"=>"available"),"productID=$id");    
         }
-        
-        //header("Location: ../views/allproducts.php");
-        //return $http_response_header;
-        //return ("hihi");
-        //header('Content-Type: application/json');
-        //return json_encode(array('id' => $id));
+       
         echo "$id"."@changestate" ;
     }
     
@@ -662,7 +664,7 @@ echo "$id"."@delete" ;
                );
        
         if(isset($_FILES['productPicture'])){
-        if($product[0]["productPicture"]!="upload/image/user/default.png"){
+        if($product[0]["productPicture"]!="s../static/img/defaultproduct.jpg"){
             unlink(trim($product[0]["productsPicture"]));    
         }
 
