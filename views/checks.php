@@ -13,7 +13,7 @@
     <body>
          <?php
         @session_start();
-         if(!isset($_SESSION['logged']))
+         if(!($_SESSION['logged']&&$_SESSION['isAdmin']))
             {    
                 header("Location: ../views/login.php");
 

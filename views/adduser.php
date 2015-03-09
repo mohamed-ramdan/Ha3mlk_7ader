@@ -72,7 +72,7 @@
                                         <div class="col-sm-2"></div>
                                       <label for="secretQuestion" class="col-sm-2 control-label">secretQuestion</label>
                                       <div class="col-sm-5">
-                                          <input type="text" class="form-control" name="secretQuestion"  placeholder="secretQuestion" value="<?php if( isset($_GET['secretQuestionVal']) ){echo $_GET['secretQuestionVal']; }?>">
+                                          <input type="text" class="form-control" name="secretQuestion" required="1"  placeholder="secretQuestion" value="<?php if( isset($_GET['secretQuestionVal']) ){echo $_GET['secretQuestionVal']; }?>">
                                       </div>
                                     </div>
                                     
@@ -80,7 +80,7 @@
                                         <div class="col-sm-2"></div>
                                       <label for="secretAnswer" class="col-sm-2 control-label">secretAnswer</label>
                                       <div class="col-sm-5">
-                                          <input type="text" class="form-control" name="secretAnswer"  placeholder="secretAnswer" value="<?php if( isset($_GET['secretAnswerVal']) ){echo $_GET['secretAnswerVal']; }?>">
+                                          <input type="text" class="form-control" name="secretAnswer"  required="1" placeholder="secretAnswer" value="<?php if( isset($_GET['secretAnswerVal']) ){echo $_GET['secretAnswerVal']; }?>">
                                       </div>
                                     </div>
                                     
