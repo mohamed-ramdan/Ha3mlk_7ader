@@ -10,7 +10,7 @@
         <link rel="stylesheet" type="text/css" media="screen"
               href="../static/css/bootstrap-datetimepicker.min.css">
     </head>
-    <body>
+    <body style="background-image: url('../static/img/bbg.jpg'); background-repeat: repeat;">
          <?php
         @session_start();
          if(!($_SESSION['logged']&&$_SESSION['isAdmin']))
@@ -21,14 +21,14 @@
    
         ?>
  
-<nav class="navbar navbar-inverse navbar-fixed-top " style="height: 70px;">
+<nav class="navbar navbar-inverse navbar-fixed-top " style="height: 70px;background-color: #130C49!important;">
             
             <div class="navbar-header navbar-right" >
                 
                
                  <a class="navbar-brand " href="#">
                     
-                     <img alt="Brand" src="<?php echo trim($_SESSION['userPicture']);?>"  style="width: 50px;height: 50px;float:right;margin-right: 15px;">
+                     <img  class='img img-circle' alt="Brand" src="<?php echo trim($_SESSION['userPicture']);?>"  style="width: 50px;height: 50px;float:right;margin-right: 15px;">
                  </a> 
                 <a href="http://localhost/Ha3mlk_7ader/Ha3mlk_7ader/views/profile.php?id=<?php echo trim($_SESSION['userID']);?>" style="margin-right: 20px;"><?php echo trim($_SESSION['username']);?></a>
                 
@@ -55,8 +55,8 @@
         
         <br /> <br /><br /> <br />
         <div class="container">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
+            <div class="panel panel-default">
+                <div class="panel-heading" style='background-color:rgba(81, 71, 25, 0.56)!important;'>
                     <h1>Checks</h1>
                 </div><!--panel heading -->
                 <div class="panel-body">

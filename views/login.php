@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="../static/css/bootstrap.min.css" rel="stylesheet">
     </head>
-    <body style="background-color:#2554C7;">
+    <body style="background-image: url('../static/img/loginbg.jpg');">
         <?php
         @session_start();
          if(isset($_SESSION['logged'])&&$_SESSION['isAdmin'])
@@ -26,8 +26,8 @@
             <div class="container">
                 <div class="container">
                     <div class="container">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
+                        <div class="panel panel-default" style="background-color: rgba(165, 134, 69, 0.53);">
+                            <div class="panel-heading" style="background-color:#493D26 !important; color:#fff !important; ">
                                 <h1>Login</h1>
                             </div>
                             <div class="panel-body">
@@ -62,7 +62,7 @@
                                         <div class="col-sm-2"></div>
                                       <div class="col-sm-offset-2 col-sm-5">
                                           
-                                        <button type="submit" class="btn btn-primary" style="width: 445px;">Sign in</button>
+                                        <button type="submit" class="btn btn-warning" style="width: 445px;">Sign in</button>
                                       </div>
                                     <!--</div>-->
                                     <div class="form-group">

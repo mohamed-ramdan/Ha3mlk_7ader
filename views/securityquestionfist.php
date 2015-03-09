@@ -6,12 +6,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link type="text/css" rel="stylesheet" href="../static/css/bootstrap.min.css" />
     </head>
-    <body>
+    <body style="background-image: url('../static/img/bbg.jpg'); background-repeat: repeat;">
        
         <br ><br >
         <div class="container">
-            <div class="panel panel-primary">
-                <div class="panel-heading"><h1>Password Recovery </h1></div>
+            <div class="panel panel-default">
+                <div class="panel-heading" style='background-color:rgba(81, 71, 25, 0.56)!important;'><h1>Password Recovery </h1></div>
                 <div class="panel-body">
                     <form class="form-horizontal" method="get" action="../controllers/AuthenticationController.php?fn=getSecurityQuestion">
                         <div class="form-group">

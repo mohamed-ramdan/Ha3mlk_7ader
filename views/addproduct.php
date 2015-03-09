@@ -23,8 +23,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="../static/css/bootstrap.min.css" rel="stylesheet">
     </head>
-    <body>
-<nav class="navbar navbar-inverse navbar-fixed-top " style="height: 70px;">
+    <body style="background-image: url('../static/img/bbg.jpg'); background-repeat: repeat;">
+<nav class="navbar navbar-inverse navbar-fixed-top " style="height: 70px;background-color: #130C49!important;">
             
             <div class="navbar-header navbar-right" >
                 
@@ -58,8 +58,8 @@
             <div class="container">
                 <div class="container">
                     <div class="container">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" style='background-color:rgba(81, 71, 25, 0.56)!important;'>
                                 <h1>add product</h1>
                                 
                             </div>

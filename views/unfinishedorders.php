@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link type="text/css" rel="stylesheet" href="../static/css/bootstrap.min.css" />
     </head>
-<body>
+<body style="background-image: url('../static/img/bbg.jpg'); background-repeat: repeat;">
 
 <?php
         @session_start();
@@ -17,14 +17,14 @@
             }
    
         ?>
-<nav class="navbar navbar-inverse navbar-fixed-top " style="height: 70px;">
+<nav class="navbar navbar-inverse navbar-fixed-top " style="height: 70px;background-color: #130C49!important;">
             
             <div class="navbar-header navbar-right" >
                 
                
                  <a class="navbar-brand " href="#">
                     
-                     <img alt="Brand" src="<?php echo trim($_SESSION['userPicture']);?>"  style="width: 50px;height: 50px;float:right;margin-right: 15px;">
+                     <img  class='img img-circle' alt="Brand" src="<?php echo trim($_SESSION['userPicture']);?>"  style="width: 50px;height: 50px;float:right;margin-right: 15px;">
                  </a> 
                 <a href="http://localhost/Ha3mlk_7ader/Ha3mlk_7ader/views/profile.php?id=<?php echo trim($_SESSION['userID']);?>" style="margin-right: 20px;"><?php echo trim($_SESSION['username']);?></a>
                 
@@ -112,8 +112,8 @@
             echo "<br />";
             //echo "<br /><p style='color:orange';> Unfinished orders <p><br/> ";
             echo "<div class='container'>";
-            echo "<div class='panel panel-primary'>";
-            echo "<div class='panel-heading'><h1>Unfinished Orders</h1></div>";
+            echo "<div class='panel panel-default'>";
+            echo "<div class='panel-heading' style='background-color:rgba(81, 71, 25, 0.56)!important;'><h1>Unfinished Orders</h1></div>";
             echo "<div class='panel-body'>";
             //extracting each item from $result
             echo "<table  id='mytable' class='table table-responsive table-striped'>";
@@ -146,7 +146,7 @@
                             . "</select>".'</td>';
                     echo '</tr>';
                     echo '<tr>';
-                    echo '<td>'."<img src='".$order['productPicture']."' width='50px' height='50px'>".'</td>';
+                    echo '<td>'."<img class='img img-circle' src='".$order['productPicture']."' width='80px' height='80px'>".'</td>';
                     ?>
                         <script>
                             if( document.getElementById('textstatus<?php echo $thisOrderID; ?>' ).innerHTML.trim()!='Canceled'){
@@ -172,7 +172,7 @@
                 }
                 else{
                     //echo '<td>'.$order['productName'].'</td>'; 
-                    echo '<td>'."<img src='".$order['productPicture']."' width='50px' height='50px'>".'</td>';
+                    echo '<td>'."<img class='img img-circle' src='".$order['productPicture']."' width='80px' height='80px'>".'</td>';
 
                 }
                  $lastOrder = $order['orderID'];

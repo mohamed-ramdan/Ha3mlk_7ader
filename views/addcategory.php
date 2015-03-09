@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link type="text/css" rel="stylesheet" href="../static/css/bootstrap.min.css" />
     </head>
-    <body>
+    <body style="background-image: url('../static/img/bbg.jpg'); background-repeat: repeat;">
     <?php @session_start();
     if(!($_SESSION['logged']&&$_SESSION['isAdmin']))
        {    
@@ -15,7 +15,7 @@
        }    
       ?> 
         
-        <nav class="navbar navbar-inverse navbar-fixed-top " style="height: 70px;">
+        <nav class="navbar navbar-inverse navbar-fixed-top " style="height: 70px;background-color: #130C49!important;">
             
             <div class="navbar-header navbar-right" >
                 
@@ -42,8 +42,8 @@
         </nav>
         <br /> <br />
         <div class="container">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
+            <div class="panel panel-default">
+                <div class="panel-heading" style='background-color:rgba(81, 71, 25, 0.56)!important;'>
                     <h1>Add Category</h1>
                 </div><!--panel heading-->
                 <div class="panel-body">

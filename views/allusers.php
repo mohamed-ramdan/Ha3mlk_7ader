@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link type="text/css" rel="stylesheet" href="../static/css/bootstrap.min.css" /> 
 </head>
-<body>
+<body  style="background-image: url('../static/img/bbg.jpg'); background-repeat: repeat;">
     
     <?php
         @session_start();
@@ -53,14 +53,14 @@ function ajax(url){
 </script>
 
     
-    <nav class="navbar navbar-inverse navbar-fixed-top " style="height: 70px;">
+    <nav class="navbar navbar-inverse navbar-fixed-top " style="height: 70px;background-color: #130C49!important;">
             
             <div class="navbar-header navbar-right" >
                 
                
                  <a class="navbar-brand " href="#">
                     
-                     <img alt="Brand" src="<?php echo trim($_SESSION['userPicture']);?>"  style="width: 50px;height: 50px;float:right;margin-right: 15px;">
+                     <img class='img img-circle' alt="Brand" src="<?php echo trim($_SESSION['userPicture']);?>"  style="width: 50px;height: 50px;float:right;margin-right: 15px;">
                  </a> 
                 <a href="http://localhost/Ha3mlk_7ader/Ha3mlk_7ader/views/profile.php?id=<?php echo trim($_SESSION['userID']);?>" style="margin-right: 20px;"><?php echo trim($_SESSION['username']);?></a>
                 
@@ -81,8 +81,8 @@ function ajax(url){
         </nav>
     <br><br> <br><br>
 <div class="container">
-     <div class="panel panel-primary">
-        <div class="panel-heading"><h1>All Users</h1></div>
+     <div class="panel panel-default">
+        <div class="panel-heading" style='background-color:rgba(81, 71, 25, 0.56)!important;'><h1>All Users</h1></div>
         <div class="panel-body">
          <li><a href="adduser.php">addUser</a></li>    
         <table class="table table-responsive table-striped">
@@ -113,7 +113,7 @@ echo "<tr id='row".$id."'>";
 //echo "</br>";
 echo "<td>". $users[$i]['username']." </td>";
 echo "<td> ".$users[$i]['roomNumber'] ."</td>";
-echo "<td>  <img src=".trim($users[$i]['userPicture'])." height='50' width='50'> </td>";
+echo "<td>  <img class='img img-circle' src=".trim($users[$i]['userPicture'])." height='50' width='50'> </td>";
 echo "<td>". $users[$i]['ext']." </td>";
 
 echo "<td> <input  class='btn btn-danger' value='delete' type='button' class='btn btn-warning' id='$id'  onclick =\"ajax('id=$id&fn=deleteUser')\"";

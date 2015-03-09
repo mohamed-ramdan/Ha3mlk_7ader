@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link type="text/css" rel="stylesheet" href="../static/css/bootstrap.min.css" />
     </head>
-    <body>
+    <body style="background-image: url('../static/img/bbg.jpg'); background-repeat: repeat;">
          <?php @session_start();
     if(!($_SESSION['check']))
        {    
@@ -20,8 +20,8 @@
         
         <br ><br >
         <div class="container">
-            <div class="panel panel-primary">
-                <div class="panel-heading"><h1>Answer The Security Qestion</h1></div>
+            <div class="panel panel-default">
+                <div class="panel-heading" style='background-color:rgba(81, 71, 25, 0.56)!important;'><h1>Answer The Security Qestion</h1></div>
                 <div class="panel-body">
                     <form class="form-horizontal" method="get" action="../controllers/AuthenticationController.php">
                         
