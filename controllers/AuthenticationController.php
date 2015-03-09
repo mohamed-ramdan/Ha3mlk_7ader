@@ -65,8 +65,8 @@ require_once '../models/Validation.php';
        function  register(){
           
             $obj = ORM::getInstance();
-          
-           
+            
+      
             if($_POST)
             {  
                 

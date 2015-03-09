@@ -53,7 +53,7 @@ function __autoload($classname) {
 				$imgvalid= FALSE;
 				return $imgvalid;
 			}
-			if($data[$fieldname]['type'] != 'image/jpeg'){
+			if($data[$fieldname]['type'] != 'image/jpeg' && $data[$fieldname]['type'] !='image/png'){
                                 echo $data[$fieldname]['type']."<br/>";
                                 //var_dump($data[$fieldname]);
                                 //exit;
