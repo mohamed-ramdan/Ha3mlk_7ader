@@ -73,6 +73,8 @@ require_once '../models/Validation.php';
 			'password' => 'required|matchvalues',
 			'roomNumber' => 'required',
 			'ext' => 'required',
+                        'secretQuestion'=>'required',   
+                        'secretAnswer'=>'required', 
                         'captcha' => 'required|match',
                         'passwordc'=>'required',
                         );
@@ -246,24 +248,26 @@ require_once '../models/Validation.php';
 			$emailVal=$_POST["email"];
 			$roomVal=$_POST["roomNumber"];
                         $extVal=$_POST["ext"];
+                        $secretQuestionVal=$_POST["secretQuestion"];
+                        $secretAnswerVal=$_POST["secretAnswer"];
                         $errors = implode("^",$validation->errors);
                         if(isset($_GET["edit"])){
                             $id=$_GET['id'];
                           if($_SESSION['isAdmin']==1)
                             {    
-                               header("Location: ../views/profile.php?id=$id&edit=1&nameVal={$nameVal}&emailVal={$emailVal}&extVal={$extVal}&roomVal={$roomVal}&errors={$errors}");    
+                               header("Location: ../views/profile.php?id=$id&edit=1&nameVal={$nameVal}&emailVal={$emailVal}&extVal={$extVal}&roomVal={$roomVal}&secretQuestionVal={$secretQuestionVal}&secretAnswerVal={$secretAnswerVal}&errors={$errors}");    
 
                             }
                             else{
 
 
-                              header("Location: ../views/profileuser.php?id=$id&edit=1&nameVal={$nameVal}&emailVal={$emailVal}&extVal={$extVal}&roomVal={$roomVal}&errors={$errors}");    
+                              header("Location: ../views/profileuser.php?id=$id&edit=1&nameVal={$nameVal}&emailVal={$emailVal}&extVal={$extVal}&roomVal={$roomVal}&secretQuestionVal={$secretQuestionVal}&secretAnswerVal={$secretAnswerVal}&errors={$errors}");    
 
                             }
                             
                        }
                         else{
-                            header("Location: ../views/adduser.php?nameVal={$nameVal}&emailVal={$emailVal}&extVal={$extVal}&roomVal={$roomVal}&errors={$errors}");    
+                            header("Location: ../views/adduser.php?nameVal={$nameVal}&emailVal={$emailVal}&extVal={$extVal}&secretQuestionVal={$secretQuestionVal}&secretAnswerVal={$secretAnswerVal}&roomVal={$roomVal}&errors={$errors}");    
                         
                         }
                }
@@ -353,9 +357,9 @@ require_once '../models/Validation.php';
         $mail= $_GET['email'];
         $q= $_GET['q'];
         
-        $result = $orm-> select("email='$mail' and secretAnswer= '$ans' ");
+        $opOfQuery = $orm-> select("email='$mail' and secretAnswer= '$ans' ");
         
-        if (count($result))
+        if (count($opOfQuery))
             
         { 
                 $_SESSION['logged']=1;
@@ -462,11 +466,15 @@ require_once '../models/Validation.php';
             header("Location: ../views/login.php");
         }
         break;
-        
-      case "securityQestionTest":
-          $userAuth->securityQestionTest();
-          break;
       
+      case "securityQestionTest":
+           if($_SESSION['check'])
+             { $userAuth->securityQestionTest();}
+           else{
+               header("Location: ../views/login.php");
+           }
+          break;
+       
       case "getSecurityQuestion":
           
           $userAuth->getSecurityQuestion();

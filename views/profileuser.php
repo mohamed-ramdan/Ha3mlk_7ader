@@ -80,16 +80,32 @@
                                         <div class="col-sm-2"></div>
                                       <label for="name" class="col-sm-2 control-label">Name</label>
                                       <div class="col-sm-5">
-                                          <input type="text" class="form-control" name="username" required="1" placeholder="Name" value="<?php if( isset($userInfo['username']) ){echo $userInfo['username']; } elseif( isset($_GET['nameVal']) ){echo $_GET['nameVal'];}?>">
+                                          <input type="text" class="form-control" name="username" required="1" placeholder="Name" value="<?php if( isset($_GET['nameVal']) ){echo $_GET['nameVal'];} elseif( isset($userInfo['username']) ){echo $userInfo['username']; } ?>">
                                       </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="col-sm-2"></div>
                                       <label for="email" class="col-sm-2 control-label">Email</label>
                                       <div class="col-sm-5">
-                                          <input type="email" class="form-control" readonly="1" name="email" required="1" placeholder="Email"  value="<?php if( isset($userInfo['email']) ){echo $userInfo['email']; }elseif( isset($_GET['emailVal']) ){echo $_GET['emailVal']; }?>">
+                                          <input type="email" class="form-control" readonly="1" name="email" required="1" placeholder="Email"  value="<?php if( isset($_GET['emailVal']) ){echo $_GET['emailVal']; } elseif( isset($userInfo['email']) ){echo $userInfo['email']; }?>">
                                       </div>
                                     </div>
+                                      <div class="form-group">
+                                        <div class="col-sm-2"></div>
+                                      <label for="secretQuestion" class="col-sm-2 control-label">secretQuestion</label>
+                                      <div class="col-sm-5">
+                                          <input type="text" class="form-control" name="secretQuestion"  placeholder="secretQuestion" value="<?php if( isset($_GET['secretQuestionVal']) ){echo $_GET['secretQuestionVal'];} elseif( isset($userInfo['secretQuestion']) ){echo $userInfo['secretQuestion']; } ?>">
+                                      </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <div class="col-sm-2"></div>
+                                      <label for="secretAnswer" class="col-sm-2 control-label">secretAnswer</label>
+                                      <div class="col-sm-5">
+                                          <input type="text" class="form-control" name="secretAnswer"  placeholder="secretAnswer" value="<?php if( isset($_GET['secretAnswerVal']) ){echo $_GET['secretAnswerVal'];} elseif( isset($userInfo['secretAnswer']) ){echo $userInfo['secretAnswer']; } ?>">
+                                      </div>
+                                    </div>
+                                    
                                     <div class="form-group">
                                         <div class="col-sm-2"></div>
                                       <label for="password" class="col-sm-2 control-label">Password</label>

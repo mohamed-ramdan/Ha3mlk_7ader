@@ -102,10 +102,12 @@ $authObj=new Authenticate;
 $users=$authObj->getAllUsers();
 $i=0;
 echo "</br>";
+
 $length=count($users);
 while($length>=1){
+//foreach($users as $user){    
 $id=$users[$i]['userID'];
-$e=$i+1;
+//$e=$i+1;
 echo "<tr id='row".$id."'>";
 ////echo $users[$i]['userPicture'];
 //echo "</br>";
