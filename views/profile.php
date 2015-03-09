@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
          @session_start();
-         if(!($_SESSION['logged']))
+         if(!($_SESSION['logged']&&$_SESSION['isAdmin']))
             {    
                 header("Location: ../views/login.php");
 

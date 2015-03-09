@@ -14,7 +14,11 @@ require_once '../models/Validation.php';
   */
     
      
-    
+        function clean($string) {
+            $string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
+
+            return preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
+        }
         function  login(){
             
             $obj = ORM::getInstance();
@@ -102,8 +106,9 @@ require_once '../models/Validation.php';
                         unset($_POST["passwordc"]);
                         unset($_POST["captcha"]);
                         $_POST["password"]=  md5($_POST["password"]);
-                        $upfile="../static/img/{$_POST['email']}_{$_FILES['userPicture']['name']}";
-			$imgname = "{$_POST['email']}_{$_FILES['userPicture']['name']}";
+                        $imgname = $this->clean("{$_POST['email']}_{$_FILES['userPicture']['name']}");
+                        $upfile="../static/img/$imgname";
+			
                         //save image
 			$_POST["userPicture"]=$upfile;
                         //insert in database
@@ -114,7 +119,7 @@ require_once '../models/Validation.php';
                                 $userEdited=$obj->update($_POST,"userID='$id'");
                                 
                                 if(isset($_FILES['userPicture'])){
-                                    if($user[0]["userPicture"]!="upload/image/user/default.png"){
+                                    if($user[0]["userPicture"]!="../static/img/defaultuser.jpg"){
                                         unlink(trim($user[0]["userPicture"]));    
                                     }
                                     
@@ -176,7 +181,7 @@ require_once '../models/Validation.php';
                   header("Location: ../views/unfinishedorders.php");                  
                 }
                 else{
-                  header("Location: ../views/NormalMyOrders.php");   
+                  header("Location: ../views/makeOrder.php");   
                 }
                 
               }
@@ -227,7 +232,7 @@ require_once '../models/Validation.php';
                 else{
                     
                     
-                  header("Location: ../views/NormalMyOrders.php");   
+                  header("Location: ../views/makeOrder.php");   
                 }         
              }
                //data it self isnot valid
@@ -328,7 +333,7 @@ require_once '../models/Validation.php';
                   // Retrieve all users
                 $id=$_GET['id'];
                 $user = $orm->select("userId='$id'");
-                if($user[0]["userPicture"]!="upload/image/user/default.png"){
+                if($user[0]["userPicture"]!="../static/img/defaultuser.jpg"){
                     unlink(trim($user[0]["userPicture"]));    
                 }
                 $user = $orm->delete("userId='$id'");  

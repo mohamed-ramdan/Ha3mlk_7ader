@@ -15,6 +15,11 @@ class AdminController
      * @param void 
      * @return array Include unfinished orders
      */
+    function clean($string) {
+        $string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
+
+        return preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
+     }
     function getUnFinishedOrders()
     {
         // Get Intance from ORM model
@@ -240,10 +245,11 @@ class AdminController
             $id=$orm->insert(array('productName'     => $_POST['productName'],
             'price'    => $_POST['price'],'categoryID' => $categoryId,));       
             }
-                $upfile="../static/img/{$id}_{$_FILES['productPicture']['name']}";
+                $imgname = $this->clean("{$id}_{$_FILES['productPicture']['name']}");
+                $upfile="../static/img/$imgname";
                
-                $imgname = "{$id}_{$_FILES['productPicture']['name']}";
-
+                
+                
                 $_POST["productPicture"]=$upfile;
 
                 if (is_uploaded_file($_FILES['productPicture']['tmp_name']))
