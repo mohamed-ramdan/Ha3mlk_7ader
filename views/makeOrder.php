@@ -99,9 +99,12 @@
            
             echo "<label class='labe'> Choose Products </label> &nbsp;";
             foreach ($products as $product) {
+                
                 $productname = $product['productName'];
                 echo "<button class='btn btn-primary' type='button' id='$productname'> $productname </button>";
-                
+                $productimg=$product['productPicture'];
+                echo "<img    src='$productimg' class='img img-circle' alt='Brand' style='width: 50px;height: 50px; margin-right: 15px;'> ";
+
                 
                 ?>
     

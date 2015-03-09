@@ -21,9 +21,9 @@
         // Set table orders to retrieve
         $orm->setTable('h3mlk7aderdb.product');
         // Retrieve all products
-        $products = $orm->select("productStatus='available'");
+        $products = $orm->select("productStatus='available' and visibilty ='1'  ");
         
-        // Set table orders to retrieve
+        // Set table orders to retrieved 
         $orm->setTable('h3mlk7aderdb.room');
         // Retrieve all rooms
         $rooms = $orm->select();
