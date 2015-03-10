@@ -100,6 +100,7 @@
             . '<th> Action</th>'
             . '</tr>';
         $lastOrder = 0; 
+        $total=0;
         if(isset($result)&&!empty($result)){
         foreach ($result as $key => $order) {
             $thisOrderID =  $order['orderID'];
@@ -109,8 +110,14 @@
                     . '<td>'. $order['orderID'] .'</td>'
                     . '<td>'. $order['date'] .'</td>'
                     . "<td id = 'status".$thisOrderID."'>" .$order['status'] .'</td>'
-                    . '<td>'. '100' .'</td>'
+                    . '<td>'. $order['amount'] .'</td>'
                     . '<td>'. "<input type='button' class='btn btn-danger' value='Cancel' id='cancel".$thisOrderID."'" .'</td>';
+                    echo "</tr>";
+                    echo "<tr>";
+                    echo '<td>'."<img class='img img-circle' src='".$order['productPicture']."' width='80px' height='80px'>".'</td>';
+                    echo '<td>'."<p style='color:gray'>".$order['productName'].":  "."Quantity:".$order['quantity']."Price:".$order['price'].'EGP'."</p>".'</td>'; 
+                    echo '</tr>';
+                    $total=$total+$order['amount'];
                 ?>
                 <script>
                     var cancelBtn =  document.getElementById("<?php echo 'cancel'.$thisOrderID ?>");
@@ -125,13 +132,23 @@
 
                     }
                 </script>
+                
                 <?php
                 
-            }   
+            } 
+            else{
+                echo '<tr>';
+                echo '<td>'."<img class='img img-circle' src='".$order['productPicture']."' width='80px' height='80px'>".'</td>';
+                echo '<td>'."<p style='color:gray'>".$order['productName'].":  "."Quantity:".$order['quantity']."Price:".$order['price']."EGP"."</p>".'</td>'; 
+                echo '</tr>';    
+            }
             $lastOrder = $thisOrderID;
         }
         }
         echo '</table>';
+        echo "<div>";
+        echo "<p style='color:brown';'margin-right: 20px'; 'font-family:courier'; 'font-size:160%';> total:             $total EGP</p>";
+        echo "</div>";
         echo "</div><!-- panelbody -->"; //panel body div close
     ?>
                 

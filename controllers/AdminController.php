@@ -34,11 +34,19 @@ class AdminController
         // If there are any unfinished orders
         //print_r($unFinishedOrders);
         //exit;
+        
         return $unFinishedOrders;
     }
     
-    
-    
+    function getProductWithName($value,$fieldname)
+    {
+           $obj = ORM::getInstance();
+           $obj->setTable('product');
+           $op=$obj->select("productName = '$value' ");
+           return $op;
+        
+        
+    }
     /**
      * @author Mohamed Ramadan
      * getManualOrderData is a function that get all needed data 
@@ -210,8 +218,8 @@ class AdminController
     {
        
        $rules = array(
-			'product' => 'required',
-			'price' => 'required',
+			'product' => 'required|nameunique',
+			'price' => 'required|number',
 			'category' => 'required',
                         
                         );
@@ -222,7 +230,9 @@ class AdminController
                    );
           
        
-       
+       if(isset($_GET["edit"])){
+                    $rules['product']='required';
+                }
        $validation = new Validation();
        $result = $validation->validate($data,$rules);
        $imgresult = $validation->validateimg($_FILES,'productPicture');

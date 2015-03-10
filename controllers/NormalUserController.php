@@ -157,8 +157,10 @@
         $orm->setTable('h3mlk7aderdb.cafeOrder');
         // Call function select from ORM instance
         //$orders  = $orm->selectjoin(array(user,cafeOrder,product,orderComponent),"username='$userName' and user.userID=cafeOrder.orderUserId and orderComponent.orderID=cafeOrder.orderID and orderComponent.productID=product.productID");
-        $orders  = $orm->selectjoin(array('cafeOrder','product','orderComponent'),"cafeOrder.orderUserId = '$userID' and orderComponent.orderID=cafeOrder.orderID and orderComponent.productID=product.productID");
-                
+        //$orders  = $orm->selectjoin(array('cafeOrder','product','orderComponent'),"cafeOrder.orderUserId = '$userID' and orderComponent.orderID=cafeOrder.orderID and orderComponent.productID=product.productID");
+        $orders  = $orm->selectjoin(array('cafeOrder','product','orderComponent'),"cafeOrder.orderUserID='$userID' and cafeOrder.orderID = orderComponent.orderID and orderComponent.productID = product.productID "
+                . "order by cafeOrder.orderID DESC");
+               
         // If there are any categories then retrieve
         //var_dump($orders);
         if(!empty($orders))

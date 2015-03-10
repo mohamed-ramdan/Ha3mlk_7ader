@@ -96,6 +96,29 @@ function __autoload($classname) {
 				return $valid;
 			}
 		}
+                
+                
+                function number($value, $fieldname){
+			$a=  is_numeric($value);           
+			if(!$a){
+                            
+				$valid=FALSE;
+				$this->errors[] = "The $fieldname isnot a number";
+				return $valid;
+			}
+		}
+                function nameunique($value, $fieldname){
+			include_once "../controllers/AuthenticationController.php";
+                        $adminobj=new AdminController();
+                        $users=$adminobj->getProductWithName($value,$fieldname);
+                                   
+			if(count($users)>=1){
+                            
+				$valid=FALSE;
+				$this->errors[] = "The $fieldname already taken";
+				return $valid;
+			}
+		}
                 function matchvalues($value, $fieldname){
 			
 			if($value != $_SESSION['passwd']){

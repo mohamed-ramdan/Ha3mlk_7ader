@@ -125,6 +125,7 @@
             echo '<th>Ext.</th>';
             echo '<th>Status</th>';
             echo '<th>Action</th>';
+            echo '<th>Total</th>';
             echo '</tr>';
             $lastOrder = 0;
             foreach ($result as $order) {
@@ -144,9 +145,14 @@
                             . "<option value='delivering'> delivering </option>"
                             . "<option value='done'> done </option>"
                             . "</select>".'</td>';
+                    echo '<td>'.$order['amount'].'</td>';
                     echo '</tr>';
                     echo '<tr>';
-                    echo '<td>'."<img class='img img-circle' src='".$order['productPicture']."' width='80px' height='80px'>".'</td>';
+                    
+                    echo '<td>'."<img class='img img-circle' src='".$order['productPicture']."' width='80px' height='80px'>";
+                    echo '</td>';
+                    echo '<td>'."<p style='color:gray'>".$order['productName'].":  "."Quantity:".$order['quantity']."Price:".$order['price']."</p>".'</td>'; 
+                    echo '</tr>';
                     ?>
                         <script>
                             if( document.getElementById('textstatus<?php echo $thisOrderID; ?>' ).innerHTML.trim()!='Canceled'){
@@ -171,9 +177,11 @@
                     
                 }
                 else{
-                    //echo '<td>'.$order['productName'].'</td>'; 
+                    //echo '<td>'.$order['productName'].'</td>';
+                    echo '<tr>';
                     echo '<td>'."<img class='img img-circle' src='".$order['productPicture']."' width='80px' height='80px'>".'</td>';
-
+                    echo '<td>'."<p style='color:gray'>".$order['productName'].":  "."Quantity:".$order['quantity']."Price:".$order['price'].'</p>'.'</td>'; 
+                    echo '</tr>';
                 }
                  $lastOrder = $order['orderID'];
 

@@ -174,7 +174,7 @@ echo "</td>";
 
 
 //echo "<td><a href=http://localhost/Ha3mlk_7ader/Ha3mlk_7ader/controllers/AdminController.php?id=$id&fn=deleteProduct>delete</a> </td>";
-echo "<td><a class='btn btn-success' href=productprofile.php?id=$id>edit</a></td>";
+echo "<td><a class='btn btn-success' href=productprofile.php?id=$id&edit=1>edit</a></td>";
 }
 $length=$length-1;	
 $i=$i+1;
