@@ -110,7 +110,7 @@
                               
                         }
         };
-    
+        /*
         // get the confirm button and put an action listener on it
         document.getElementById("save").onclick = function(){
 
@@ -135,7 +135,7 @@
             //// Here ENds the web socket
             
         }
-        
+        */
         </script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
         <script src="../static/js/bootstrap.min.js" type="text/javascript"></script>
